@@ -1,34 +1,71 @@
 import random
 
 import customtkinter as ctk
+from playsound import playsound
+
+from styles import font_color, button_color, python_blue, python_yellow
 
 class PythonGame:
     def __init__(self) -> None:
-        self.create_gui()
-        self.create_variables()
-        self.create_binds()
-        self.create_python()
-        self.create_berry()
-        self.check_hitboxes()
-
-        self.move()
+        self.create_game_variables()
+        self.create_window()
+        self.create_main_menu()
 
 
-    def create_gui(self) -> None:
-        self.WINDOW = ctk.CTkToplevel()
+    def create_game_variables(self):
         self.WINDOW_WIDTH = 400
         self.WINDOW_HEIGHT = 400
+        self.GRID_SIZE = 40
+        self.base_color_1 = "green"
+        self.base_color_2 = "darkgreen"
+        self.berry_color = "red"
+        self.munch_sound = "Assets/python_game/munch_sound.mp3"
+
+    
+    def create_window(self) -> None:
+        self.WINDOW = ctk.CTkToplevel()
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
         self.WINDOW.title("Python.exe")
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.grab_set()
+        self.WINDOW.resizable(False, False)
 
 
-    def create_variables(self) -> None:
+    def create_main_menu(self):
+        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
+        self.main_menu_frame.pack()
+        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=font_color, fg_color=button_color, command=self.start_game)
+        play_button.pack()
+
+
+    def create_grid(self):
+        columns = int(self.WINDOW_WIDTH / self.GRID_SIZE)
+        rows = int(self.WINDOW_HEIGHT / self.GRID_SIZE)
+
+        x_pos = 0 - self.GRID_SIZE
+        y_pos = 0 - self.GRID_SIZE
+
+        color1 = self.base_color_2
+        color2 = self.base_color_1
+
+        for i in range(rows):
+            y_pos += self.GRID_SIZE
+            x_pos = 0 - self.GRID_SIZE
+
+            color1, color2 = color2, color1
+
+            for j in range(columns):
+                x_pos += self.GRID_SIZE
+                if j % 2 == 0:
+                    ctk.CTkFrame(self.WINDOW, fg_color=color1, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0).place(x=x_pos, y=y_pos)
+                else:
+                    ctk.CTkFrame(self.WINDOW, fg_color=color2, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0).place(x=x_pos, y=y_pos)
+
+
+    def create_python_variables(self) -> None:
         self.game_over = False
         self.body_part_list = []
         self.python_coords = []
-        self.GRID_SIZE = 20
         self.DEFAULT_PYTHON_SPEED = 2
         self.python_speed = self.DEFAULT_PYTHON_SPEED
         self.direction = "up"
@@ -54,16 +91,18 @@ class PythonGame:
 
 
     def create_python(self):
-        self.python_coords = [[180, 180]]
+        python_start_pos_x = round((self.WINDOW_WIDTH / 2) / self.GRID_SIZE) * self.GRID_SIZE
+        python_start_pos_y = round((self.WINDOW_HEIGHT / 2) / self.GRID_SIZE) * self.GRID_SIZE + self.GRID_SIZE
 
-        self.python = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color="blue")
+        self.python_coords = [[python_start_pos_x, python_start_pos_y]]
+
+        self.python = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color=python_blue, bg_color="transparent", corner_radius=self.GRID_SIZE/4)
         self.python.place(x=self.python_coords[0][0], y=self.python_coords[0][1])
 
         self.body_part_list = [self.python]
 
 
     def move(self) -> None:
-
         self.move_python_body()
 
         match self.direction:
@@ -78,10 +117,15 @@ class PythonGame:
 
         self.check_if_self_eating()
 
-        if self.game_over == False:
-            self.python.place(x=self.python_coords[0][0], y=self.python_coords[0][1])
+        self.python.place(x=self.python_coords[0][0], y=self.python_coords[0][1])
+
+        self.update_python_background()
+        self.check_hitboxes()
+
+        if self.game_over:
+            return
                 
-            self.WINDOW.after(int(1000 / self.python_speed), self.move)
+        self.WINDOW.after(int(1000 / self.python_speed), self.move)
 
 
     def move_python_body(self):
@@ -98,22 +142,58 @@ class PythonGame:
                 self.body_part_list[index].place(x=self.python_coords[index][0], y=self.python_coords[index][1])
 
 
+    def update_python_background(self):
+        """Updates the background color of each body part based on it's position"""
+        for index, part in enumerate(self.body_part_list):
+            if self.python_coords[index][0] / self.GRID_SIZE % 2 == 0:
+                if self.python_coords[index][1] / self.GRID_SIZE % 2 == 0:
+                    part.configure(bg_color=self.base_color_1)
+                else:
+                    part.configure(bg_color=self.base_color_2)
+            else:
+                if self.python_coords[index][1] / self.GRID_SIZE % 2 == 0:
+                    part.configure(bg_color=self.base_color_2)
+                else:
+                    part.configure(bg_color=self.base_color_1)
+
+
     def create_berry(self):
-        self.berry_x_pos = random.randrange(0, self.WINDOW_WIDTH, self.GRID_SIZE)
-        self.berry_y_pos = random.randrange(0, self.WINDOW_HEIGHT, self.GRID_SIZE)
-        self.berry = ctk.CTkFrame(self.WINDOW, fg_color="red", width=self.GRID_SIZE, height=self.GRID_SIZE)
+        #Prevent berries spawning in the same position as any body part
+        while True:
+            self.berry_x_pos = random.randrange(0, self.WINDOW_WIDTH, self.GRID_SIZE)
+            self.berry_y_pos = random.randrange(0, self.WINDOW_HEIGHT, self.GRID_SIZE)
+
+            if [self.berry_x_pos, self.berry_y_pos] not in self.python_coords:
+                break
+
+        def get_background_color() -> str:
+            if self.berry_x_pos / self.GRID_SIZE % 2 == 0:
+                if self.berry_y_pos / self.GRID_SIZE % 2 == 0:
+                    background_color = self.base_color_1
+                else:
+                     background_color = self.base_color_2
+            else:
+                if self.berry_y_pos / self.GRID_SIZE % 2 == 0:
+                    background_color = self.base_color_2
+                else:
+                    background_color = self.base_color_1
+            return background_color
+
+        self.berry = ctk.CTkFrame(self.WINDOW, fg_color=self.berry_color, width=self.GRID_SIZE, height=self.GRID_SIZE, border_width=0, bg_color=get_background_color(), corner_radius=self.GRID_SIZE/2)
         self.berry.place(x=self.berry_x_pos, y=self.berry_y_pos)
 
 
     def check_hitboxes(self):
+        if self.game_over:
+            return
+        
+        #If position of snake head is the same as berry position
         if self.python_coords[0][0] == self.berry_x_pos and self.python_coords[0][1] == self.berry_y_pos:
             self.berry_hit()
 
-        if self.python_coords[0][0] < 0 or self.python_coords[0][0] > self.WINDOW_WIDTH or self.python_coords[0][1] < 0 or self.python_coords[0][1] > self.WINDOW_HEIGHT:
+        #If position of snake head is outside of window
+        if self.python_coords[0][0] < 0 or self.python_coords[0][0] > self.WINDOW_WIDTH - self.GRID_SIZE or self.python_coords[0][1] < 0 or self.python_coords[0][1] > self.WINDOW_HEIGHT - self.GRID_SIZE:
             self.end_game()
-
-        if self.game_over == False:
-            self.WINDOW.after(10, self.check_hitboxes)
 
 
     def check_if_self_eating(self):
@@ -125,6 +205,7 @@ class PythonGame:
 
 
     def berry_hit(self):
+        playsound(self.munch_sound, block=False)
         self.berries += 1
         self.python_speed = self.berries / 1.5 + self.DEFAULT_PYTHON_SPEED
 
@@ -135,10 +216,11 @@ class PythonGame:
 
     def grow_python(self):
         if (len(self.body_part_list) + 1) % 2 == 0:
-            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color="yellow")
+            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color=python_yellow, bg_color="transparent", corner_radius=self.GRID_SIZE/4)
         else:
-            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color="blue")
+            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color=python_blue, bg_color="transparent", corner_radius=self.GRID_SIZE/4)
         
+        #Get the position of where to grow the next body part
         match self.direction:
             case "up":
                 python_body_x_coord = self.python_coords[-1][0]
@@ -157,13 +239,43 @@ class PythonGame:
 
         self.body_part_list.append(python_body)
         self.python_coords.append([python_body_x_coord, python_body_y_coord])
+
+
+    def create_game_over_gui(self):
+        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
+        self.game_over_frame.pack()
+        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!")
+        game_over_text.place()
+        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", command=self.run)
+        play_again_button.pack()
         
 
     def end_game(self):
         self.python_speed = 0
         self.game_over = True
-        for part in self.body_part_list:
-            part.destroy()
+        
+        self.create_game_over_gui()
 
-        print("GAME OVER")
+
+    def start_game(self):
+        self.main_menu_frame.pack_forget()
+        self.create_grid()
+        self.WINDOW.after(2000, self.run)
+
+
+    def run(self):
+        try:
+            self.game_over_frame.destroy()
+            self.berry.destroy()
+            for part in self.body_part_list:
+                part.destroy()
+        except AttributeError:
+            pass
+
+        self.create_python_variables()
+        self.create_binds()
+        self.create_python()
+        self.create_berry()
+
+        self.move()
     
