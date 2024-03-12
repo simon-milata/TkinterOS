@@ -63,10 +63,15 @@ class PythonGame:
 
 
     def create_python_variables(self) -> None:
+        self.previous_head_pos = []
+        self.direction_to_buffer = ""
+        self.change_direction_lock = False
+        self.python_head_color = "#4686b8"
         self.game_over = False
         self.body_part_list = []
         self.python_coords = []
-        self.DEFAULT_PYTHON_SPEED = 2
+        self.DEFAULT_PYTHON_SPEED = 2.5
+        self.DEFAULT_SPEED_INCREASE = 0.05
         self.python_speed = self.DEFAULT_PYTHON_SPEED
         self.direction = "up"
         self.berries = 0
@@ -84,19 +89,45 @@ class PythonGame:
 
 
     def change_direction(self, event, direction:str) -> None:
-        if [direction, self.direction] in [["right", "left"], ["left", "right"], ["up", "down"], ["down", "up"]]:
+        #Prevent python head from being able to change direction towards it's body if it has one
+        if len(self.body_part_list) > 1:
+            if direction == "up" and self.python_coords[1][1] <  self.python_coords[0][1]:
+                return
+            elif direction == "down" and self.python_coords[1][1] > self.python_coords[0][1]:
+                return
+            elif direction == "left" and self.python_coords[1][0] < self.python_coords[0][0]:
+                return
+            elif direction == "right" and self.python_coords[1][0] > self.python_coords[0][0]:
+                return
+            
+        #Prevent python head from turning 180 degrees if it doesn't have a body    
+        else:
+            if direction == "up" and self.previous_head_pos[1] <  self.python_coords[0][1]:
+                return
+            elif direction == "down" and self.previous_head_pos[1] > self.python_coords[0][1]:
+                return
+            elif direction == "left" and self.previous_head_pos[0] < self.python_coords[0][0]:
+                return
+            elif direction == "right" and self.previous_head_pos[0] > self.python_coords[0][0]:
+                return
+            
+        #Buffer the next move
+        if self.change_direction_lock and self.direction_to_buffer == "":
+            self.direction_to_buffer = direction
             return
 
         self.direction = direction
+        self.change_direction_lock = True
 
 
     def create_python(self):
+        #Create python in the center of a grid
         python_start_pos_x = round((self.WINDOW_WIDTH / 2) / self.GRID_SIZE) * self.GRID_SIZE
         python_start_pos_y = round((self.WINDOW_HEIGHT / 2) / self.GRID_SIZE) * self.GRID_SIZE + self.GRID_SIZE
 
         self.python_coords = [[python_start_pos_x, python_start_pos_y]]
 
-        self.python = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color=python_blue, bg_color="transparent", corner_radius=self.GRID_SIZE/4)
+        self.python = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, fg_color=self.python_head_color, bg_color="transparent", corner_radius=self.GRID_SIZE/4)
         self.python.place(x=self.python_coords[0][0], y=self.python_coords[0][1])
 
         self.body_part_list = [self.python]
@@ -104,6 +135,13 @@ class PythonGame:
 
     def move(self) -> None:
         self.move_python_body()
+
+        if self.direction_to_buffer != "":
+            self.change_direction_lock = True
+            self.direction = self.direction_to_buffer
+            self.direction_to_buffer = ""
+
+        self.previous_head_pos = self.python_coords[0].copy()
 
         match self.direction:
             case "up":
@@ -121,11 +159,13 @@ class PythonGame:
 
         self.update_python_background()
         self.check_hitboxes()
+        self.change_direction_lock = False
 
         if self.game_over:
             return
                 
         self.WINDOW.after(int(1000 / self.python_speed), self.move)
+        self.change_direction_lock = False
 
 
     def move_python_body(self):
@@ -206,8 +246,9 @@ class PythonGame:
 
     def berry_hit(self):
         playsound(self.munch_sound, block=False)
+
         self.berries += 1
-        self.python_speed = self.berries / 1.5 + self.DEFAULT_PYTHON_SPEED
+        self.python_speed += self.DEFAULT_SPEED_INCREASE
 
         self.berry.destroy()
         self.grow_python()
