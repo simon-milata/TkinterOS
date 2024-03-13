@@ -1,9 +1,8 @@
-from datetime import datetime
 from PIL import Image
 
 import customtkinter as ctk
 
-from styles import desktop_colors, desktop_highlight_colors
+from styles import desktop_colors, desktop_highlight_colors, font_size_xs, font_family, font_color
 
 class TaskBar:
     def __init__(self, os, gui) -> None:
@@ -52,12 +51,31 @@ class TaskBar:
         self.restart_button.pack()
 
 
-    def create_time_date(self):
+    def create_time_date(self) -> None:
         self.time_date_frame = ctk.CTkFrame(self.taskbar, width=self.width/20, height=45, fg_color="transparent")
         self.time_date_frame.place(anchor="e", relx=1, rely=0.5)
+        self.clock = ctk.CTkLabel(self.time_date_frame, text=self.os.get_time(), font=(font_family, font_size_xs), text_color=font_color, height=font_size_xs)
+        self.clock.place(anchor="ne", relx=0.9, rely=0.1)
+        self.date = ctk.CTkLabel(self.time_date_frame, text=self.os.get_date(), font=(font_family, font_size_xs), text_color=font_color, height=font_size_xs)
+        self.date.place(anchor="se", relx=0.9, rely=0.9)
+
+        self.clock.after(1000 * 60, self.update_time)
+        self.date.after(1000 * 60 * 10, self.update_date)
 
     
-    def create_default_taskbar_apps(self):
+    def update_time(self) -> None:
+        self.clock.configure(text=self.os.get_time())
+
+        self.clock.after(1000 * 60, self.update_time)
+
+    
+    def update_date(self) -> None:
+        self.date.configure(text=self.os.get_date())
+
+        self.date.after(1000 * 60 * 10, self.update_date)
+
+    
+    def create_default_taskbar_apps(self) -> None:
         self.python_game_frame = ctk.CTkFrame(self.taskbar_app_frame, fg_color="transparent")
         self.python_game_frame.pack(padx=self.width/30)
         self.python_game_button = ctk.CTkButton(self.python_game_frame, command=lambda: self.os.play_game("python"), width=45, height=45, text="", 

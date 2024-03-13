@@ -1,4 +1,5 @@
 import sys, os
+import time
 
 from desktop import DesktopGUI
 from task_bar import TaskBar
@@ -125,6 +126,18 @@ class OS:
         match game:
             case "python":
                 PythonGame(self.gui.WINDOW)
+
+
+    def get_time(self) -> str:
+        current_time = time.localtime(time.time())
+        current_time = time.strftime("%H:%M", current_time)
+        return current_time
+    
+    
+    def get_date(self) -> str:
+        current_date = time.localtime(time.time())
+        current_date = time.strftime("%d/%m/%Y", current_date)
+        return current_date
 
 
 if __name__ == "__main__":

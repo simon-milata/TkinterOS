@@ -21,6 +21,7 @@ font_size_xxl = 60
 font_size_big = 30
 font_size_medium = 24
 font_size_small = 20
+font_size_xs = 12
 
 button_font_size = font_size_big
 
