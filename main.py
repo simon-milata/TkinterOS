@@ -1,11 +1,13 @@
 import sys, os
 
-from DesktopGUI import DesktopGUI
+from desktop import DesktopGUI
+from task_bar import TaskBar
 from python_game import PythonGame
 
 class OS:
     def __init__(self) -> None:
         self.gui = DesktopGUI(self)
+        self.task_bar = TaskBar(self, self.gui)
         self.create_variables()
         self.create_binds()
         self.run()
@@ -46,14 +48,14 @@ class OS:
     
     def start_menu_mechanism(self) -> None:
         if not self.start_menu_open:
-            self.gui.start_menu_frame.place(anchor="sw", relx=0, rely=0.96)
+            self.task_bar.start_menu_frame.place(anchor="sw", relx=0, rely=0.96)
         else:
-            self.gui.start_menu_frame.place_forget()
+            self.task_bar.start_menu_frame.place_forget()
         self.start_menu_open = not self.start_menu_open
 
     
     def close_start_menu(self) -> None:
-        self.gui.start_menu_frame.place_forget()
+        self.task_bar.start_menu_frame.place_forget()
         self.start_menu_open = False
 
         self.gui.desktop_actions_frame.place_forget()

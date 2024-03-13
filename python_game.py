@@ -3,7 +3,7 @@ import random
 import customtkinter as ctk
 from playsound import playsound
 
-from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big, font_size_xxl, font_family
+from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big, font_size_xxl, font_family, desktop_colors
 
 class PythonGame:
     def __init__(self, os_window) -> None:
@@ -26,16 +26,19 @@ class PythonGame:
     
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
+        self.WINDOW.iconbitmap("Assets/snake_yellow_icon.ico")
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
-        self.WINDOW.configure(fg_color=(python_yellow, python_blue))
-        self.WINDOW.title("Python.exe")
+        self.WINDOW.configure(fg_color=desktop_colors)
+        self.WINDOW.title("Python Game")
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.grab_set()
         self.WINDOW.resizable(False, False)
 
+        self.WINDOW.after(200, lambda: self.WINDOW.iconbitmap("Assets/snake_yellow_icon.ico"))
+
 
     def create_main_menu(self):
-        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=(python_yellow, python_blue))
+        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=desktop_colors)
         self.main_menu_frame.pack()
         header = ctk.CTkLabel(self.main_menu_frame, text="PYTHON", text_color=font_color, font=(font_family_bold, font_size_xxl))
         header.place(anchor="n", relx=0.5, rely=0.05)
@@ -338,7 +341,7 @@ class PythonGame:
         self.WINDOW_HEIGHT = 400
 
         self.WINDOW.geometry("400x400")
-        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=(python_yellow, python_blue))
+        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=desktop_colors)
         self.game_over_frame.pack()
         game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_xxl), text_color=font_color)
         game_over_text.place(anchor="n", relx=0.5, rely=0.05)
