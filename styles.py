@@ -7,10 +7,10 @@ python_yellow_highlight = "#ffef9e"
 font_family = "Segoe UI"
 font_family_bold = "Segoe UI bold"
 
-font_size_xxl = 30
-font_size_big = 24
-font_size_medium = 20
-font_size_small = 16
+font_size_xxl = 60
+font_size_big = 30
+font_size_medium = 24
+font_size_small = 20
 
 button_font_size = font_size_big
 

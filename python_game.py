@@ -3,7 +3,7 @@ import random
 import customtkinter as ctk
 from playsound import playsound
 
-from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big
+from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big, font_size_xxl, font_family
 
 class PythonGame:
     def __init__(self, os_window) -> None:
@@ -27,6 +27,7 @@ class PythonGame:
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
+        self.WINDOW.configure(fg_color=(python_yellow, python_blue))
         self.WINDOW.title("Python.exe")
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.grab_set()
@@ -34,22 +35,25 @@ class PythonGame:
 
 
     def create_main_menu(self):
-        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
+        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=(python_yellow, python_blue))
         self.main_menu_frame.pack()
-        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Rows", text_color=font_color, font=(font_family_bold, font_size_big))
-        rows_label.place(anchor="center", relx=0.5, rely=0.5)
-        self.row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family_bold, font_size_big), selected_hover_color=button_hover_color, 
+        header = ctk.CTkLabel(self.main_menu_frame, text="PYTHON", text_color=font_color, font=(font_family_bold, font_size_xxl))
+        header.place(anchor="n", relx=0.5, rely=0.05)
+        
+        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Rows", text_color=font_color, font=(font_family, font_size_big))
+        rows_label.place(anchor="center", relx=0.5, rely=0.52)
+        self.row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family, font_size_big), selected_hover_color=button_hover_color, 
                                                 fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
-        self.row_input.place(anchor="center", relx=0.5, rely=0.6)
+        self.row_input.place(anchor="center", relx=0.5, rely=0.62)
 
-        columns_label = ctk.CTkLabel(self.main_menu_frame, text="Columns", text_color=font_color, font=(font_family_bold, font_size_big))
+        columns_label = ctk.CTkLabel(self.main_menu_frame, text="Columns", text_color=font_color, font=(font_family, font_size_big))
         columns_label.place(anchor="center", relx=0.5, rely=0.3)
-        self.column_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family_bold, font_size_big), selected_hover_color=button_hover_color, 
+        self.column_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family, font_size_big), selected_hover_color=button_hover_color, 
                                                    fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
         self.column_input.place(anchor="center", relx=0.5, rely=0.4)
         play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=button_font_color, fg_color=button_color, command=self.start_game,
                                     font=(font_family_bold, button_font_size), hover_color=button_hover_color)
-        play_button.place(anchor="center", relx=0.5, rely=0.75)
+        play_button.place(anchor="center", relx=0.5, rely=0.8)
 
 
     def create_grid(self):
@@ -330,12 +334,21 @@ class PythonGame:
 
 
     def create_game_over_gui(self):
-        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
+        self.WINDOW_WIDTH = 400
+        self.WINDOW_HEIGHT = 400
+
+        self.WINDOW.geometry("400x400")
+        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=(python_yellow, python_blue))
         self.game_over_frame.pack()
-        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_big), fg_color=font_color)
-        game_over_text.place(anchor="n", relx=0.5, rely=0.2)
-        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", command=self.run)
-        play_again_button.place()
+        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_xxl), text_color=font_color)
+        game_over_text.place(anchor="n", relx=0.5, rely=0.05)
+        berry_label = ctk.CTkLabel(self.game_over_frame, text="Berries", font=(font_family_bold, font_size_big), text_color=font_color)
+        berry_label.place(anchor="center", relx=0.5, rely=0.35)
+        score_text = ctk.CTkLabel(self.game_over_frame, text=self.berries, font=(font_family_bold, font_size_xxl), text_color=font_color)
+        score_text.place(anchor="center", relx=0.5, rely=0.5)
+        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", fg_color=button_color, text_color=button_font_color, 
+                                          font=(font_family_bold, button_font_size), command=self.run, hover_color=button_hover_color)
+        play_again_button.place(anchor="center", relx=0.5, rely=0.7)
         
 
     def end_game(self):
@@ -352,7 +365,7 @@ class PythonGame:
         
         self.main_menu_frame.pack_forget()
         self.create_grid()
-        self.WINDOW.after(2000, self.run)
+        self.run()
 
 
     def run(self):
@@ -395,14 +408,11 @@ class PythonGame:
 
         self.OS_WINDOW.update()
 
-        print(self.OS_WINDOW.winfo_width(), self.OS_WINDOW.winfo_height())
-
         if int(self.column_input.get()) > self.OS_WINDOW.winfo_width() or int(self.row_input.get()) > self.OS_WINDOW.winfo_height():
             return
         
         self.WINDOW_WIDTH = self.GRID_SIZE * int(self.column_input.get())
         self.WINDOW_HEIGHT = self.GRID_SIZE * int(self.row_input.get())
-        print(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
 
         self.grid_setup = True
