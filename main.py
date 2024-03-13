@@ -122,7 +122,7 @@ class OS:
     def play_game(self, game:str) -> None:
         match game:
             case "python":
-                PythonGame()
+                PythonGame(self.gui.WINDOW)
 
 
 if __name__ == "__main__":

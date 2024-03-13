@@ -3,22 +3,24 @@ import random
 import customtkinter as ctk
 from playsound import playsound
 
-from styles import font_color, button_color, python_blue, python_yellow
+from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big
 
 class PythonGame:
-    def __init__(self) -> None:
+    def __init__(self, os_window) -> None:
+        self.OS_WINDOW = os_window
         self.create_game_variables()
         self.create_window()
         self.create_main_menu()
 
 
     def create_game_variables(self):
+        self.grid_setup = False
         self.WINDOW_WIDTH = 400
         self.WINDOW_HEIGHT = 400
         self.GRID_SIZE = 40
         self.base_color_1 = "green"
         self.base_color_2 = "darkgreen"
-        self.berry_color = "red"
+        self.berry_color = "#e03d3d"
         self.munch_sound = "Assets/python_game/munch_sound.mp3"
 
     
@@ -34,7 +36,19 @@ class PythonGame:
     def create_main_menu(self):
         self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
         self.main_menu_frame.pack()
-        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=font_color, fg_color=button_color, command=self.start_game)
+        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Rows", text_color=font_color, font=(font_family_bold, font_size_big))
+        rows_label.place(anchor="center", relx=0.5, rely=0.5)
+        self.row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family_bold, font_size_big), selected_hover_color=button_hover_color, 
+                                                fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
+        self.row_input.place(anchor="center", relx=0.5, rely=0.6)
+
+        columns_label = ctk.CTkLabel(self.main_menu_frame, text="Columns", text_color=font_color, font=(font_family_bold, font_size_big))
+        columns_label.place(anchor="center", relx=0.5, rely=0.3)
+        self.column_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family_bold, font_size_big), selected_hover_color=button_hover_color, 
+                                                   fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
+        self.column_input.place(anchor="center", relx=0.5, rely=0.4)
+        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=button_font_color, fg_color=button_color, command=self.start_game,
+                                    font=(font_family_bold, button_font_size), hover_color=button_hover_color)
         play_button.place(anchor="center", relx=0.5, rely=0.75)
 
 
@@ -68,7 +82,7 @@ class PythonGame:
         self.previous_head_pos = []
         self.direction_to_buffer = ""
         self.change_direction_lock = False
-        self.python_head_color = "#4686b8"
+        self.python_head_color = python_blue
         self.game_over = False
         self.body_part_list = []
         self.python_coords = []
@@ -231,7 +245,7 @@ class PythonGame:
 
         self.berry = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, border_width=0, bg_color=get_background_color(), fg_color=get_background_color(), corner_radius=0)
         self.berry.place(x=self.berry_x_pos, y=self.berry_y_pos)
-        berry_graphic = ctk.CTkFrame(self.berry, fg_color=self.berry_color, width=self.GRID_SIZE/2, height=self.GRID_SIZE/2, corner_radius=self.GRID_SIZE/2)
+        berry_graphic = ctk.CTkFrame(self.berry, fg_color=self.berry_color, width=self.GRID_SIZE/1.5, height=self.GRID_SIZE/1.5, corner_radius=self.GRID_SIZE/1.5)
         berry_graphic.place(anchor="center", relx=0.5, rely=0.5)
 
 
@@ -277,14 +291,22 @@ class PythonGame:
     def grow_python(self):
         self.reduce_python_size()
 
+        color = self.body_part_list[-1].cget("bg_color")
+
+        if color == "green":
+            color = "darkgreen"
+        else:
+            color = "green"
+
         if (len(self.body_part_list) + 1) % 2 == 0:
-            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0)
-            python_graphic = ctk.CTkFrame(python_body, fg_color=python_yellow, width=self.GRID_SIZE * self.python_size, height=self.GRID_SIZE * self.python_size)
+            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0, fg_color=color)
+            python_graphic = ctk.CTkFrame(python_body, fg_color=python_yellow, width=self.GRID_SIZE * self.python_size, height=self.GRID_SIZE * self.python_size, bg_color=color)
             python_graphic.place(anchor="center", relx=0.5, rely=0.5)
         else:
-            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0)
-            python_graphic = ctk.CTkFrame(python_body, fg_color=python_blue, width=self.GRID_SIZE * self.python_size, height=self.GRID_SIZE * self.python_size)
+            python_body = ctk.CTkFrame(self.WINDOW, width=self.GRID_SIZE, height=self.GRID_SIZE, corner_radius=0, fg_color=color)
+            python_graphic = ctk.CTkFrame(python_body, fg_color=python_blue, width=self.GRID_SIZE * self.python_size, height=self.GRID_SIZE * self.python_size, bg_color=color)
             python_graphic.place(anchor="center", relx=0.5, rely=0.5)
+
         
         #Get the position of where to grow the next body part
         match self.direction:
@@ -310,10 +332,10 @@ class PythonGame:
     def create_game_over_gui(self):
         self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
         self.game_over_frame.pack()
-        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!")
-        game_over_text.place()
+        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_big), fg_color=font_color)
+        game_over_text.place(anchor="n", relx=0.5, rely=0.2)
         play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", command=self.run)
-        play_again_button.pack()
+        play_again_button.place()
         
 
     def end_game(self):
@@ -324,6 +346,10 @@ class PythonGame:
 
 
     def start_game(self):
+        self.setup_grid()
+        if self.grid_setup == False:
+            return
+        
         self.main_menu_frame.pack_forget()
         self.create_grid()
         self.WINDOW.after(2000, self.run)
@@ -359,3 +385,24 @@ class PythonGame:
         else:
             self.python_eye_1.place(anchor="s", relx=0.25, rely=0.75)
             self.python_eye_2.place(anchor="s", relx=0.75, rely=0.75)
+
+
+    def setup_grid(self):
+        if self.column_input.get() == "":
+            self.column_input.set("10")
+        if self.row_input.get() == "":
+            self.row_input.set("10")
+
+        self.OS_WINDOW.update()
+
+        print(self.OS_WINDOW.winfo_width(), self.OS_WINDOW.winfo_height())
+
+        if int(self.column_input.get()) > self.OS_WINDOW.winfo_width() or int(self.row_input.get()) > self.OS_WINDOW.winfo_height():
+            return
+        
+        self.WINDOW_WIDTH = self.GRID_SIZE * int(self.column_input.get())
+        self.WINDOW_HEIGHT = self.GRID_SIZE * int(self.row_input.get())
+        print(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
+        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
+
+        self.grid_setup = True
