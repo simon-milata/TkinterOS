@@ -11,6 +11,7 @@ class DesktopGUI:
         self.get_screen_size()
         self.icon_setup()
         self.create_gui()
+        ctk.set_appearance_mode("light")
 
     
     def window_setup(self) -> None:

@@ -4,6 +4,7 @@ import time
 from desktop import DesktopGUI
 from task_bar import TaskBar
 from python_game import PythonGame
+from styles import button_color, button_hover_color, desktop_highlight_colors, desktop_bright_colors
 
 class OS:
     def __init__(self) -> None:
@@ -16,6 +17,8 @@ class OS:
     
     def create_variables(self) -> None:
         self.start_menu_open = False
+        self.utils_menu_open = False
+        self.internet_on = False
         self.document_list = []
 
 
@@ -138,6 +141,26 @@ class OS:
         current_date = time.localtime(time.time())
         current_date = time.strftime("%d/%m/%Y", current_date)
         return current_date
+    
+
+    def utils_menu_mechanism(self) -> None:
+        if not self.utils_menu_open:
+            self.task_bar.utils_menu_frame.place(anchor="se", relx=1, rely=0.96)
+        else:
+            self.task_bar.utils_menu_frame.place_forget()
+        self.utils_menu_open = not self.utils_menu_open
+
+
+    def internet_mechanism(self) -> None:
+        if not self.internet_on:
+            self.task_bar.internet_button.configure(fg_color=button_color, hover_color=button_hover_color)
+            self.task_bar.internet.configure(image=self.task_bar.internet_icon)
+            self.task_bar.internet_label.configure(text="Available")
+        else:
+            self.task_bar.internet_button.configure(fg_color=desktop_highlight_colors, hover_color=desktop_bright_colors)
+            self.task_bar.internet.configure(image=self.task_bar.no_internet_icon)
+            self.task_bar.internet_label.configure(text="Wi-Fi")
+        self.internet_on = not self.internet_on
 
 
 if __name__ == "__main__":
