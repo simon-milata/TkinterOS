@@ -4,6 +4,7 @@ import time
 from desktop import DesktopGUI
 from task_bar import TaskBar
 from python_game import PythonGame
+from pybrowse import PyBrowse
 from styles import button_color, button_hover_color, desktop_highlight_colors, desktop_bright_colors
 
 class OS:
@@ -16,6 +17,7 @@ class OS:
 
     
     def create_variables(self) -> None:
+        self.dark_mode = False
         self.start_menu_open = False
         self.utils_menu_open = False
         self.internet_on = False
@@ -47,6 +49,7 @@ class OS:
 
     def close_windows(self, event) -> None:
         self.close_start_menu()
+        self.close_utils_menu()
         self.close_new_action()
 
     
@@ -66,8 +69,7 @@ class OS:
 
     
     def open_desktop_actions(self, event, widget = None) -> None:
-        self.close_start_menu()
-        self.close_new_action()
+        self.close_windows(None)
         if widget == "logo":
             self.gui.desktop_actions_frame.place(x=event.x+self.gui.width/2.29, y=event.y+self.gui.height/2.63)
         else:
@@ -128,7 +130,10 @@ class OS:
     def play_game(self, game:str) -> None:
         match game:
             case "python":
-                PythonGame(self.gui.WINDOW)
+                PythonGame(self, self.gui.WINDOW)
+            case "pybrowse":
+                self.py_browse = PyBrowse(self, self.gui.WINDOW)
+                self.show_pybrowse_gui()
 
 
     def get_time(self) -> str:
@@ -161,6 +166,18 @@ class OS:
             self.task_bar.internet.configure(image=self.task_bar.no_internet_icon)
             self.task_bar.internet_label.configure(text="Wi-Fi")
         self.internet_on = not self.internet_on
+
+    
+    def close_utils_menu(self) -> None:
+        self.task_bar.utils_menu_frame.place_forget()
+        self.utils_menu_open = False
+
+
+    def show_pybrowse_gui(self) -> None:
+        if not self.internet_on:
+            self.py_browse.no_internet_frame.place(anchor="center", relx=0.5, rely=0.5)
+        else:
+            pass
 
 
 if __name__ == "__main__":

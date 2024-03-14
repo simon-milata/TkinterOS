@@ -6,7 +6,8 @@ from playsound import playsound
 from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big, font_size_xxl, font_family, desktop_colors
 
 class PythonGame:
-    def __init__(self, os_window) -> None:
+    def __init__(self, os, os_window: ctk.CTk) -> None:
+        self.OS = os
         self.OS_WINDOW = os_window
         self.create_game_variables()
         self.create_window()
@@ -26,15 +27,20 @@ class PythonGame:
     
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
-        self.WINDOW.iconbitmap("Assets/snake_yellow_icon.ico")
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
         self.WINDOW.configure(fg_color=desktop_colors)
         self.WINDOW.title("Python Game")
         self.WINDOW.attributes("-topmost", True)
-        self.WINDOW.grab_set()
+        self.WINDOW.focus_force()
         self.WINDOW.resizable(False, False)
+        self.WINDOW.after(200, self.icon_setup)
 
-        self.WINDOW.after(200, lambda: self.WINDOW.iconbitmap("Assets/snake_yellow_icon.ico"))
+    
+    def icon_setup(self):
+        if self.OS.dark_mode:
+            self.WINDOW.iconbitmap("Assets/python_game/snake_yellow_icon.ico")
+        else:
+            self.WINDOW.iconbitmap("Assets/python_game/snake_blue_icon.ico")
 
 
     def create_main_menu(self):

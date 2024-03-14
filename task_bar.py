@@ -2,7 +2,7 @@ from PIL import Image
 
 import customtkinter as ctk
 
-from styles import desktop_colors, desktop_highlight_colors, font_size_xs, font_family, font_color, desktop_off_colors, desktop_bright_colors, button_color, button_font_color, font_size_small
+from styles import desktop_colors, desktop_highlight_colors, font_size_xs, font_family, font_color, desktop_off_colors, desktop_bright_colors, button_color, button_font_color, font_size_small, button_hover_color
 
 class TaskBar:
     def __init__(self, os, gui) -> None:
@@ -30,11 +30,13 @@ class TaskBar:
         self.no_internet_icon = ctk.CTkImage(light_image=Image.open("assets/no_internet_icon_dark.png"), dark_image=Image.open("assets/no_internet_icon.png"), size=(20, 20))
         self.internet_icon = ctk.CTkImage(light_image=Image.open("assets/wifi_icon_dark.png"), dark_image=Image.open("assets/wifi_icon.png"), size=(20, 20))
         self.internet_icon_off = ctk.CTkImage(light_image=Image.open("assets/wifi_icon.png"), dark_image=Image.open("assets/wifi_icon_dark.png"), size=(32, 32))
+        self.py_browse_icon = ctk.CTkImage(light_image=Image.open("assets/pybrowse_dark.png"), dark_image=Image.open("assets/pybrowse.png"), size=(32, 32))
 
     
     def create_taskbar(self) -> None:
-        self.taskbar = ctk.CTkFrame(self.WINDOW, height=45, width=self.width, fg_color=desktop_colors, corner_radius=0)
+        self.taskbar = ctk.CTkFrame(self.WINDOW, height=46, width=self.width, fg_color=desktop_colors, corner_radius=0)
         self.taskbar.place(anchor="s", relx=0.5, rely=1)
+        self.taskbar.lift()
 
         self.taskbar_app_frame = ctk.CTkFrame(self.taskbar, fg_color="transparent")
         self.taskbar_app_frame.place(anchor="center", relx=0.5, rely=0.5)
@@ -49,12 +51,13 @@ class TaskBar:
     def create_start_menu(self) -> None:
         self.start_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.width/6, height=self.height/4, fg_color=desktop_off_colors)
         self.start_menu_frame.grid_propagate(False)
+        self.start_menu_frame.lift()
 
         self.shut_down_button = ctk.CTkButton(self.start_menu_frame, width=self.width/20, height=self.height/20, text="Shut down", command=self.os.quit, 
-                                              fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color)
+                                              fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color, hover_color=button_hover_color)
         self.shut_down_button.grid(padx=self.height * 0.01, pady=self.height * 0.01)
         self.restart_button = ctk.CTkButton(self.start_menu_frame, width=self.width/20, height=self.height/20, text="Restart", command=self.os.restart, 
-                                            fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color)
+                                            fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color, hover_color=button_hover_color)
         self.restart_button.grid(padx=self.height * 0.01, pady=self.height * 0.01)
 
 
@@ -83,11 +86,13 @@ class TaskBar:
 
     
     def create_default_taskbar_apps(self) -> None:
-        self.python_game_frame = ctk.CTkFrame(self.taskbar_app_frame, fg_color="transparent")
-        self.python_game_frame.pack(padx=self.width/30)
-        self.python_game_button = ctk.CTkButton(self.python_game_frame, command=lambda: self.os.play_game("python"), width=45, height=45, text="", 
+        self.pybrowse = ctk.CTkButton(self.taskbar_app_frame, width=40, height=40, text="", command=lambda: self.os.play_game("pybrowse"),
+                                                image=self.py_browse_icon, fg_color="transparent", hover_color=desktop_highlight_colors)
+        self.pybrowse.grid(padx=self.width*0.005, row=0, column=0)
+
+        self.python_game_button = ctk.CTkButton(self.taskbar_app_frame, command=lambda: self.os.play_game("python"), width=40, height=40, text="", 
                                                 image=self.snake_icon, fg_color="transparent", hover_color=desktop_highlight_colors)
-        self.python_game_button.place(anchor="center", relx=0.5, rely=0.5)
+        self.python_game_button.grid(padx=self.width*0.005, row=0, column=1)
 
 
     def create_utils(self) -> None:
