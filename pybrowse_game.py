@@ -15,6 +15,8 @@ class PyBrowseGame:
         self.create_variables()
         self.create_python()
 
+        
+
 
     def create_icons(self) -> None:
         self.python_icon = ctk.CTkImage(light_image=Image.open("Assets/pybrowse/anaconda_blue.png"), dark_image=Image.open("Assets/pybrowse/anaconda_yellow.png"), size=(64, 64))
@@ -28,7 +30,8 @@ class PyBrowseGame:
 
 
     def start_game(self) -> None:
-        self.game_frame.after(1000, self.spawn_objects)
+        self.create_binds()
+        self.game_frame.after(1000, self.spawn_object)
 
 
     def create_variables(self):
@@ -42,7 +45,7 @@ class PyBrowseGame:
         self.barrier_speed = 5
 
 
-    def spawn_objects(self) -> None:
+    def spawn_object(self) -> None:
         if self.game_over:
             return
         
@@ -62,8 +65,6 @@ class PyBrowseGame:
         if self.game_over:
             return
 
-        self.game_frame.after(int(1000 / self.spawn_frequency), self.spawn_objects)
-
         if self.barrier_speed > 1:
             self.barrier_speed -= 0.1
 
@@ -75,10 +76,20 @@ class PyBrowseGame:
         y_pos = blockade.winfo_y()
         blockade.place(x=x_pos, y=y_pos)
         
-        if x_pos <= 0:
+        if x_pos <= blockade.winfo_width():
             blockade.destroy()
+            self.spawn_object()
             return
         
-        
-
         blockade.after(int(self.barrier_speed), lambda: self.move_object(blockade))
+
+
+    def jump(self) -> None:
+        self.python.update()
+        print(self.python.winfo_y)
+
+
+    def create_binds(self) -> None:
+        self.game_frame.bind("<space>", self.jump)
+        self.game_frame.bind("w", self.jump)
+        self.game_frame.bind("up", self.jump)

@@ -58,6 +58,7 @@ class PyBrowse:
         if self.game_running:
             return
         
+        self.WINDOW.unbind("<space>")
         self.pybrowse_game.start_game()
 
     def create_internet_gui(self) -> None:
