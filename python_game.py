@@ -343,11 +343,8 @@ class PythonGame:
 
 
     def create_game_over_gui(self):
-        self.WINDOW_WIDTH = 400
-        self.WINDOW_HEIGHT = 400
-
         self.WINDOW.geometry("400x400")
-        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=desktop_colors)
+        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=400, height=400, fg_color=desktop_colors)
         self.game_over_frame.pack()
         game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_xxl), text_color=font_color)
         game_over_text.place(anchor="n", relx=0.5, rely=0.05)
@@ -385,6 +382,8 @@ class PythonGame:
                 part.destroy()
         except AttributeError:
             pass
+
+        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
 
         self.create_python_variables()
         self.create_binds()

@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from pybrowse_game import PyBrowseGame
-from styles import desktop_colors, font_family, font_size_big, font_size_medium, font_color, button_color
+from styles import desktop_colors, font_family, font_size_big, font_size_medium, font_color, button_color, font_color
 
 class PyBrowse:
     def __init__(self, os, os_window: ctk.CTk) -> None:
@@ -9,6 +9,7 @@ class PyBrowse:
         self.OS_WINDOW = os_window
         self.create_variables()
         self.create_window()
+        self.create_window_bar()
         self.create_no_internet_gui()
         self.create_internet_gui()
 
@@ -39,6 +40,11 @@ class PyBrowse:
         else:
             self.WINDOW.iconbitmap("Assets/pybrowse/pybrowse_dark.ico")
 
+
+    def create_window_bar(self) -> None:
+        self.window_bar_frame = ctk.CTkFrame(self.WINDOW, fg_color=font_color, corner_radius=0, width=self.WINDOW_WIDTH, height=50)
+        self.window_bar_frame.place(anchor="n", relx=0.5, rely=0)
+
     
     def create_no_internet_gui(self) -> None:
         self.no_internet_frame = ctk.CTkFrame(self.WINDOW, fg_color="transparent")
@@ -46,7 +52,7 @@ class PyBrowse:
         self.game_frame = ctk.CTkFrame(self.no_internet_frame, fg_color="transparent", width=int(self.WINDOW_WIDTH/2.5), height=int(self.WINDOW_HEIGHT * 0.2), border_color=button_color, border_width=3)
         self.game_frame.grid()
 
-        self.pybrowse_game = PyBrowseGame(self.WINDOW, self.game_frame)
+        self.pybrowse_game = PyBrowseGame(self, self.WINDOW, self.game_frame)
 
         self.WINDOW.bind("<space>", self.start_pybrowse_game)
 
@@ -54,10 +60,7 @@ class PyBrowse:
         no_internet_label.grid()
 
 
-    def start_pybrowse_game(self, event) -> None:
-        if self.game_running:
-            return
-        
+    def start_pybrowse_game(self, event) -> None:        
         self.WINDOW.unbind("<space>")
         self.pybrowse_game.start_game()
 

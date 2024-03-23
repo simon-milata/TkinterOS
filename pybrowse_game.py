@@ -3,10 +3,11 @@ import random
 
 import customtkinter as ctk
 
-from styles import button_color, button_font_color, font_family, font_size_small
+from styles import button_color, button_font_color, font_family, font_size_small, font_size_xs, font_color
 
 class PyBrowseGame:
-    def __init__(self, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame) -> None:
+    def __init__(self, pybrowse: object, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame) -> None:
+        self.pybrowse = pybrowse
         self.PYBROWSE_WINDOW = pybrowse_window
         self.PYBROWSE_WINDOW.update()
         self.game_frame = game_frame
@@ -35,11 +36,17 @@ class PyBrowseGame:
 
 
     def start_game(self) -> None:
+        try:
+            self.score_counter.destroy()
+        except AttributeError:
+            pass
+
         self.create_variables()
 
         self.game_frame.grab_set()
         self.game_frame.focus_set()
         self.create_binds()
+        self.start_counter()
         self.game_frame.after(1000, self.spawn_barrier)
 
 
@@ -50,9 +57,12 @@ class PyBrowseGame:
         self.barrier_frequency = 1
         self.spawn_pos_x = int(self.game_frame.winfo_width())
         self.spawn_pos_y = 0
-        self.spawn_pos_y_low = int(self.game_frame.winfo_height() * 0.8)
+        self.spawn_pos_y_low = int(self.game_frame.winfo_height() * 0.7)
         self.barrier_speed = 3
         self.mid_air = False
+        self.score = 0
+        self.score_counter = ctk.CTkLabel(self.game_frame, text=0, fg_color="transparent", text_color=font_color, font=(font_family, font_size_small))
+        self.score_counter.place(anchor="center", relx=0.5, rely=0.5)
         
 
 
@@ -88,25 +98,25 @@ class PyBrowseGame:
 
 
     def move_up(self) -> None:
-        if self.python_y > 0:
-            self.python_y -= 1
+        if self.python_y > 5:
+            self.python_y -= 2
             self.python.place(x=self.python_x, y=self.python_y)
         else:
-            self.python.after(100, self.move_down)
+            self.python.after(150, self.move_down)
             return
             
-        self.python.after(1, self.move_up)
+        self.python.after(3, self.move_up)
 
 
     def move_down(self) -> None:
         if self.python_y < self.python_spawn_pos_y:
-            self.python_y += 1
+            self.python_y += 2
             self.python.place(x=self.python_x, y=self.python_y)
         else:
             self.mid_air = False
             return
         
-        self.python.after(1, self.move_down)
+        self.python.after(3, self.move_down)
 
 
     def create_binds(self) -> None:
@@ -116,12 +126,23 @@ class PyBrowseGame:
     def end_game(self) -> None:
         self.game_over = True
         self.game_frame.unbind("<Button-1>")
-        print("Game Over")
+        self.PYBROWSE_WINDOW.bind("<space>", self.pybrowse.start_pybrowse_game)
         
         for barrier in self.barrier_list:
             barrier.destroy()
 
         
+    def start_counter(self) -> None:
+        if self.game_over:
+            return
+        
+        self.score_counter.after(1, self.increase_counter)
+
+    
+    def increase_counter(self) -> None:
+        self.score += 1
+        self.score_counter.configure(text=self.score)
+        self.start_counter()
 
 
 class Blockade:
@@ -141,7 +162,7 @@ class Blockade:
 
     def create_barrier(self) -> ctk.CTkLabel:
         self.barrier = ctk.CTkLabel(self.game_frame, height=self.game_frame.winfo_height() / 3, text=random.choice(self.error_list), fg_color=button_color, 
-                                   text_color=button_font_color, font=(font_family, font_size_small))
+                                   text_color=button_font_color, font=(font_family, font_size_xs))
         self.barrier.place(x=self.x_pos, y=self.y_pos)
 
         self.game.barrier_list.append(self.barrier)
