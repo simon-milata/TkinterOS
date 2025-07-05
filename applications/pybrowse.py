@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from pybrowse_game import PyBrowseGame
+from .pybrowse_game import PyBrowseGame
 from styles import desktop_colors, font_family, font_size_big, font_size_medium, font_color, button_color, font_color
 
 class PyBrowse:

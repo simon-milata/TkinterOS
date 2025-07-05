@@ -1,10 +1,10 @@
 import sys, os
 import time
 
-from desktop import DesktopGUI
-from task_bar import TaskBar
-from python_game import PythonGame
-from pybrowse import PyBrowse
+from desktop.desktop import DesktopGUI
+from desktop.task_bar import TaskBar
+from applications.python_game import PythonGame
+from applications.pybrowse import PyBrowse
 from styles import button_color, button_hover_color, desktop_highlight_colors, desktop_bright_colors
 
 class OS:

@@ -25,12 +25,12 @@ class TaskBar:
 
     
     def icon_setup(self) -> None:
-        self.python_icon = ctk.CTkImage(light_image=Image.open("assets/python_icon_dark.png"), dark_image=Image.open("assets/python_icon.png"), size=(40, 40))
-        self.snake_icon = ctk.CTkImage(light_image=Image.open("assets/snake_blue_icon.png"), dark_image=Image.open("assets/snake_yellow_icon.png"), size=(32, 32))
-        self.no_internet_icon = ctk.CTkImage(light_image=Image.open("assets/no_internet_icon_dark.png"), dark_image=Image.open("assets/no_internet_icon.png"), size=(20, 20))
-        self.internet_icon = ctk.CTkImage(light_image=Image.open("assets/wifi_icon_dark.png"), dark_image=Image.open("assets/wifi_icon.png"), size=(20, 20))
-        self.internet_icon_off = ctk.CTkImage(light_image=Image.open("assets/wifi_icon.png"), dark_image=Image.open("assets/wifi_icon_dark.png"), size=(32, 32))
-        self.py_browse_icon = ctk.CTkImage(light_image=Image.open("assets/pybrowse_dark.png"), dark_image=Image.open("assets/pybrowse.png"), size=(32, 32))
+        self.python_icon = ctk.CTkImage(light_image=Image.open("assets/desktop/python_icon_dark.png"), dark_image=Image.open("assets/desktop/python_icon.png"), size=(40, 40))
+        self.snake_icon = ctk.CTkImage(light_image=Image.open("assets/desktop/snake_blue_icon.png"), dark_image=Image.open("assets/desktop/snake_yellow_icon.png"), size=(32, 32))
+        self.no_internet_icon = ctk.CTkImage(light_image=Image.open("assets/desktop/no_internet_icon_dark.png"), dark_image=Image.open("assets/desktop/no_internet_icon.png"), size=(20, 20))
+        self.internet_icon = ctk.CTkImage(light_image=Image.open("assets/desktop/wifi_icon_dark.png"), dark_image=Image.open("assets/desktop/wifi_icon.png"), size=(20, 20))
+        self.internet_icon_off = ctk.CTkImage(light_image=Image.open("assets/desktop/wifi_icon.png"), dark_image=Image.open("assets/desktop/wifi_icon_dark.png"), size=(32, 32))
+        self.py_browse_icon = ctk.CTkImage(light_image=Image.open("assets/desktop/pybrowse_dark.png"), dark_image=Image.open("assets/desktop/pybrowse.png"), size=(32, 32))
 
     
     def create_taskbar(self) -> None:
