@@ -2,6 +2,7 @@ import sys, os
 import time
 
 from desktop.desktop import DesktopGUI
+from desktop.file_manager import FileManager
 from desktop.task_bar import TaskBar
 from applications.python_game import PythonGame
 from applications.pybrowse import PyBrowse
@@ -9,10 +10,12 @@ from styles import button_color, button_hover_color, desktop_highlight_colors, d
 
 class OS:
     def __init__(self) -> None:
+        self.file_manager = FileManager()
         self.gui = DesktopGUI(self)
         self.task_bar = TaskBar(self, self.gui)
         self.create_variables()
         self.create_binds()
+        self.load_files()
         self.run()
 
     
@@ -27,11 +30,11 @@ class OS:
     def create_binds(self) -> None:
         self.gui.desktop_frame.bind("<Button-1>", self.close_windows)
         self.gui.desktop_frame.bind("<Button-1>", self.get_click_position)
-        self.gui.desktop_frame.bind("<Button-3>", self.open_desktop_actions)
-        self.gui.desktop_logo.bind("<Button-3>", lambda event: self.open_desktop_actions(event, widget="logo"))
-        self.gui.new_button.bind("<Enter>", self.open_create_new_action)
+        self.gui.desktop_frame.bind("<Button-3>", self.create_desktop_context_menu_frame)
+        self.gui.desktop_logo.bind("<Button-3>", lambda event: self.create_desktop_context_menu_frame(event, widget="logo"))
+        self.gui.new_button.bind("<Enter>", self.creates_desktop_context_menu)
 
-        self.gui.desktop_frame.bind("<B1-Motion>", self.create_motion_area)
+        self.gui.desktop_frame.bind("<B1-Motion>", self.create_selection_box)
         self.gui.desktop_frame.bind("<ButtonRelease-1>", self.delete_motion_area)
 
 
@@ -50,7 +53,7 @@ class OS:
     def close_windows(self, event) -> None:
         self.close_start_menu()
         self.close_utils_menu()
-        self.close_new_action()
+        self.close_desktop_context_menu()
 
     
     def start_menu_mechanism(self) -> None:
@@ -68,7 +71,7 @@ class OS:
         self.gui.desktop_actions_frame.place_forget()
 
     
-    def open_desktop_actions(self, event, widget = None) -> None:
+    def create_desktop_context_menu_frame(self, event, widget = None) -> None:
         self.close_windows(None)
         if widget == "logo":
             self.gui.desktop_actions_frame.place(x=event.x+self.gui.width/2.29, y=event.y+self.gui.height/2.63)
@@ -76,18 +79,25 @@ class OS:
             self.gui.desktop_actions_frame.place(x=event.x, y=event.y)
 
 
-    def open_create_new_action(self, event) -> None:
+    def creates_desktop_context_menu(self, event) -> None:
+        """Opens context menu when you right click on the desktop"""
         self.desktop_actions_frame_x = self.gui.desktop_actions_frame.winfo_rootx()
         self.desktop_actions_frame_y = self.gui.desktop_actions_frame.winfo_rooty()
         self.gui.new_action_frame.place(x=self.desktop_actions_frame_x + self.gui.desktop_actions_frame.winfo_width(), y=self.desktop_actions_frame_y - self.gui.desktop_actions_frame.winfo_height())
 
     
-    def close_new_action(self) -> None:
+    def close_desktop_context_menu(self) -> None:
+        """Closes context menu when you left click on the desktop"""
         self.gui.new_action_frame.place_forget()
+
+    
+    def load_files(self):
+        print(self.file_manager.file_objects)
+        for file in self.file_manager.file_objects:
+            self.gui.create_text_document_gui(file.pos_x, file.pos_y, file.name)
 
 
     def create_text_document(self) -> None:
-
         self.gui.create_text_document_gui(self.desktop_actions_frame_x, self.desktop_actions_frame_y)
         self.close_windows(None)
 
@@ -101,23 +111,24 @@ class OS:
         self.y_click_pos = event.y
 
 
-    def create_motion_area(self, event) -> None:
+    def create_selection_box(self, event) -> None:
+        """Creates a selection box on left click drag on the desktop"""
         try:
             self.gui.motion_frame.destroy()
         except:
             pass
         
         if self.y_click_pos < event.y and self.x_click_pos < event.x:
-            self.gui.create_motion_area_gui(self.x_click_pos, self.y_click_pos, event.x, event.y)
+            self.gui.create_selection_box_gui(self.x_click_pos, self.y_click_pos, event.x, event.y)
 
         elif self.y_click_pos > event.y and self.x_click_pos > event.x:
-            self.gui.create_motion_area_gui(event.x, event.y, self.x_click_pos, self.y_click_pos)
+            self.gui.create_selection_box_gui(event.x, event.y, self.x_click_pos, self.y_click_pos)
 
         elif self.y_click_pos > event.y and self.x_click_pos < event.x:
-            self.gui.create_motion_area_gui(self.x_click_pos, event.y, event.x, self.y_click_pos)
+            self.gui.create_selection_box_gui(self.x_click_pos, event.y, event.x, self.y_click_pos)
 
         elif self.y_click_pos < event.y and self.x_click_pos > event.x:
-            self.gui.create_motion_area_gui(event.x, self.y_click_pos, self.x_click_pos, event.y)
+            self.gui.create_selection_box_gui(event.x, self.y_click_pos, self.x_click_pos, event.y)
 
 
     def delete_motion_area(self, event) -> None:

@@ -60,11 +60,16 @@ class DesktopGUI:
         self.create_new_text_document.pack()
 
 
-    def create_text_document_gui(self, x, y) -> None:
+    def create_text_document_gui(self, x: int, y: int, name: str) -> None:
         text_document_frame = ctk.CTkFrame(self.desktop_frame, width=75, height=100)
         text_document_frame.place(x=x, y=y)
-        text_document_button = ctk.CTkButton(text_document_frame, width=75, height=100, command=self.os.open_text_document, text="Text Document.txt")
+        text_document_button = ctk.CTkButton(
+            text_document_frame, width=75, height=100, command=self.os.open_text_document, text="",
+            image=ctk.CTkImage(Image.open("assets/desktop/python_logo.png"), size=(50, 50)), fg_color="transparent"
+            )
         text_document_button.place(anchor="center", relx=0.5, rely=0.5)
+        text_document_label = ctk.CTkLabel(text_document_frame, width=75, height=20, text=name)
+        text_document_label.place(anchor="center", relx=0.5, rely=0.9)
 
 
     def create_text_document_open_gui(self) -> None:
