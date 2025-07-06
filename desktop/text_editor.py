@@ -14,8 +14,10 @@ class TextEditor:
 
     def open_file(self):
         self.file_window = ctk.CTkToplevel()
+        self.file_window.title(self.name)
+        self.file_window.minsize(200, 100)
         self.file_window.attributes("-topmost", True)
-        self.file_textbox = ctk.CTkTextbox(self.file_window)
+        self.file_textbox = ctk.CTkTextbox(self.file_window, width=300, height=400)
         self.file_textbox.pack(expand=True, fill="both")
         self.file_textbox.insert(0.0, self.file_content)
 
