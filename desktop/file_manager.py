@@ -23,6 +23,11 @@ class File:
             self.last_edited = self.creation_time
 
 
+    def update_content(self, new_content):
+        self.content = new_content
+        self.last_edited = datetime.now()
+
+
 class FileManager():
     def __init__(self):
         user_path = os.path.expanduser("~")
@@ -72,3 +77,18 @@ class FileManager():
                 creation_time=datetime.fromisoformat(self.metadata["files"][file]["creation_time"]),
             )
             self.file_objects.append(file_object)
+
+
+    def get_file_content(self, name: str) -> str:
+        file_path = os.path.join(self.file_folder, name)
+        with open(file_path, "r") as file:
+            content = file.read()
+        print(f"{content=}")
+        return content
+    
+
+    def save_file_content(self, name: str, updated_content: str) -> None:
+        file_path = os.path.join(self.file_folder, name)
+        print(f"{updated_content=}")
+        with open(file_path, "w") as file:
+            file.writelines(updated_content)
