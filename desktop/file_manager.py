@@ -8,8 +8,8 @@ from datetime import datetime
 class File:
     pos_x: int
     pos_y: int
-    creation_time: str
-    last_edited: str
+    creation_time: datetime
+    last_edited: datetime
     name: str = "New Text File"
     content: str = ""
 
@@ -21,6 +21,11 @@ class File:
             self.creation_time = datetime.now()
         if not self.last_edited:
             self.last_edited = self.creation_time
+
+
+    def update_content(self, new_content):
+        self.content = new_content
+        self.last_edited = datetime.now()
 
 
 class FileManager():
@@ -45,9 +50,10 @@ class FileManager():
             with open(os.path.join(self.file_folder, "metadata.json"), "r") as metadata_file:
                 self.metadata = json.load(metadata_file)
         except FileNotFoundError:
-            emtpy_metadata = {"files": []}
+            emtpy_metadata = {"files": {}}
             with open(os.path.join(self.file_folder, "metadata.json"), "w") as metadata_file:
-                self.metadata = json.dump(emtpy_metadata, metadata_file)
+                json.dump(emtpy_metadata, metadata_file)
+                self.metadata = emtpy_metadata
                 
 
 
@@ -60,11 +66,29 @@ class FileManager():
 
     def create_file_objects(self):
         for file in self.files:
+            if not file in self.metadata["files"]:
+                continue
+            
             file_object = File(
                 pos_x=self.metadata["files"][file]["x_pos"],
                 pos_y=self.metadata["files"][file]["y_pos"],
-                name=[file],
-                last_edited=self.metadata["files"][file]["last_modified"],
-                creation_time=self.metadata["files"][file]["creation_time"],
+                name=file,
+                last_edited=datetime.fromisoformat(self.metadata["files"][file]["last_modified"]),
+                creation_time=datetime.fromisoformat(self.metadata["files"][file]["creation_time"]),
             )
             self.file_objects.append(file_object)
+
+
+    def get_file_content(self, name: str) -> str:
+        file_path = os.path.join(self.file_folder, name)
+        with open(file_path, "r") as file:
+            content = file.read()
+        print(f"{content=}")
+        return content
+    
+
+    def save_file_content(self, name: str, updated_content: str) -> None:
+        file_path = os.path.join(self.file_folder, name)
+        print(f"{updated_content=}")
+        with open(file_path, "w") as file:
+            file.writelines(updated_content)

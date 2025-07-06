@@ -6,7 +6,10 @@ from desktop.file_manager import FileManager
 from desktop.task_bar import TaskBar
 from applications.python_game import PythonGame
 from applications.pybrowse import PyBrowse
+from desktop.text_editor import TextEditor
+from desktop.file_widget import TextFileWidget
 from styles import button_color, button_hover_color, desktop_highlight_colors, desktop_bright_colors
+
 
 class OS:
     def __init__(self) -> None:
@@ -24,7 +27,6 @@ class OS:
         self.start_menu_open = False
         self.utils_menu_open = False
         self.internet_on = False
-        self.document_list = []
 
 
     def create_binds(self) -> None:
@@ -47,6 +49,7 @@ class OS:
 
     
     def restart(self) -> None:
+        # TODO: not working -> fix
         os.execl(sys.executable, sys.executable, *sys.argv)
 
 
@@ -92,18 +95,18 @@ class OS:
 
     
     def load_files(self):
-        print(self.file_manager.file_objects)
+        """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            self.gui.create_text_document_gui(file.pos_x, file.pos_y, file.name)
+            TextFileWidget(file, self.gui.WINDOW, self.open_file)
 
 
-    def create_text_document(self) -> None:
-        self.gui.create_text_document_gui(self.desktop_actions_frame_x, self.desktop_actions_frame_y)
-        self.close_windows(None)
+    def open_file(self, name):
+        content = self.file_manager.get_file_content(name)
+        TextEditor(name, content, self.close_file)
 
 
-    def open_text_document(self) -> None:
-        self.gui.create_text_document_open_gui()
+    def close_file(self, name, updated_content):
+        self.file_manager.save_file_content(name, updated_content)
 
 
     def get_click_position(self, event):

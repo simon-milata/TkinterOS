@@ -56,30 +56,11 @@ class DesktopGUI:
 
         self.create_new_folder = ctk.CTkButton(self.new_action_frame, text="Folder")
         self.create_new_folder.pack()
-        self.create_new_text_document = ctk.CTkButton(self.new_action_frame, text="Text Document", command=self.os.create_text_document)
+        self.create_new_text_document = ctk.CTkButton(self.new_action_frame, text="Text Document")
         self.create_new_text_document.pack()
 
 
-    def create_text_document_gui(self, x: int, y: int, name: str) -> None:
-        text_document_frame = ctk.CTkFrame(self.desktop_frame, width=75, height=100)
-        text_document_frame.place(x=x, y=y)
-        text_document_button = ctk.CTkButton(
-            text_document_frame, width=75, height=100, command=self.os.open_text_document, text="",
-            image=ctk.CTkImage(Image.open("assets/desktop/python_logo.png"), size=(50, 50)), fg_color="transparent"
-            )
-        text_document_button.place(anchor="center", relx=0.5, rely=0.5)
-        text_document_label = ctk.CTkLabel(text_document_frame, width=75, height=20, text=name)
-        text_document_label.place(anchor="center", relx=0.5, rely=0.9)
-
-
-    def create_text_document_open_gui(self) -> None:
-        text_document_open_window = ctk.CTkToplevel(self.WINDOW)
-        text_document_open_window.attributes("-topmost", True)
-        text_document_open_textbox = ctk.CTkTextbox(text_document_open_window)
-        text_document_open_textbox.pack(expand=True, fill="both")
-
-
-    def create_motion_area_gui(self, start_x, start_y, end_x, end_y):
+    def create_selection_box_gui(self, start_x, start_y, end_x, end_y):
         self.motion_frame = ctk.CTkFrame(self.desktop_frame, fg_color="lightblue", border_color="blue", border_width=2, corner_radius=0, height=end_y-start_y, width=end_x-start_x)
         self.motion_frame.place(x=start_x, y=start_y)
 
