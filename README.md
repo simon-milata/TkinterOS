@@ -26,3 +26,5 @@ Inspired by GodotOS, TkinterOS offers a playful environment for users to explore
 - **Customization Options:** Provide users with additional customization features to personalize their TkinterOS experience.
 
 Feel free to explore TkinterOS and contribute to its development!
+
+Disclaimer: I haven't worked on this project in a while and the code is very messy. Next few updates will be focused on refactoring.
