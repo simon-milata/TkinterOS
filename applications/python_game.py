@@ -37,7 +37,7 @@ class PythonGame:
 
     
     def icon_setup(self):
-        if self.OS.dark_mode:
+        if self.OS.appearance_mode:
             self.WINDOW.iconbitmap("Assets/python_game/snake_yellow_icon.ico")
         else:
             self.WINDOW.iconbitmap("Assets/python_game/snake_blue_icon.ico")
