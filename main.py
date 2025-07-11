@@ -18,15 +18,15 @@ class OS:
         self.system_tray_menu_open = False
         self.network_on = False
 
-    #    self.file_manager = FileManager()
+        self.file_manager = FileManager()
         self.desktop_gui = DesktopGUI(self)
 
         self.callbacks = self.create_callbacks()
         self.desktop_window_details = self.create_desktop_window_details()
 
         self.task_bar = TaskBarGUI(self.desktop_window_details, self.callbacks)
-    #     self.create_binds()
-    #     self.load_files()
+        self.create_binds()
+        self.load_files()
         self.update_taskbar_time()
         self.run()
         
