@@ -9,6 +9,7 @@ from applications.python_game import PythonGame
 from applications.pybrowse import PyBrowse
 from desktop.text_editor import TextEditor
 from desktop.file_widget import TextFileWidget
+from desktop.callbacks import Callback
 
 
 class OS:
@@ -65,13 +66,13 @@ class OS:
 
     def create_callbacks(self):
         return {
-            "toggle_start_menu": self.toggle_start_menu,
-            "toggle_system_tray_menu": self.toggle_system_tray_menu,
-            "toggle_network": self.toggle_network,
-            "quit": self.quit,
-            "restart": self.restart,
-            "pybrowse": lambda: self.start_app("pybrowse"),
-            "python": lambda: self.start_app("python")
+            Callback.TOGGLE_START_MENU: self.toggle_start_menu,
+            Callback.TOGGLE_SYSTEM_TRAY_MENU: self.toggle_system_tray_menu,
+            Callback.TOGGLE_NETWORK: self.toggle_network,
+            Callback.QUIT: self.quit,
+            Callback.RESTART: self.restart,
+            Callback.PYBROWSE: lambda: self.start_app("pybrowse"),
+            Callback.PYTHON: lambda: self.start_app("python")
         }
 
 

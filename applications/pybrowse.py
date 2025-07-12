@@ -35,7 +35,7 @@ class PyBrowse:
 
     
     def icon_setup(self):
-        if self.OS.dark_mode:
+        if self.OS.appearance_mode:
             self.WINDOW.iconbitmap("Assets/pybrowse/pybrowse.ico")
         else:
             self.WINDOW.iconbitmap("Assets/pybrowse/pybrowse_dark.ico")
