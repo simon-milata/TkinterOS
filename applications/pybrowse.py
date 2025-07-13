@@ -1,3 +1,5 @@
+import logging
+
 import customtkinter as ctk
 
 from .pybrowse_game import PyBrowseGame
@@ -23,15 +25,26 @@ class PyBrowse:
 
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
-        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
         self.WINDOW.configure(fg_color=desktop_colors)
         self.WINDOW.title("PyBrowse")
-        self.WINDOW.state("zoom")
+        self.maximize_window()
         self.WINDOW.focus_set()
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.resizable(False, False)
 
         self.WINDOW.after(200, self.icon_setup)
+
+
+    def maximize_window(self):
+        try:
+            self.WINDOW.state("zoom")
+        except Exception:
+            try:
+                self.WINDOW.attributes("-zoomed", True)
+            except Exception:
+                logging.debug("Fullscreen not supported.")
+                self.WINDOW.geometry(f"{int(self.WINDOW_WIDTH//1.01)}x{int(self.WINDOW_HEIGHT//1.01)}+0+0")
+                self.WINDOW.update_idletasks()
 
     
     def icon_setup(self):
