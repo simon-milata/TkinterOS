@@ -1,6 +1,7 @@
 import sys, os
 import time
 import datetime
+import logging
 
 from desktop.desktop import DesktopGUI
 from desktop.file_manager import FileManager
@@ -10,6 +11,16 @@ from applications.pybrowse import PyBrowse
 from desktop.text_editor import TextEditor
 from desktop.file_widget import TextFileWidget
 from desktop.callbacks import Callback
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(filename)s | %(message)s",
+    datefmt="%H:%M:%S"
+)
+
+logging.getLogger("PIL").setLevel(logging.WARNING)
+
 
 
 class OS:
@@ -50,6 +61,7 @@ class OS:
 
     
     def quit(self) -> None:
+        logging.debug("Shutting down.")
         sys.exit()
 
     
@@ -86,6 +98,8 @@ class OS:
         # Calculate milliseconds until the next full minute
         seconds_until_next_minute = 60 - now.second
         delay = seconds_until_next_minute * 1000
+
+        logging.debug("Updating taskbar date/time.")
 
         self.desktop_gui.WINDOW.after(delay, self.update_taskbar_time)
 

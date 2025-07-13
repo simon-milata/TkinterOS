@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -12,6 +13,9 @@ class File:
     last_modified: datetime
     name: str = "New Text File"
     content: str = ""
+
+    def __repr__(self):
+        return f"Name: {self.name}, X: {self.x_pos}, Y: {self.y_pos}, Created: {self.creation_time.strftime("%d/%m/%Y %H:%M:%S")}, Last Modified: {self.last_modified.strftime("%d/%m/%Y %H:%M:%S")}"
 
     def __post_init__(self):
         self.x_pos = int(self.x_pos)
@@ -41,7 +45,7 @@ class FileManager():
 
         self.create_file_folder()
         self.load_files()
-        self.create_file_objects()
+        self.load_file_objects()
 
 
     def create_file_folder(self):
@@ -81,7 +85,7 @@ class FileManager():
         with open(self.metadata_path, "w") as metadata_file:
             json.dump(self.metadata, metadata_file)
         
-        print(f"metadata for file {file.name} created.")
+        logging.debug(f"Metadata for {file.name} created.")
 
 
     def create_actual_file(self, file: File):
@@ -89,6 +93,9 @@ class FileManager():
         file_path = os.path.join(self.file_folder, file.name)
         if not os.path.exists(file_path):
             open(file_path, "w").close()
+
+            logging.debug(f"Physical file ({file}) created.")
+
             self.create_file_metadata(file)
 
 
@@ -101,23 +108,31 @@ class FileManager():
             creation_time=creation_time,
         )
 
+        logging.debug(f"Loading file ({file_object}).")
+
         self.create_actual_file(file_object)
     
         self.file_objects.append(file_object)
         return file_object
 
 
-    def create_file_objects(self):
+    def load_file_objects(self):
+        """Creates file objects from files + metadata and adds them to a list"""
+
+        logging.debug(f"Loading file objects...")
+
         for file in self.files:
             if not file in self.metadata["files"]:
                 continue
+
+            file_metadata = self.metadata["files"][file]
             
             self.create_file_object(
-                x_pos=self.metadata["files"][file]["x_pos"],
-                y_pos=self.metadata["files"][file]["y_pos"],
+                x_pos=file_metadata["x_pos"],
+                y_pos=file_metadata["y_pos"],
                 name=file,
-                last_modified=datetime.fromisoformat(self.metadata["files"][file]["last_modified"]),
-                creation_time=datetime.fromisoformat(self.metadata["files"][file]["creation_time"]),
+                last_modified=datetime.fromisoformat(file_metadata["last_modified"]),
+                creation_time=datetime.fromisoformat(file_metadata["creation_time"]),
             )
 
 
@@ -125,12 +140,15 @@ class FileManager():
         file_path = os.path.join(self.file_folder, name)
         with open(file_path, "r") as file:
             content = file.read()
-        print(f"{content=}")
+
+        logging.debug(f"Loading file content:\n'{content}' from {name}.")
+
         return content
     
 
     def save_file_content(self, name: str, updated_content: str) -> None:
         file_path = os.path.join(self.file_folder, name)
-        print(f"{updated_content=}")
         with open(file_path, "w") as file:
             file.writelines(updated_content)
+
+        logging.debug(f"Saving file content:\n'{updated_content}' to {name}.")
