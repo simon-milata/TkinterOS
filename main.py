@@ -2,6 +2,7 @@ import sys, os
 import time
 import datetime
 import logging
+import subprocess
 
 from desktop.desktop import DesktopGUI
 from desktop.file_manager import FileManager
@@ -62,12 +63,15 @@ class OS:
     
     def quit(self) -> None:
         logging.debug("Shutting down.")
-        sys.exit()
+        self.desktop_window_details["window"].destroy()
+        sys.exit(0)
 
     
     def restart(self) -> None:
-        # TODO: not working -> fix
-        os.execl(sys.executable, sys.executable, *sys.argv)
+        logging.debug("Restarting.")
+        self.desktop_window_details["window"].destroy()
+        subprocess.call([sys.executable] + sys.argv)
+        sys.exit(0)
 
 
     def create_desktop_window_details(self):
