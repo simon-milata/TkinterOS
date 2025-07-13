@@ -14,18 +14,20 @@ from desktop.callbacks import Callback
 
 class OS:
     def __init__(self) -> None:
-        self.appearance_mode = "dark"
+        self.appearance_mode = "light"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
 
         self.file_manager = FileManager()
-        self.desktop_gui = DesktopGUI(self)
 
         self.callbacks = self.create_callbacks()
+
+        self.desktop_gui = DesktopGUI(self.appearance_mode, self.callbacks)
         self.desktop_window_details = self.create_desktop_window_details()
 
         self.task_bar = TaskBarGUI(self.desktop_window_details, self.callbacks)
+
         self.create_binds()
         self.load_files()
         self.update_taskbar_time()
@@ -37,7 +39,7 @@ class OS:
         self.desktop_gui.desktop_frame.bind("<Button-1>", self.get_click_position)
         self.desktop_gui.desktop_frame.bind("<Button-3>", self.create_desktop_context_menu_frame)
         self.desktop_gui.desktop_logo.bind("<Button-3>", lambda event: self.create_desktop_context_menu_frame(event, widget="logo"))
-        self.desktop_gui.new_button.bind("<Enter>", self.creates_desktop_context_menu)
+        self.desktop_gui.new_button.bind("<Enter>", self.create_desktop_context_menu)
 
         self.desktop_gui.desktop_frame.bind("<B1-Motion>", self.create_selection_box)
         self.desktop_gui.desktop_frame.bind("<ButtonRelease-1>", self.delete_motion_area)
@@ -72,7 +74,8 @@ class OS:
             Callback.QUIT: self.quit,
             Callback.RESTART: self.restart,
             Callback.PYBROWSE: lambda: self.start_app("pybrowse"),
-            Callback.PYTHON: lambda: self.start_app("python")
+            Callback.PYTHON: lambda: self.start_app("python"),
+            Callback.CREATE_TXT_FILE: self.create_txt_file
         }
 
 
@@ -118,7 +121,7 @@ class OS:
             self.desktop_gui.desktop_actions_frame.place(x=event.x, y=event.y)
 
 
-    def creates_desktop_context_menu(self, event) -> None:
+    def create_desktop_context_menu(self, event) -> None:
         """Opens context menu when you right click on the desktop"""
         self.desktop_actions_frame_x = self.desktop_gui.desktop_actions_frame.winfo_rootx()
         self.desktop_actions_frame_y = self.desktop_gui.desktop_actions_frame.winfo_rooty()
@@ -139,6 +142,11 @@ class OS:
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
         TextEditor(name, content, self.close_file)
+
+
+    def create_txt_file(self):
+        file_object = self.file_manager.create_file_object(100, 100, "test_file", None, None)
+        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file)
 
 
     def close_file(self, name, updated_content):

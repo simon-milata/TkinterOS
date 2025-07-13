@@ -9,3 +9,4 @@ class Callback(Enum):
     RESTART = auto()
     PYBROWSE = auto()
     PYTHON = auto()
+    CREATE_TXT_FILE = auto()

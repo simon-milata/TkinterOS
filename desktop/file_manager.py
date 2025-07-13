@@ -6,26 +6,28 @@ from datetime import datetime
 
 @dataclass()
 class File:
-    pos_x: int
-    pos_y: int
+    x_pos: int
+    y_pos: int
     creation_time: datetime
-    last_edited: datetime
+    last_modified: datetime
     name: str = "New Text File"
     content: str = ""
 
     def __post_init__(self):
-        self.pos_x = int(self.pos_x)
-        self.pos_y = int(self.pos_y)
+        self.x_pos = int(self.x_pos)
+        self.y_pos = int(self.y_pos)
 
+        if not self.name.endswith(".txt"):
+            self.name += ".txt"
         if not self.creation_time:
             self.creation_time = datetime.now()
-        if not self.last_edited:
-            self.last_edited = self.creation_time
+        if not self.last_modified:
+            self.last_modified = self.creation_time
 
 
     def update_content(self, new_content):
         self.content = new_content
-        self.last_edited = datetime.now()
+        self.last_modified = datetime.now()
 
 
 class FileManager():
@@ -33,6 +35,7 @@ class FileManager():
         user_path = os.path.expanduser("~")
         self.project_folder_path = os.path.join(user_path, "AppData/Local/TkinterOS")
         self.file_folder = os.path.join(self.project_folder_path, "files")
+        self.metadata_path = os.path.join(self.file_folder, "metadata.json")
 
         self.file_objects = []
 
@@ -47,11 +50,11 @@ class FileManager():
 
     def load_metadata(self):
         try:
-            with open(os.path.join(self.file_folder, "metadata.json"), "r") as metadata_file:
+            with open(self.metadata_path, "r") as metadata_file:
                 self.metadata = json.load(metadata_file)
         except FileNotFoundError:
             emtpy_metadata = {"files": {}}
-            with open(os.path.join(self.file_folder, "metadata.json"), "w") as metadata_file:
+            with open(self.metadata_path, "w") as metadata_file:
                 json.dump(emtpy_metadata, metadata_file)
                 self.metadata = emtpy_metadata
                 
@@ -64,19 +67,58 @@ class FileManager():
         self.text_files = [file for file in self.files if ".txt" in file]
 
 
+    def create_file_metadata(self, file: File) -> None:
+        with open(self.metadata_path, "r") as metadata_file: 
+            self.metadata = json.load(metadata_file)
+
+        self.metadata["files"][file.name] = {
+            "x_pos": file.x_pos,
+            "y_pos": file.y_pos,
+            "creation_time": file.creation_time.isoformat(),
+            "last_modified": file.last_modified.isoformat()
+        }
+
+        with open(self.metadata_path, "w") as metadata_file:
+            json.dump(self.metadata, metadata_file)
+        
+        print(f"metadata for file {file.name} created.")
+
+
+    def create_actual_file(self, file: File):
+        """Checks if a physical file exists and if not creates it"""
+        file_path = os.path.join(self.file_folder, file.name)
+        if not os.path.exists(file_path):
+            open(file_path, "w").close()
+            self.create_file_metadata(file)
+
+
+    def create_file_object(self, x_pos: int, y_pos: int, name: str, last_modified: datetime | None, creation_time: datetime | None) -> File:
+        file_object = File(
+            x_pos=x_pos,
+            y_pos=y_pos,
+            name=name,
+            last_modified=last_modified,
+            creation_time=creation_time,
+        )
+
+        self.create_actual_file(file_object)
+    
+        self.file_objects.append(file_object)
+        return file_object
+
+
     def create_file_objects(self):
         for file in self.files:
             if not file in self.metadata["files"]:
                 continue
             
-            file_object = File(
-                pos_x=self.metadata["files"][file]["x_pos"],
-                pos_y=self.metadata["files"][file]["y_pos"],
+            self.create_file_object(
+                x_pos=self.metadata["files"][file]["x_pos"],
+                y_pos=self.metadata["files"][file]["y_pos"],
                 name=file,
-                last_edited=datetime.fromisoformat(self.metadata["files"][file]["last_modified"]),
+                last_modified=datetime.fromisoformat(self.metadata["files"][file]["last_modified"]),
                 creation_time=datetime.fromisoformat(self.metadata["files"][file]["creation_time"]),
             )
-            self.file_objects.append(file_object)
 
 
     def get_file_content(self, name: str) -> str:

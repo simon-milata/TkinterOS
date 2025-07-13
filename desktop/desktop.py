@@ -1,23 +1,24 @@
 from PIL import Image
+from desktop.callbacks import Callback
 
 import customtkinter as ctk
 
 from styles import desktop_blue, desktop_yellow
 
 class DesktopGUI:
-    def __init__(self, os) -> None:
-        self.os = os
+    def __init__(self, appearance_mode, callbacks) -> None:
+        self.callbacks = callbacks
         self.window_setup()
         self.get_screen_size()
         self.icon_setup()
         self.create_gui()
-        ctk.set_appearance_mode(self.os.appearance_mode)
+        ctk.set_appearance_mode(appearance_mode)
 
     
     def window_setup(self) -> None:
         self.WINDOW = ctk.CTk()
         self.WINDOW.attributes('-fullscreen', True)
-        self.WINDOW.configure(fg_color=("white", "black"))
+        self.WINDOW.configure(fg_color=(desktop_yellow, desktop_blue))
         self.WINDOW.update_idletasks()
 
 
@@ -56,7 +57,7 @@ class DesktopGUI:
 
         self.create_new_folder = ctk.CTkButton(self.new_action_frame, text="Folder")
         self.create_new_folder.pack()
-        self.create_new_text_document = ctk.CTkButton(self.new_action_frame, text="Text Document")
+        self.create_new_text_document = ctk.CTkButton(self.new_action_frame, text="Text Document", command=self.callbacks[Callback.CREATE_TXT_FILE])
         self.create_new_text_document.pack()
 
 
