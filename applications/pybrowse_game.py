@@ -3,7 +3,7 @@ import random
 
 import customtkinter as ctk
 
-from styles import button_color, button_font_color, font_family, font_size_small, font_size_xs, font_color
+from theme import THEME_COLORS, THEME_FONTS
 
 class PyBrowseGame:
     def __init__(self, pybrowse: object, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame) -> None:
@@ -61,7 +61,7 @@ class PyBrowseGame:
         self.barrier_speed = 3
         self.mid_air = False
         self.score = 0
-        self.score_counter = ctk.CTkLabel(self.game_frame, text=0, fg_color="transparent", text_color=font_color, font=(font_family, font_size_small))
+        self.score_counter = ctk.CTkLabel(self.game_frame, text=0, fg_color="transparent", text_color=THEME_COLORS.font_color, font=(THEME_FONTS.family, THEME_FONTS.small))
         self.score_counter.place(anchor="center", relx=0.5, rely=0.5)
         
 
@@ -161,8 +161,8 @@ class Blockade:
 
 
     def create_barrier(self) -> ctk.CTkLabel:
-        self.barrier = ctk.CTkLabel(self.game_frame, height=self.game_frame.winfo_height() / 3, text=random.choice(self.error_list), fg_color=button_color, 
-                                   text_color=button_font_color, font=(font_family, font_size_xs))
+        self.barrier = ctk.CTkLabel(self.game_frame, height=self.game_frame.winfo_height() / 3, text=random.choice(self.error_list), fg_color=THEME_COLORS.button, 
+                                   text_color=THEME_COLORS.button_font_color, font=(THEME_FONTS.family, THEME_FONTS.extra_small))
         self.barrier.place(x=self.x_pos, y=self.y_pos)
 
         self.game.barrier_list.append(self.barrier)

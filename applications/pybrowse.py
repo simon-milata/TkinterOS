@@ -3,7 +3,7 @@ import logging
 import customtkinter as ctk
 
 from .pybrowse_game import PyBrowseGame
-from styles import desktop_colors, font_family, font_size_big, font_size_medium, font_color, button_color, font_color
+from theme import THEME_COLORS, THEME_FONTS
 
 class PyBrowse:
     def __init__(self, os, os_window: ctk.CTk) -> None:
@@ -25,7 +25,7 @@ class PyBrowse:
 
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
-        self.WINDOW.configure(fg_color=desktop_colors)
+        self.WINDOW.configure(fg_color=THEME_COLORS.primary)
         self.WINDOW.title("PyBrowse")
         self.maximize_window()
         self.WINDOW.focus_set()
@@ -55,21 +55,21 @@ class PyBrowse:
 
 
     def create_window_bar(self) -> None:
-        self.window_bar_frame = ctk.CTkFrame(self.WINDOW, fg_color=font_color, corner_radius=0, width=self.WINDOW_WIDTH, height=50)
+        self.window_bar_frame = ctk.CTkFrame(self.WINDOW, fg_color=THEME_COLORS.font_color, corner_radius=0, width=self.WINDOW_WIDTH, height=50)
         self.window_bar_frame.place(anchor="n", relx=0.5, rely=0)
 
     
     def create_no_internet_gui(self) -> None:
         self.no_internet_frame = ctk.CTkFrame(self.WINDOW, fg_color="transparent")
 
-        self.game_frame = ctk.CTkFrame(self.no_internet_frame, fg_color="transparent", width=int(self.WINDOW_WIDTH/2.5), height=int(self.WINDOW_HEIGHT * 0.2), border_color=button_color, border_width=3)
+        self.game_frame = ctk.CTkFrame(self.no_internet_frame, fg_color="transparent", width=int(self.WINDOW_WIDTH/2.5), height=int(self.WINDOW_HEIGHT * 0.2), border_color=THEME_COLORS.button, border_width=3)
         self.game_frame.grid()
 
         self.pybrowse_game = PyBrowseGame(self, self.WINDOW, self.game_frame)
 
         self.WINDOW.bind("<space>", self.start_pybrowse_game)
 
-        no_internet_label = ctk.CTkLabel(self.no_internet_frame, text="No internet", font=(font_family, font_size_big), text_color=font_color)
+        no_internet_label = ctk.CTkLabel(self.no_internet_frame, text="No internet", font=(THEME_FONTS.family, THEME_FONTS.big), text_color=THEME_COLORS.font_color)
         no_internet_label.grid()
 
 
