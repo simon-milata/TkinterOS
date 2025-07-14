@@ -3,7 +3,10 @@ import random
 import customtkinter as ctk
 from playsound import playsound
 
-from styles import button_font_color, button_color, python_blue, python_yellow, button_font_size, font_family_bold, button_hover_color, font_color, font_size_big, font_size_xxl, font_family, desktop_colors
+from theme import THEME_COLORS, THEME_FONTS
+
+python_blue = "#326c9b"
+python_yellow = "#ffe66d"
 
 class PythonGame:
     def __init__(self, os, os_window: ctk.CTk) -> None:
@@ -28,7 +31,7 @@ class PythonGame:
     def create_window(self) -> None:
         self.WINDOW = ctk.CTkToplevel()
         self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
-        self.WINDOW.configure(fg_color=desktop_colors)
+        self.WINDOW.configure(fg_color=THEME_COLORS.primary)
         self.WINDOW.title("Python Game")
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.focus_force()
@@ -44,24 +47,24 @@ class PythonGame:
 
 
     def create_main_menu(self):
-        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=desktop_colors)
+        self.main_menu_frame = ctk.CTkFrame(self.WINDOW, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, fg_color=THEME_COLORS.primary)
         self.main_menu_frame.pack()
-        header = ctk.CTkLabel(self.main_menu_frame, text="PYTHON", text_color=font_color, font=(font_family_bold, font_size_xxl))
+        header = ctk.CTkLabel(self.main_menu_frame, text="PYTHON", text_color=THEME_COLORS.font_color, font=(THEME_COLORS.font_color, THEME_FONTS.large))
         header.place(anchor="n", relx=0.5, rely=0.05)
         
-        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Rows", text_color=font_color, font=(font_family, font_size_big))
+        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Rows", text_color=THEME_COLORS.font_color, font=(THEME_FONTS.family, THEME_FONTS.big))
         rows_label.place(anchor="center", relx=0.5, rely=0.52)
-        self.row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family, font_size_big), selected_hover_color=button_hover_color, 
-                                                fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
+        self.row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=THEME_COLORS.button_font_color, font=(THEME_FONTS.family, THEME_FONTS.big), selected_hover_color=THEME_COLORS.button_hover, 
+                                                fg_color=THEME_COLORS.button, unselected_color=THEME_COLORS.button, selected_color=THEME_COLORS.button_hover, values=["5", "10", "15", "20"], unselected_hover_color=THEME_COLORS.button)
         self.row_input.place(anchor="center", relx=0.5, rely=0.62)
 
-        columns_label = ctk.CTkLabel(self.main_menu_frame, text="Columns", text_color=font_color, font=(font_family, font_size_big))
+        columns_label = ctk.CTkLabel(self.main_menu_frame, text="Columns", text_color=THEME_COLORS.font_color, font=(THEME_FONTS.family, THEME_FONTS.big))
         columns_label.place(anchor="center", relx=0.5, rely=0.3)
-        self.column_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=button_font_color, font=(font_family, font_size_big), selected_hover_color=button_hover_color, 
-                                                   fg_color=button_color, unselected_color=button_color, selected_color=button_hover_color, values=["5", "10", "15", "20"], unselected_hover_color=button_color)
+        self.column_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=THEME_COLORS.button_font_color, font=(THEME_FONTS.family, THEME_FONTS.big), selected_hover_color=THEME_COLORS.button_hover, 
+                                                   fg_color=THEME_COLORS.button, unselected_color=THEME_COLORS.button, selected_color=THEME_COLORS.button_hover, values=["5", "10", "15", "20"], unselected_hover_color=THEME_COLORS.button)
         self.column_input.place(anchor="center", relx=0.5, rely=0.4)
-        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=button_font_color, fg_color=button_color, command=self.start_game,
-                                    font=(font_family_bold, button_font_size), hover_color=button_hover_color)
+        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=THEME_COLORS.button_font_color, fg_color=THEME_COLORS.button, command=self.start_game,
+                                    font=(THEME_COLORS.font_color, THEME_FONTS.button_font_size), hover_color=THEME_COLORS.button_hover)
         play_button.place(anchor="center", relx=0.5, rely=0.8)
 
 
@@ -344,16 +347,16 @@ class PythonGame:
 
     def create_game_over_gui(self):
         self.WINDOW.geometry("400x400")
-        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=400, height=400, fg_color=desktop_colors)
+        self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=400, height=400, fg_color=THEME_COLORS.primary)
         self.game_over_frame.pack()
-        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(font_family_bold, font_size_xxl), text_color=font_color)
+        game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(THEME_FONTS.family_bold, THEME_FONTS.large), text_color=THEME_COLORS.font_color)
         game_over_text.place(anchor="n", relx=0.5, rely=0.05)
-        berry_label = ctk.CTkLabel(self.game_over_frame, text="Berries", font=(font_family_bold, font_size_big), text_color=font_color)
+        berry_label = ctk.CTkLabel(self.game_over_frame, text="Berries", font=(THEME_FONTS.family_bold, THEME_FONTS.big), text_color=THEME_COLORS.font_color)
         berry_label.place(anchor="center", relx=0.5, rely=0.35)
-        score_text = ctk.CTkLabel(self.game_over_frame, text=self.berries, font=(font_family_bold, font_size_xxl), text_color=font_color)
+        score_text = ctk.CTkLabel(self.game_over_frame, text=self.berries, font=(THEME_FONTS.family_bold, THEME_FONTS.large), text_color=THEME_COLORS.font_color)
         score_text.place(anchor="center", relx=0.5, rely=0.5)
-        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", fg_color=button_color, text_color=button_font_color, 
-                                          font=(font_family_bold, button_font_size), command=self.run, hover_color=button_hover_color)
+        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", fg_color=THEME_COLORS.button, text_color=THEME_COLORS.button_font_color, 
+                                          font=(THEME_FONTS.family_bold, THEME_FONTS.button_font_size), command=self.run, hover_color=THEME_COLORS.button_hover)
         play_again_button.place(anchor="center", relx=0.5, rely=0.7)
         
 

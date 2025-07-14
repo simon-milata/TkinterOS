@@ -4,7 +4,7 @@ from desktop.callbacks import Callback
 
 import customtkinter as ctk
 
-from styles import *
+from theme import THEME_COLORS, THEME_FONTS
 
 
 class TaskBarGUI:
@@ -30,7 +30,7 @@ class TaskBarGUI:
 
     
     def create_taskbar(self) -> None:
-        self.taskbar = ctk.CTkFrame(self.desktop_window_details["window"], height=46, width=self.desktop_window_details["width"], fg_color=desktop_colors, corner_radius=0)
+        self.taskbar = ctk.CTkFrame(self.desktop_window_details["window"], height=46, width=self.desktop_window_details["width"], fg_color=THEME_COLORS.primary, corner_radius=0)
         self.taskbar.place(anchor="s", relx=0.5, rely=1)
         self.taskbar.lift()
 
@@ -38,31 +38,31 @@ class TaskBarGUI:
         self.taskbar_app_frame.place(anchor="center", relx=0.5, rely=0.5)
 
         self.start_button = ctk.CTkButton(self.taskbar, text="", image=self.python_icon, width=45, height=45, fg_color="transparent", 
-                                          command=self.callbacks[Callback.TOGGLE_START_MENU], hover_color=desktop_highlight_colors)
+                                          command=self.callbacks[Callback.TOGGLE_START_MENU], hover_color=THEME_COLORS.highlight)
         self.start_button.place(anchor="w", relx=0, rely=0.5)
 
         self.create_taskbar_apps()
 
 
     def create_start_menu(self) -> None:
-        self.start_menu_frame = ctk.CTkFrame(self.desktop_window_details["window"], width=self.desktop_window_details["width"]/6, height=self.desktop_window_details["height"]/4, fg_color=desktop_off_colors)
+        self.start_menu_frame = ctk.CTkFrame(self.desktop_window_details["window"], width=self.desktop_window_details["width"]/6, height=self.desktop_window_details["height"]/4, fg_color=THEME_COLORS.off)
         self.start_menu_frame.grid_propagate(False)
         self.start_menu_frame.lift()
 
         self.shut_down_button = ctk.CTkButton(self.start_menu_frame, width=self.desktop_window_details["width"]/20, height=self.desktop_window_details["height"]/20, text="Shut down", command=self.callbacks[Callback.QUIT], 
-                                              fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color, hover_color=button_hover_color)
+                                              fg_color=THEME_COLORS.button, font=(THEME_FONTS.family, THEME_FONTS.small), text_color=THEME_COLORS.button_font_color, hover_color=THEME_COLORS.button_hover)
         self.shut_down_button.grid(padx=self.desktop_window_details["height"] * 0.01, pady=self.desktop_window_details["height"] * 0.01)
         self.restart_button = ctk.CTkButton(self.start_menu_frame, width=self.desktop_window_details["width"]/20, height=self.desktop_window_details["height"]/20, text="Restart", command=self.callbacks[Callback.RESTART], 
-                                            fg_color=button_color, font=(font_family, font_size_small), text_color=button_font_color, hover_color=button_hover_color)
+                                            fg_color=THEME_COLORS.button, font=(THEME_FONTS.family, THEME_FONTS.small), text_color=THEME_COLORS.button_font_color, hover_color=THEME_COLORS.button_hover)
         self.restart_button.grid(padx=self.desktop_window_details["height"] * 0.01, pady=self.desktop_window_details["height"] * 0.01)
 
 
     def create_time_date(self) -> None:
         self.time_date_frame = ctk.CTkFrame(self.taskbar, width=self.desktop_window_details["width"]/20, height=45, fg_color="transparent")
         self.time_date_frame.place(anchor="e", relx=1, rely=0.5)
-        self.clock = ctk.CTkLabel(self.time_date_frame, font=(font_family, font_size_xs), text_color=font_color, height=font_size_xs)
+        self.clock = ctk.CTkLabel(self.time_date_frame, font=(THEME_FONTS.family, THEME_FONTS.extra_small), text_color=THEME_COLORS.font_color, height=THEME_FONTS.extra_small)
         self.clock.place(anchor="ne", relx=0.9, rely=0.1)
-        self.date = ctk.CTkLabel(self.time_date_frame, font=(font_family, font_size_xs), text_color=font_color, height=font_size_xs)
+        self.date = ctk.CTkLabel(self.time_date_frame, font=(THEME_FONTS.family, THEME_FONTS.extra_small), text_color=THEME_COLORS.font_color, height=THEME_FONTS.extra_small)
         self.date.place(anchor="se", relx=0.9, rely=0.9)
 
     
@@ -75,11 +75,11 @@ class TaskBarGUI:
     def create_taskbar_apps(self) -> None:
         """Creates taskbar apps eg. browser, games..."""
         self.pybrowse = ctk.CTkButton(self.taskbar_app_frame, width=40, height=40, text="", command=lambda: self.callbacks[Callback.PYBROWSE](),
-                                                image=self.py_browse_icon, fg_color="transparent", hover_color=desktop_highlight_colors)
+                                                image=self.py_browse_icon, fg_color="transparent", hover_color=THEME_COLORS.highlight)
         self.pybrowse.grid(padx=self.desktop_window_details["width"]*0.005, row=0, column=0)
 
         self.python_game_button = ctk.CTkButton(self.taskbar_app_frame, command=lambda: self.callbacks[Callback.PYTHON](), width=40, height=40, text="", 
-                                                image=self.snake_icon, fg_color="transparent", hover_color=desktop_highlight_colors)
+                                                image=self.snake_icon, fg_color="transparent", hover_color=THEME_COLORS.highlight)
         self.python_game_button.grid(padx=self.desktop_window_details["width"]*0.005, row=0, column=1)
 
 
@@ -89,21 +89,21 @@ class TaskBarGUI:
         self.system_tray_frame.place(anchor="center", relx=0.95, rely=0.5)
 
         self.network = ctk.CTkButton(self.system_tray_frame, height=45, width=45, text="", image=self.no_network_icon, fg_color="transparent", 
-                                      bg_color="transparent", hover_color=desktop_highlight_colors, command=self.callbacks[Callback.TOGGLE_SYSTEM_TRAY_MENU])
+                                      bg_color="transparent", hover_color=THEME_COLORS.highlight, command=self.callbacks[Callback.TOGGLE_SYSTEM_TRAY_MENU])
         self.network.grid()
 
 
     def create_system_tray_menu(self) -> None:
         """Creates a popup menu for network etc"""
-        self.system_tray_menu_frame = ctk.CTkFrame(self.desktop_window_details["window"], width=self.desktop_window_details["width"]/6, height=self.desktop_window_details["height"]/4, fg_color=desktop_off_colors)
+        self.system_tray_menu_frame = ctk.CTkFrame(self.desktop_window_details["window"], width=self.desktop_window_details["width"]/6, height=self.desktop_window_details["height"]/4, fg_color=THEME_COLORS.off)
         self.system_tray_menu_frame.grid_propagate(False)
         
         self.network_frame = ctk.CTkFrame(self.system_tray_menu_frame, fg_color="transparent")
         self.network_frame.grid(padx=self.desktop_window_details["height"] * 0.01, pady=self.desktop_window_details["height"] * 0.01)
-        self.network_button = ctk.CTkButton(self.network_frame, width=self.desktop_window_details["width"] * 0.05, height=self.desktop_window_details["height"] * 0.05, text="", hover_color=desktop_bright_colors, 
-                                             command=self.callbacks[Callback.TOGGLE_NETWORK], fg_color=desktop_highlight_colors, image=self.network_icon_off)
+        self.network_button = ctk.CTkButton(self.network_frame, width=self.desktop_window_details["width"] * 0.05, height=self.desktop_window_details["height"] * 0.05, text="", hover_color=THEME_COLORS.bright, 
+                                             command=self.callbacks[Callback.TOGGLE_NETWORK], fg_color=THEME_COLORS.highlight, image=self.network_icon_off)
         self.network_button.pack()
-        self.network_label = ctk.CTkLabel(self.network_frame, text="Wi-Fi", font=(font_family, font_size_xs), text_color=font_color, fg_color="transparent")
+        self.network_label = ctk.CTkLabel(self.network_frame, text="Wi-Fi", font=(THEME_FONTS.family, THEME_FONTS.extra_small), text_color=THEME_COLORS.font_color, fg_color="transparent")
         self.network_label.pack()
 
 
@@ -111,10 +111,10 @@ class TaskBarGUI:
         """Changes system tray and system tray menu icon and text of network"""
         match state:
             case "on":
-                self.network_button.configure(fg_color=button_color, hover_color=button_hover_color)
+                self.network_button.configure(fg_color=THEME_COLORS.button, hover_color=THEME_COLORS.button_hover)
                 self.network.configure(image=self.network_icon)
                 self.network_label.configure(text="Available")
             case "off":
-                self.network_button.configure(fg_color=desktop_highlight_colors, hover_color=desktop_bright_colors)
+                self.network_button.configure(fg_color=THEME_COLORS.highlight, hover_color=THEME_COLORS.bright)
                 self.network.configure(image=self.no_network_icon)
                 self.network_label.configure(text="Wi-Fi")

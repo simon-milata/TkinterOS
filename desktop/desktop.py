@@ -3,7 +3,7 @@ from desktop.callbacks import Callback
 
 import customtkinter as ctk
 
-from styles import desktop_blue, desktop_yellow
+from theme import THEME_COLORS, THEME_FONTS
 
 class DesktopGUI:
     def __init__(self, appearance_mode, callbacks) -> None:
@@ -18,7 +18,7 @@ class DesktopGUI:
     def window_setup(self) -> None:
         self.WINDOW = ctk.CTk()
         self.WINDOW.attributes('-fullscreen', True)
-        self.WINDOW.configure(fg_color=(desktop_yellow, desktop_blue))
+        self.WINDOW.configure(fg_color=THEME_COLORS.primary)
         self.WINDOW.update_idletasks()
 
 

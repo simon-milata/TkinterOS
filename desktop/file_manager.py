@@ -9,8 +9,8 @@ from datetime import datetime
 class File:
     x_pos: int
     y_pos: int
-    creation_time: datetime
-    last_modified: datetime
+    creation_time: datetime | None
+    last_modified: datetime | None
     name: str = "New Text File"
     content: str = ""
 
@@ -21,7 +21,7 @@ class File:
         self.x_pos = int(self.x_pos)
         self.y_pos = int(self.y_pos)
 
-        if not self.name.endswith(".txt"):
+        if self.name and not self.name.endswith(".txt"):
             self.name += ".txt"
         if not self.creation_time:
             self.creation_time = datetime.now()

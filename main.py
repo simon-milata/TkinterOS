@@ -163,7 +163,9 @@ class OS:
 
 
     def create_txt_file(self):
-        file_object = self.file_manager.create_file_object(100, 100, "test_file", None, None)
+        x=self.desktop_actions_frame_x
+        y=self.desktop_actions_frame_y
+        file_object = self.file_manager.create_file_object(x, y, "aaa", None, None)
         TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file)
 
 
