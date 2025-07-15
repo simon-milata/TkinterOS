@@ -7,7 +7,7 @@ import customtkinter as ctk
 from theme import THEME_COLORS, THEME_FONTS
 
 
-class TaskBarGUI:
+class TaskbarGUI:
     def __init__(self, desktop_window_details: dict[str, any], callbacks: dict[str, Callable]) -> None:
         self.desktop_window_details = desktop_window_details
         self.callbacks = callbacks
