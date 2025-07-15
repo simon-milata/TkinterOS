@@ -29,7 +29,7 @@ class DesktopGUI:
 
 
     def icon_setup(self) -> None:
-        self.python_logo = ctk.CTkImage(Image.open("Assets/desktop/python_logo.png"), size=(self.height/5, self.height/5))
+        self.python_logo = ctk.CTkImage(Image.open("src/Assets/desktop/python_logo.png"), size=(self.height/5, self.height/5))
 
     
     def create_gui(self) -> None:

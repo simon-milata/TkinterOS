@@ -18,7 +18,7 @@ class PyBrowseGame:
 
 
     def create_icons(self) -> None:
-        self.python_icon = ctk.CTkImage(light_image=Image.open("Assets/pybrowse/anaconda_blue.png"), dark_image=Image.open("Assets/pybrowse/anaconda_yellow.png"), size=(64, 64))
+        self.python_icon = ctk.CTkImage(light_image=Image.open("src/Assets/pybrowse/anaconda_blue.png"), dark_image=Image.open("src/Assets/pybrowse/anaconda_yellow.png"), size=(64, 64))
 
 
     def create_python(self) -> None:

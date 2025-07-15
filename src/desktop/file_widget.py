@@ -17,7 +17,7 @@ class TextFileWidget:
         file_body_frame.place(x=self.file.x_pos, y=self.file.y_pos)
         file_body_button = ctk.CTkButton(
             file_body_frame, width=75, height=100, command=self.on_click, text="",
-            image=ctk.CTkImage(Image.open("Assets/desktop/python_logo.png"), size=(50, 50)), fg_color="transparent"
+            image=ctk.CTkImage(Image.open("src/Assets/desktop/python_logo.png"), size=(50, 50)), fg_color="transparent"
         ) # TODO: replace placeholder image
         file_body_button.place(anchor="center", relx=0.5, rely=0.5)
         file_body_name_label = ctk.CTkLabel(file_body_frame, width=75, height=20, text=self.file.name)

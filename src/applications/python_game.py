@@ -25,7 +25,7 @@ class PythonGame:
         self.base_color_1 = "green"
         self.base_color_2 = "darkgreen"
         self.berry_color = "#e03d3d"
-        self.munch_sound = "Assets/python_game/munch_sound.mp3"
+        self.munch_sound = "src/Assets/python_game/munch_sound.mp3"
 
     
     def create_window(self) -> None:
@@ -41,9 +41,9 @@ class PythonGame:
     
     def icon_setup(self):
         if self.OS.appearance_mode:
-            self.WINDOW.iconbitmap("Assets/python_game/snake_yellow_icon.ico")
+            self.WINDOW.iconbitmap("src/Assets/python_game/snake_yellow_icon.ico")
         else:
-            self.WINDOW.iconbitmap("Assets/python_game/snake_blue_icon.ico")
+            self.WINDOW.iconbitmap("src/Assets/python_game/snake_blue_icon.ico")
 
 
     def create_main_menu(self):
