@@ -12,6 +12,8 @@ from applications.pybrowse import PyBrowse
 from desktop.text_editor import TextEditor
 from desktop.file_widget import TextFileWidget
 from desktop.callback_manager import CallbackManager
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import DesktopAssets
 
 
 logging.basicConfig(
@@ -30,13 +32,15 @@ class OS_Controller:
         self.system_tray_menu_open = False
         self.network_on = False
 
+        self.asset_manager = AssetManager("src/asset_management/Assets")
         self.file_manager = FileManager()
         self.callback_manager = CallbackManager(self)
+        self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
 
-        self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks)
+        self.text_file_icon = self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON)
         self.desktop_window_details = self.create_desktop_window_details()
 
-        self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks)
+        self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
 
         self.create_binds()
         self.load_files()
@@ -139,7 +143,7 @@ class OS_Controller:
     def load_files(self):
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file)
+            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file, self.text_file_icon)
 
 
     def open_file(self, name):
@@ -151,7 +155,7 @@ class OS_Controller:
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, "aaa", None, None)
-        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file)
+        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file, self.text_file_icon)
 
 
     def close_file(self, name, updated_content):
@@ -193,9 +197,9 @@ class OS_Controller:
     def start_app(self, game:str) -> None:
         match game:
             case "python":
-                PythonGame(self, self.desktop_gui.WINDOW)
+                PythonGame(self, self.desktop_gui.WINDOW, self.asset_manager)
             case "pybrowse":
-                self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW)
+                self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
 
 

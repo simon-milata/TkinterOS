@@ -4,9 +4,12 @@ import random
 import customtkinter as ctk
 
 from theme import THEME_COLORS, THEME_FONTS
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import PyBrowseAssets
 
 class PyBrowseGame:
-    def __init__(self, pybrowse: object, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame) -> None:
+    def __init__(self, pybrowse: object, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame, asset_manager: AssetManager) -> None:
+        self.asset_manager = asset_manager
         self.pybrowse = pybrowse
         self.PYBROWSE_WINDOW = pybrowse_window
         self.PYBROWSE_WINDOW.update()
@@ -18,7 +21,7 @@ class PyBrowseGame:
 
 
     def create_icons(self) -> None:
-        self.python_icon = ctk.CTkImage(light_image=Image.open("src/Assets/pybrowse/anaconda_blue.png"), dark_image=Image.open("src/Assets/pybrowse/anaconda_yellow.png"), size=(64, 64))
+        self.python_icon = ctk.CTkImage(light_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE_DARK), dark_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE_LIGHT), size=(64, 64))
 
 
     def create_python(self) -> None:

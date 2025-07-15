@@ -5,10 +5,13 @@ from desktop.callbacks import Callback
 import customtkinter as ctk
 
 from theme import THEME_COLORS, THEME_FONTS
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import DesktopAssets
 
 
 class TaskbarGUI:
-    def __init__(self, desktop_window_details: dict[str, any], callbacks: dict[str, Callable]) -> None:
+    def __init__(self, desktop_window_details: dict[str, any], callbacks: dict[str, Callable], asset_manager: AssetManager) -> None:
+        self.asset_manager = asset_manager
         self.desktop_window_details = desktop_window_details
         self.callbacks = callbacks
 
@@ -21,12 +24,41 @@ class TaskbarGUI:
     
 
     def icon_setup(self) -> None:
-        self.python_icon = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/python_icon_dark.png"), dark_image=Image.open("src/Assets/desktop/python_icon.png"), size=(40, 40))
-        self.snake_icon = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/snake_blue_icon.png"), dark_image=Image.open("src/Assets/desktop/snake_yellow_icon.png"), size=(32, 32))
-        self.no_network_icon = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/no_internet_icon_dark.png"), dark_image=Image.open("src/Assets/desktop/no_internet_icon.png"), size=(20, 20))
-        self.network_icon = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/wifi_icon_dark.png"), dark_image=Image.open("src/Assets/desktop/wifi_icon.png"), size=(20, 20))
-        self.network_icon_off = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/wifi_icon.png"), dark_image=Image.open("src/Assets/desktop/wifi_icon_dark.png"), size=(32, 32))
-        self.py_browse_icon = ctk.CTkImage(light_image=Image.open("src/Assets/desktop/pybrowse_dark.png"), dark_image=Image.open("src/Assets/desktop/pybrowse.png"), size=(32, 32))
+        self.python_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.START_LOGO_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.START_LOGO_LIGHT),
+            size=(40, 40)
+        )
+
+        self.snake_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME_LIGHT),
+            size=(32, 32)
+        )
+
+        self.no_network_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_LIGHT),
+            size=(20, 20)
+        )
+
+        self.network_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_LIGHT),
+            size=(20, 20)
+        )
+
+        self.network_icon_off = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_LIGHT),
+            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_DARK),
+            size=(32, 32)
+        )
+
+        self.py_browse_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE_LIGHT),
+            size=(32, 32)
+        )
 
     
     def create_taskbar(self) -> None:

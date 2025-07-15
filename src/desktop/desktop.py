@@ -4,9 +4,12 @@ from desktop.callbacks import Callback
 import customtkinter as ctk
 
 from theme import THEME_COLORS, THEME_FONTS
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import DesktopAssets
 
 class DesktopGUI:
-    def __init__(self, appearance_mode, callbacks) -> None:
+    def __init__(self, appearance_mode, callbacks, asset_manager: AssetManager) -> None:
+        self.asset_manager = asset_manager
         self.callbacks = callbacks
         self.window_setup()
         self.get_screen_size()
@@ -29,7 +32,7 @@ class DesktopGUI:
 
 
     def icon_setup(self) -> None:
-        self.python_logo = ctk.CTkImage(Image.open("src/Assets/desktop/python_logo.png"), size=(self.height/5, self.height/5))
+        self.python_logo = ctk.CTkImage(self.asset_manager.get_image(DesktopAssets.BACKGROUND_LOGO), size=(self.height/5, self.height/5))
 
     
     def create_gui(self) -> None:
