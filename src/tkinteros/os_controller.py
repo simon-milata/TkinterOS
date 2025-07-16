@@ -4,14 +4,16 @@ import datetime
 import logging
 import subprocess
 
-from desktop.desktop import DesktopGUI
-from desktop.file_manager import FileManager
-from desktop.task_bar import TaskBarGUI
-from applications.python_game import PythonGame
+from gui.desktop_gui import DesktopGUI
+from file_management.file_manager import FileManager
+from gui.taskbar_gui import TaskbarGUI
+from applications.snake_game import PythonGame
 from applications.pybrowse import PyBrowse
-from desktop.text_editor import TextEditor
-from desktop.file_widget import TextFileWidget
-from desktop.callbacks import Callback
+from gui.text_editor import TextEditor
+from gui.file_widget import TextFileWidget
+from callback_management.callback_manager import CallbackManager
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import DesktopAssets
 
 
 logging.basicConfig(
@@ -23,22 +25,22 @@ logging.basicConfig(
 logging.getLogger("PIL").setLevel(logging.WARNING)
 
 
-
-class OS:
+class OS_Controller:
     def __init__(self) -> None:
         self.appearance_mode = "light"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
 
+        self.asset_manager = AssetManager("src/tkinteros/asset_management/assets")
         self.file_manager = FileManager()
+        self.callback_manager = CallbackManager(self)
+        self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
 
-        self.callbacks = self.create_callbacks()
-
-        self.desktop_gui = DesktopGUI(self.appearance_mode, self.callbacks)
+        self.text_file_icon = self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON)
         self.desktop_window_details = self.create_desktop_window_details()
 
-        self.task_bar = TaskBarGUI(self.desktop_window_details, self.callbacks)
+        self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
 
         self.create_binds()
         self.load_files()
@@ -79,19 +81,6 @@ class OS:
             "window": self.desktop_gui.WINDOW, 
             "width": self.desktop_gui.width,
             "height": self.desktop_gui.height
-        }
-
-
-    def create_callbacks(self):
-        return {
-            Callback.TOGGLE_START_MENU: self.toggle_start_menu,
-            Callback.TOGGLE_SYSTEM_TRAY_MENU: self.toggle_system_tray_menu,
-            Callback.TOGGLE_NETWORK: self.toggle_network,
-            Callback.QUIT: self.quit,
-            Callback.RESTART: self.restart,
-            Callback.PYBROWSE: lambda: self.start_app("pybrowse"),
-            Callback.PYTHON: lambda: self.start_app("python"),
-            Callback.CREATE_TXT_FILE: self.create_txt_file
         }
 
 
@@ -154,7 +143,7 @@ class OS:
     def load_files(self):
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file)
+            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file, self.text_file_icon)
 
 
     def open_file(self, name):
@@ -166,7 +155,7 @@ class OS:
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, "aaa", None, None)
-        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file)
+        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file, self.text_file_icon)
 
 
     def close_file(self, name, updated_content):
@@ -208,9 +197,9 @@ class OS:
     def start_app(self, game:str) -> None:
         match game:
             case "python":
-                PythonGame(self, self.desktop_gui.WINDOW)
+                PythonGame(self, self.desktop_gui.WINDOW, self.asset_manager)
             case "pybrowse":
-                self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW)
+                self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
 
 
@@ -255,6 +244,3 @@ class OS:
         else:
             pass
 
-
-if __name__ == "__main__":
-    OS().run()

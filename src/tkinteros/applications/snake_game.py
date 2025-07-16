@@ -4,13 +4,16 @@ import customtkinter as ctk
 from playsound import playsound
 
 from theme import THEME_COLORS, THEME_FONTS
+from asset_management.asset_manager import AssetManager
+from asset_management.assets import SnakeGameAssets
 
 python_blue = "#326c9b"
 python_yellow = "#ffe66d"
 
 class PythonGame:
-    def __init__(self, os, os_window: ctk.CTk) -> None:
+    def __init__(self, os, os_window: ctk.CTk, asset_manager: AssetManager) -> None:
         self.OS = os
+        self.asset_manager = asset_manager
         self.OS_WINDOW = os_window
         self.create_game_variables()
         self.create_window()
@@ -25,7 +28,6 @@ class PythonGame:
         self.base_color_1 = "green"
         self.base_color_2 = "darkgreen"
         self.berry_color = "#e03d3d"
-        self.munch_sound = "Assets/python_game/munch_sound.mp3"
 
     
     def create_window(self) -> None:
@@ -41,9 +43,9 @@ class PythonGame:
     
     def icon_setup(self):
         if self.OS.appearance_mode:
-            self.WINDOW.iconbitmap("Assets/python_game/snake_yellow_icon.ico")
+            self.WINDOW.iconbitmap(self.asset_manager.get_icon(SnakeGameAssets.SNAKE_GAME_ICON_LIGHT))
         else:
-            self.WINDOW.iconbitmap("Assets/python_game/snake_blue_icon.ico")
+            self.WINDOW.iconbitmap(self.asset_manager.get_icon(SnakeGameAssets.SNAKE_GAME_ICON_DARK))
 
 
     def create_main_menu(self):
@@ -287,7 +289,7 @@ class PythonGame:
 
 
     def berry_hit(self):
-        playsound(self.munch_sound, block=False)
+        playsound(self.asset_manager.get_sound(SnakeGameAssets.MUNCH_SOUND), block=False)
 
         self.berries += 1
         self.python_speed += self.DEFAULT_SPEED_INCREASE
