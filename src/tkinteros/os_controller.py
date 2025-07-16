@@ -32,7 +32,7 @@ class OS_Controller:
         self.system_tray_menu_open = False
         self.network_on = False
 
-        self.asset_manager = AssetManager("src/asset_management/assets")
+        self.asset_manager = AssetManager("src/tkinteros/asset_management/assets")
         self.file_manager = FileManager()
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
