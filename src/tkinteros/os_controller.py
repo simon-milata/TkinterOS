@@ -4,14 +4,14 @@ import datetime
 import logging
 import subprocess
 
-from desktop.desktop import DesktopGUI
-from desktop.file_manager import FileManager
-from desktop.task_bar import TaskbarGUI
+from gui.desktop_gui import DesktopGUI
+from file_management.file_manager import FileManager
+from gui.taskbar_gui import TaskbarGUI
 from applications.snake_game import PythonGame
 from applications.pybrowse import PyBrowse
-from desktop.text_editor import TextEditor
-from desktop.file_widget import TextFileWidget
-from desktop.callback_manager import CallbackManager
+from gui.text_editor import TextEditor
+from gui.file_widget import TextFileWidget
+from callback_management.callback_manager import CallbackManager
 from asset_management.asset_manager import AssetManager
 from asset_management.assets import DesktopAssets
 

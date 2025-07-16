@@ -1,5 +1,5 @@
 from PIL import Image
-from desktop.callbacks import Callback
+from callback_management.callbacks import Callback
 
 import customtkinter as ctk
 
