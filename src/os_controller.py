@@ -7,7 +7,7 @@ import subprocess
 from desktop.desktop import DesktopGUI
 from desktop.file_manager import FileManager
 from desktop.task_bar import TaskbarGUI
-from applications.python_game import PythonGame
+from applications.snake_game import PythonGame
 from applications.pybrowse import PyBrowse
 from desktop.text_editor import TextEditor
 from desktop.file_widget import TextFileWidget
@@ -32,7 +32,7 @@ class OS_Controller:
         self.system_tray_menu_open = False
         self.network_on = False
 
-        self.asset_manager = AssetManager("src/asset_management/Assets")
+        self.asset_manager = AssetManager("src/asset_management/assets")
         self.file_manager = FileManager()
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
