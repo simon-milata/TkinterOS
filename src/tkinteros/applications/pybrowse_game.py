@@ -3,9 +3,9 @@ import random
 
 import customtkinter as ctk
 
-from theme import THEME_COLORS, THEME_FONTS
-from asset_management.asset_manager import AssetManager
-from asset_management.assets import PyBrowseAssets
+from tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import PyBrowseAssets
 
 class PyBrowseGame:
     def __init__(self, pybrowse: object, pybrowse_window: ctk.CTkToplevel, game_frame: ctk.CTkFrame, asset_manager: AssetManager) -> None:

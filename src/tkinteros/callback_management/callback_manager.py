@@ -1,4 +1,4 @@
-from .callbacks import Callback
+from tkinteros.callback_management.callbacks import Callback
 
 class CallbackManager:
     def __init__(self, os_manager):

@@ -4,16 +4,16 @@ import datetime
 import logging
 import subprocess
 
-from gui.desktop_gui import DesktopGUI
-from file_management.file_manager import FileManager
-from gui.taskbar_gui import TaskbarGUI
-from applications.snake_game import PythonGame
-from applications.pybrowse import PyBrowse
-from gui.text_editor import TextEditor
-from gui.file_widget import TextFileWidget
-from callback_management.callback_manager import CallbackManager
-from asset_management.asset_manager import AssetManager
-from asset_management.assets import DesktopAssets
+from tkinteros.gui.desktop_gui import DesktopGUI
+from tkinteros.file_management.file_manager import FileManager
+from tkinteros.gui.taskbar_gui import TaskbarGUI
+from tkinteros.applications.snake_game import PythonGame
+from tkinteros.applications.pybrowse import PyBrowse
+from tkinteros.gui.text_editor import TextEditor
+from tkinteros.gui.file_widget import TextFileWidget
+from tkinteros.callback_management.callback_manager import CallbackManager
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import DesktopAssets
 
 
 logging.basicConfig(

@@ -1,4 +1,4 @@
-from os_controller import OS_Controller
+from tkinteros.os_controller import OS_Controller
 
 
 if __name__ == "__main__":

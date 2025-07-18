@@ -1,12 +1,12 @@
-from PIL import Image
 from typing import Callable
-from callback_management.callbacks import Callback
 
+from PIL import Image
 import customtkinter as ctk
 
-from theme import THEME_COLORS, THEME_FONTS
-from asset_management.asset_manager import AssetManager
-from asset_management.assets import DesktopAssets
+from tkinteros.callback_management.callbacks import Callback
+from tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import DesktopAssets
 
 
 class TaskbarGUI:

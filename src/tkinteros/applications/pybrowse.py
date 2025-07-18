@@ -2,10 +2,10 @@ import logging
 
 import customtkinter as ctk
 
-from .pybrowse_game import PyBrowseGame
-from theme import THEME_COLORS, THEME_FONTS
-from asset_management.asset_manager import AssetManager
-from asset_management.assets import PyBrowseAssets
+from tkinteros.applications.pybrowse_game import PyBrowseGame
+from tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import PyBrowseAssets
 
 class PyBrowse:
     def __init__(self, os, os_window: ctk.CTk, asset_manager: AssetManager) -> None:
