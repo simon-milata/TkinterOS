@@ -1,8 +1,6 @@
 import os
 
 from PIL import Image
-import customtkinter as ctk
-
 
 class AssetManager:
     def __init__(self, asset_folder: str):

@@ -3,9 +3,9 @@ import random
 import customtkinter as ctk
 from playsound import playsound
 
-from theme import THEME_COLORS, THEME_FONTS
-from asset_management.asset_manager import AssetManager
-from asset_management.assets import SnakeGameAssets
+from tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import SnakeGameAssets
 
 python_blue = "#326c9b"
 python_yellow = "#ffe66d"

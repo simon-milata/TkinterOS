@@ -3,7 +3,7 @@ import json
 import logging
 from datetime import datetime
 
-from .file import File
+from tkinteros.file_management.file import File
 
 
 class FileManager():
