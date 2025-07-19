@@ -32,11 +32,9 @@ class TicTacToe:
         self.gui.update_clicked_board_cell(cell_button=button, player=self.current_player)
         self.board_list[row][column] = self.current_player
 
-        self.board_list[row][column] = self.current_player
-
         self.print_board(self.board_list)
 
-        if self.evaluate_game_state(self.board_list):
+        if self.evaluate_game_state(self.board_list, self.empty_cell):
             # TODO: end game
             self.gui.window.destroy()
         self.switch_player()
@@ -63,17 +61,17 @@ class TicTacToe:
         return 0, 0
     
 
-    def is_draw(self, board_list: list[list[str]]) -> bool:
+    def is_draw(self, board_list: list[list[str]], empty_cell: str) -> bool:
         for row in board_list:
             for cell in row:
-                if cell == self.empty_cell:
+                if cell == empty_cell:
                     return False
         print("DRAW")
         return True
 
 
-    def evaluate_game_state(self, board_list: list, board_size: int = 5):
-        if self.is_draw(board_list):
+    def evaluate_game_state(self, board_list: list, empty_cell: str = " ", board_size: int = 5):
+        if self.is_draw(board_list, empty_cell):
             return "draw"
         
         # horizontal
@@ -100,7 +98,7 @@ class TicTacToe:
                     print("vertical")
                     return self.evaluate_winner(x_count, o_count)
 
-        # diagonal \ up
+        # diagonal \\ up
         for i in range(board_size):
             x_count = 0
             o_count = 0
@@ -109,7 +107,7 @@ class TicTacToe:
                 x_count, o_count = self.evaluate_cell(current_cell, x_count, o_count)
 
                 if self.evaluate_winner(x_count, o_count):
-                    print("diagonal \ up")
+                    print("diagonal \\ up")
                     return self.evaluate_winner(x_count, o_count)
 
         # diagonal \ down
@@ -121,7 +119,7 @@ class TicTacToe:
                 x_count, o_count = self.evaluate_cell(current_cell, x_count, o_count)
 
                 if self.evaluate_winner(x_count, o_count):
-                    print("diagonal \ down")
+                    print("diagonal \\ down")
                     return self.evaluate_winner(x_count, o_count)
                 
         # diagonal / left
@@ -129,7 +127,7 @@ class TicTacToe:
             x_count = 0
             o_count = 0
             for j in range(board_size-i):
-                current_cell = board_list[board_size-j-1][j-i]
+                current_cell = board_list[board_size-j-i-1][j-i]
                 x_count, o_count = self.evaluate_cell(current_cell, x_count, o_count)
 
                 if self.evaluate_winner(x_count, o_count):
@@ -188,7 +186,9 @@ class TicTacToe:
                 else:
                     color = color2
 
-                self.gui.create_grid_button(color=color, row=row, column=column, x=x_pos, y=y_pos, cell_size=self.cell_size, callback=self.on_click)
+                self.gui.create_grid_button(
+                    color=color, row=row, column=column, x=x_pos, y=y_pos, 
+                    cell_size=self.cell_size, callback=self.on_click)
 
 
 if __name__ == "__main__":
