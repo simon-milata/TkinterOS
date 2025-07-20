@@ -1,6 +1,9 @@
+from copy import deepcopy
+
 import customtkinter as ctk
 
 from tkinteros.applications.tictactoe.tictactoe_gui import TicTacToeGUI
+from tkinteros.applications.tictactoe.tictactoe_bot import TicTacToeBot
 #from theme import THEME_COLORS
 
 
@@ -12,12 +15,14 @@ class TicTacToe:
     def run(self):
         self.create_variables()
         self.gui = TicTacToeGUI()
+        self.bot = TicTacToeBot()
         self.create_board()
         self.gui.run()
 
 
     def create_variables(self):
         self.board_list = []
+        self.button_list = []
         self.box_size = 40
         self.base_color1 = "#ffd36b"
         self.base_color2 = "#104b98"
@@ -29,7 +34,7 @@ class TicTacToe:
 
 
     def on_click(self, button: ctk.CTkButton, row: int, column: int):
-        self.gui.update_clicked_board_cell(cell_button=button, player=self.current_player)
+        self.gui.check_cell(cell_button=button, player=self.current_player)
         self.board_list[row][column] = self.current_player
 
         self.print_board(self.board_list)
@@ -38,6 +43,20 @@ class TicTacToe:
             # TODO: end game
             self.gui.window.destroy()
         self.switch_player()
+        self.bot_take_turn()
+
+
+    def bot_take_turn(self):
+        row, column = self.bot.move(board_list=self.board_list)
+
+        print(row, column)
+
+        self.board_list[row][column] = self.current_player
+        button = self.button_list[row][column]
+        self.gui.check_cell(cell_button=button, player=self.current_player)
+        self.switch_player()
+        self.print_board(self.board_list)
+        self.evaluate_game_state(board_list=self.board_list)
 
 
     def evaluate_winner(self, x_count: int, o_count: int, points_to_win: int = 3):
@@ -170,6 +189,8 @@ class TicTacToe:
 
         for row in range(rows):
             self.board_list.append([])
+            self.button_list.append([])
+
             y_pos += self.cell_size
             x_pos = 0 - self.cell_size
 
@@ -186,9 +207,12 @@ class TicTacToe:
                 else:
                     color = color2
 
-                self.gui.create_grid_button(
+                button = self.gui.create_grid_button(
                     color=color, row=row, column=column, x=x_pos, y=y_pos, 
                     cell_size=self.cell_size, callback=self.on_click)
+                
+
+                self.button_list[row].append(button)
 
 
 if __name__ == "__main__":

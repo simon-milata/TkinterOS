@@ -12,7 +12,7 @@ class TicTacToeGUI:
         self.window.mainloop()
 
 
-    def update_clicked_board_cell(self, cell_button: ctk.CTkButton, player: str):
+    def check_cell(self, cell_button: ctk.CTkButton, player: str):
         cell_button.configure(text=player, state="disabled")
 
 
@@ -40,3 +40,5 @@ class TicTacToeGUI:
         button.configure(command=lambda b=button, r=row, c=column: callback(button=b, row=r, column=c))
 
         button.place(x=x, y=y)
+
+        return button
