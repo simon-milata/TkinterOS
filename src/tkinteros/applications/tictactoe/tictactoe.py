@@ -47,9 +47,7 @@ class TicTacToe:
 
 
     def bot_take_turn(self):
-        row, column = self.bot.move(board_list=self.board_list)
-
-        print(row, column)
+        row, column = self.bot.move(board=self.board_list)
 
         self.board_list[row][column] = self.current_player
         button = self.button_list[row][column]
@@ -59,7 +57,7 @@ class TicTacToe:
         self.evaluate_game_state(board_list=self.board_list)
 
 
-    def evaluate_winner(self, x_count: int, o_count: int, points_to_win: int = 3):
+    def evaluate_winner(self, x_count: int, o_count: int, points_to_win: int = 4):
         if x_count >= points_to_win:
             print("X WON")
             return "X"

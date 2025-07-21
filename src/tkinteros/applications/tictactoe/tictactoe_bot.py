@@ -12,8 +12,9 @@ class TicTacToeBot:
         self.max_depth = max_depth
 
 
-    def move(self, board_list: list[list[str]]):
-        return self.best_move(board_list)
+    def move(self, board: list[list[str]]):
+        self.times_ran = 0
+        return self.best_move(board)
     
 
     def evaluate_winner(self, window: list[str]):
@@ -21,29 +22,24 @@ class TicTacToeBot:
         if len(window_set) == 1 and list(window_set)[0] != self.empty_cell:
             return list(window_set)[0]
         return None
+    
 
-
-    def evaluate_game_state(self, board_list: list[list[str]]) -> str:
-        """
-            Checks if the game is over and returns the symbol of the play that won.
-            Returns None if the game is not over and returns "tie" if all cells are filled.
-        """
-        board_size = len(board_list)
+    def get_board_windows(self, board: list[list[str]]) -> list[list[str]]:
+        board_size = len(board)
         window_size = self.points_to_win
-
         windows = []
 
         # Horizontal
         for row in range(board_size):
             for col in range(board_size - window_size + 1):
-                windows.append(board_list[row][col:col+window_size])
+                windows.append(board[row][col:col+window_size])
 
         # Vertical
         for col in range(board_size):
             for row in range(board_size - window_size + 1):
                 window = []
                 for k in range(window_size):
-                    window.append(board_list[row + k][col])
+                    window.append(board[row + k][col])
                 windows.append(window)
 
         # Diagonal (\)
@@ -51,7 +47,7 @@ class TicTacToeBot:
             for col in range(board_size - window_size + 1):
                 window = []
                 for k in range(window_size):
-                    window.append(board_list[row + k][col + k])
+                    window.append(board[row + k][col + k])
                 windows.append(window)
 
         # Diagonal (/)
@@ -59,17 +55,26 @@ class TicTacToeBot:
             for col in range(board_size - window_size + 1):
                 window = []
                 for k in range(window_size):
-                    window.append(board_list[row - k][col + k])
+                    window.append(board[row - k][col + k])
                 windows.append(window)
 
-        # Check if someone won
+        return windows
+
+
+    def evaluate_game_state(self, board: list[list[str]]) -> str:
+        """
+            Checks if the game is over and returns the symbol of the play that won.
+            Returns None if the game is not over and returns "tie" if all cells are filled.
+        """
+        windows = self.get_board_windows(board)
+
         for window in windows:
             winner = self.evaluate_winner(window)
             if winner:
                 return winner
             
         # Check if the board is full
-        is_full = all(cell != self.empty_cell for row in board_list for cell in row)
+        is_full = all(cell != self.empty_cell for row in board for cell in row)
         if is_full:
             return "tie"
 
@@ -77,12 +82,32 @@ class TicTacToeBot:
 
 
     def heuristic(self, board: list[list[str]]):
-        # TODO
-        return 0
+        score = 0
+
+        windows = self.get_board_windows(board=board)
+
+        for window in windows:
+            if window.count(self.ai_symbol) == self.points_to_win - 1 and window.count(self.empty_cell) == 1:
+                score += 1
+            if window.count(self.player_symbol) == self.points_to_win - 1 and window.count(self.empty_cell) == 1:
+                score -= 1.0
+            if window.count(self.ai_symbol) == self.points_to_win // 2 and window.count(self.empty_cell) == self.points_to_win // 2:
+                score += 0.1
+            if window.count(self.player_symbol) == self.points_to_win / 2 and window.count(self.empty_cell) == self.points_to_win // 2:
+                score -= 0.1
+
+        # Normalize to [-1, 1]
+        if windows:
+            score /= len(windows)
+
+        score = max(-1, min(1, score))
+
+        return score
 
 
     def minimax(self, board, is_maximizing: bool, depth: int = 0, 
                 alpha: float = -float("inf"), beta: float = float("inf")):
+        self.times_ran += 1
         result = self.evaluate_game_state(board)
         if result == self.ai_symbol:
             return 1 / (depth + 1)  # prefer quicker wins
@@ -129,6 +154,7 @@ class TicTacToeBot:
                     break
             return min_score
 
+
     def best_move(self, board: list[list[str]]):
         board_size = len(board)
         best_score = -float("inf")
@@ -142,7 +168,7 @@ class TicTacToeBot:
                     board[row][col] = self.ai_symbol
                     score = self.minimax(board, False)
                     board[row][col] = " "
-                    logging.debug(f"Move {(row, col)} has score {score}")
+                    logging.debug(f"Move {(row, col)} has a score of {score}", end='\r')
 
                     if score == 1:
                         return (row, col)
@@ -151,6 +177,8 @@ class TicTacToeBot:
                         best_score = score
                         move = (row, col)
 
-        logging.debug(f"Finding the best move with a score {best_score} move took {(time.time() - start_time):.2f}s")
-
+        logging.debug("")
+        logging.debug(f"Finding the best move with a score {best_score} move took {(time.time() - start_time):.2f}s.")
+        logging.debug(f"Minimax ran {self.times_ran} times.")
+        
         return move
