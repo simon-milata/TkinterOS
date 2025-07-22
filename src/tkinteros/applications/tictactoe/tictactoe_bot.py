@@ -1,20 +1,36 @@
 import time
 import logging
+import random
 
 
 class TicTacToeBot:
-    def __init__(self, ai_symbol: str = "O", player_symbol: str = "X", 
+    def __init__(self, ai_symbol: str = "O", player_symbol: str = "X", random_start: bool = False,
                  empty_cell: str = " ", points_to_win: int = 4, max_depth: int | None = 4):
         self.ai_symbol = ai_symbol
         self.player_symbol = player_symbol
         self.empty_cell = empty_cell
         self.points_to_win = points_to_win
         self.max_depth = max_depth
+        self.random_start = random_start
 
 
     def move(self, board: list[list[str]]):
         self.times_ran = 0
+        if self.random_start and self.get_move_count(board) < 3:
+            while True:
+                random_move = (random.randint(0, len(board) - 1), random.randint(0, len(board) - 1))
+                if board[random_move[0]][random_move[1]] == " ":
+                    return random_move
+
         return self.best_move(board)
+    
+
+    def get_move_count(self, board: list[list[str]]) -> int:
+        count = 0
+        for row in board:
+            for cell in row:
+                count += 1 if cell != self.empty_cell else 0
+        return count
     
 
     def evaluate_winner(self, window: list[str]):
@@ -133,9 +149,7 @@ class TicTacToeBot:
                     max_score = max(max_score, score)
                     alpha = max(alpha, score)
                     if beta <= alpha:
-                        break
-                if beta <= alpha:
-                    break
+                        return max_score
             return max_score
         else:
             min_score = float("inf")
@@ -149,9 +163,7 @@ class TicTacToeBot:
                     min_score = min(min_score, score)
                     beta = min(beta, score)
                     if beta <= alpha:
-                        break
-                if beta <= alpha:
-                    break
+                        return min_score
             return min_score
 
 

@@ -15,7 +15,7 @@ class TicTacToe:
     def run(self):
         self.create_variables()
         self.gui = TicTacToeGUI()
-        self.bot = TicTacToeBot()
+        self.bot = TicTacToeBot(random_start=True)
         self.create_board()
         self.gui.run()
 
