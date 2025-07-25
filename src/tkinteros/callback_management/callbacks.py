@@ -9,4 +9,5 @@ class Callback(Enum):
     RESTART = auto()
     PYBROWSE = auto()
     PYTHON = auto()
+    TICTACTOE = auto()
     CREATE_TXT_FILE = auto()

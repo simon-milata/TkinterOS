@@ -36,6 +36,12 @@ class TaskbarGUI:
             size=(32, 32)
         )
 
+        self.tictactoe_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE_DARK),
+            dark_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE_LIGHT),
+            size=(32, 32)
+        )
+
         self.no_network_icon = ctk.CTkImage(
             light_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_DARK),
             dark_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_LIGHT),
@@ -113,6 +119,9 @@ class TaskbarGUI:
         self.python_game_button = ctk.CTkButton(self.taskbar_app_frame, command=lambda: self.callbacks[Callback.PYTHON](), width=40, height=40, text="", 
                                                 image=self.snake_icon, fg_color="transparent", hover_color=THEME_COLORS.highlight)
         self.python_game_button.grid(padx=self.desktop_window_details["width"]*0.005, row=0, column=1)
+        self.tictactoe_button = ctk.CTkButton(self.taskbar_app_frame, command=lambda: self.callbacks[Callback.TICTACTOE](), width=40, height=40, text="", 
+                                                image=self.tictactoe_icon, fg_color="transparent", hover_color=THEME_COLORS.highlight)
+        self.tictactoe_button.grid(padx=self.desktop_window_details["width"]*0.005, row=0, column=2)
 
 
     def create_system_tray(self) -> None:
