@@ -13,6 +13,8 @@ class DesktopAssets(StrEnum):
     WIFI_ICON_DARK = "desktop/wifi_icon_dark.png"
     WIFI_ICON_LIGHT = "desktop/wifi_icon_light.png"
     TEXT_FILE_ICON = "desktop/python_logo.png"
+    TICTACTOE_DARK = "desktop/tictactoe_dark.png"
+    TICTACTOE_LIGHT = "desktop/tictactoe_light.png"
 
 
 class PyBrowseAssets(StrEnum):

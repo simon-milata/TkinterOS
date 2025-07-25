@@ -15,5 +15,6 @@ class CallbackManager:
             Callback.RESTART: self.os_manager.restart,
             Callback.PYBROWSE: lambda: self.os_manager.start_app("pybrowse"),
             Callback.PYTHON: lambda: self.os_manager.start_app("python"),
+            Callback.TICTACTOE: lambda: self.os_manager.start_app("tictactoe"),
             Callback.CREATE_TXT_FILE: self.os_manager.create_txt_file
         }

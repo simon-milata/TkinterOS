@@ -180,7 +180,7 @@ class TicTacToeBot:
                     board[row][col] = self.ai_symbol
                     score = self.minimax(board, False)
                     board[row][col] = " "
-                    logging.debug(f"Move {(row, col)} has a score of {score}", end='\r')
+                    # print(f"Move {(row, col)} has a score of {score}", end='\r')
 
                     if score == 1:
                         return (row, col)
