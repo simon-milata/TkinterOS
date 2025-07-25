@@ -124,8 +124,6 @@ class TicTacToe:
         if self.is_draw(board_list, empty_cell):
             return "tie"
         
-        points_to_win = self.get_points_to_win(board_size)
-        
         # horizontal
         for i in range(board_size):
             x_count = 0

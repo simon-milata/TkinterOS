@@ -11,7 +11,7 @@ def test_none():
         [' ', 'X', 'O', 'O', 'X'],
         ['O', ' ', ' ', 'X', 'X'],
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") is None
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ") is None
 
 
 def test_none_3_with_space():
@@ -27,7 +27,7 @@ def test_none_3_with_space():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' '],
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") is None
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) is None
 
 
 def test_none_3_with_space():
@@ -40,7 +40,7 @@ def test_none_3_with_space():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' '],
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") is None
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) is None
 
 
 def test_draw():
@@ -52,7 +52,7 @@ def test_draw():
         ['O', 'X', 'O', 'X', 'O'],
         ['X', 'O', 'X', 'O', 'X']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "draw"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "tie"
 
 
 def test_x_win_horizontal():
@@ -64,7 +64,7 @@ def test_x_win_horizontal():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "X"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "X"
 
 def test_o_win_vertical():
     game = TicTacToe()
@@ -75,7 +75,7 @@ def test_o_win_vertical():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "O"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "O"
 
 
 def test_x_win_diagonal_top_right():
@@ -87,7 +87,7 @@ def test_x_win_diagonal_top_right():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "X"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "X"
 
 
 def test_x_win_diagonal_bottom_left():
@@ -99,7 +99,7 @@ def test_x_win_diagonal_bottom_left():
         [' ', 'X', ' ', ' ', ' '],
         [' ', ' ', 'X', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "X"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "X"
 
 
 def test_o_win_anti_diagonal_top_left():
@@ -111,7 +111,7 @@ def test_o_win_anti_diagonal_top_left():
         [' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "O"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "O"
 
 
 def test_o_win_anti_diagonal_bottom_left():
@@ -123,4 +123,4 @@ def test_o_win_anti_diagonal_bottom_left():
         [' ', ' ', ' ', 'O', ' '],
         [' ', ' ', 'O', ' ', ' ']
     ]
-    assert game.evaluate_game_state(board_list=board_list, board_size=5, empty_cell=" ") == "O"
+    assert game.evaluate_game_state(board_list=board_list, empty_cell=" ", points_to_win=3) == "O"
