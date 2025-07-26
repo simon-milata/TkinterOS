@@ -1,20 +1,19 @@
 import logging
 
-import customtkinter as ctk
-
 from tkinteros.applications.tictactoe.gui import TicTacToeGUI
 from tkinteros.applications.tictactoe.bot import TicTacToeBot
 import tkinteros.applications.tictactoe.game_logic as game_logic
 
 
-class TicTacToe:
-    def setup(self):
+class TicTacToeController:
+    def run(self):
         self.create_variables()
         self.gui = TicTacToeGUI(start_callback=self.start_game, replay_callback=self.reset_game)
         self.gui.run()
 
 
-    def start_game(self, grid_size):
+    def start_game(self, grid_size: int) -> None:
+        logging.info("Game starting...")
         if grid_size:
             grid_size = int(grid_size.split("x")[0])
         else:
@@ -26,18 +25,17 @@ class TicTacToe:
         self.create_board(rows=grid_size, columns=grid_size)
 
 
-    def create_variables(self):
-        self.board_list = []
+    def create_variables(self) -> None:
         self.player_1 = "X"
         self.player_2 = "O"
         self.current_player = self.player_1
 
 
-    def on_click(self, row: int, column: int):
-        self.gui.check_cell(row=row, column=column, player=self.current_player)
+    def on_click(self, row: int, column: int) -> None:
         self.board_list[row][column] = self.current_player
+        self.gui.check_cell(row=row, column=column, player=self.current_player)
 
-        # self.print_board(self.board_list)
+        self.print_board(self.board_list)
 
         winner = game_logic.evaluate_game_state(self.board_list)
         if winner:
@@ -56,7 +54,6 @@ class TicTacToe:
         self.gui.hide_game_frame()
         self.gui.show_main_menu()
 
-        self.board_list = []
         self.current_player = self.player_1
 
 
@@ -65,8 +62,8 @@ class TicTacToe:
 
         self.board_list[row][column] = self.current_player
         self.gui.check_cell(row=row, column=column, player=self.current_player)
-        self.switch_player()
-        # self.print_board(self.board_list)
+        
+        self.print_board(self.board_list)
 
         winner = game_logic.evaluate_game_state(self.board_list)
         if winner:
@@ -75,6 +72,8 @@ class TicTacToe:
             self.gui.show_game_over_menu()
             self.gui.update_game_over_text(header)
             return
+        
+        self.switch_player()
                 
 
     def switch_player(self):
@@ -86,14 +85,10 @@ class TicTacToe:
 
     def print_board(self, board: list):
         for row in board:
-            print(row)
-        print()
+            logging.debug(row)
+        logging.debug("")
 
 
     def create_board(self, rows=5, columns=5, empty_cell=" "):
         self.board_list = [[empty_cell for _ in range(columns)] for _ in range(rows)]
         self.gui.create_board_grid(rows, columns, self.on_click)
-
-
-if __name__ == "__main__":
-    TicTacToe().setup()

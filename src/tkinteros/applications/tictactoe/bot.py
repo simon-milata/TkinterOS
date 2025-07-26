@@ -108,7 +108,7 @@ class TicTacToeBot:
                     board[row][col] = self.ai_symbol
                     score = self.minimax(board, False)
                     board[row][col] = empty_cell
-                    # print(f"Move {(row, col)} has a score of {score}", end='\r')
+                    logging.debug(f"Move {(row, col)} has a score of {score}")
 
                     if score == 1:
                         return (row, col)
@@ -117,7 +117,7 @@ class TicTacToeBot:
                         best_score = score
                         move = (row, col)
 
-        logging.debug(f"Finding the best move with a score {best_score} move took {(time.time() - start_time):.2f}s.")
+        logging.debug(f"Finding the best move with a score {best_score:.4f} move took {(time.time() - start_time):.2f}s.")
         logging.debug(f"Minimax ran {self.times_ran} times.")
         
         return move

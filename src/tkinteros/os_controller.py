@@ -8,7 +8,7 @@ from tkinteros.gui.desktop_gui import DesktopGUI
 from tkinteros.file_management.file_manager import FileManager
 from tkinteros.gui.taskbar_gui import TaskbarGUI
 from tkinteros.applications.snake_game import PythonGame
-from tkinteros.applications.tictactoe.tictactoe import TicTacToe
+from tkinteros.applications.tictactoe.app import TicTacToe
 from tkinteros.applications.pybrowse import PyBrowse
 from tkinteros.gui.text_editor import TextEditor
 from tkinteros.gui.file_widget import TextFileWidget
