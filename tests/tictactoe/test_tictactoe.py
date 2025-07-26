@@ -1,4 +1,4 @@
-from tkinteros.applications.tictactoe.tictactoe import TicTacToe
+from tkinteros.applications.tictactoe.controller import TicTacToe
 
 
 def test_none():

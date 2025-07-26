@@ -2,8 +2,8 @@ import logging
 
 import customtkinter as ctk
 
-from tkinteros.applications.tictactoe.tictactoe_gui import TicTacToeGUI
-from tkinteros.applications.tictactoe.tictactoe_bot import TicTacToeBot
+from tkinteros.applications.tictactoe.gui import TicTacToeGUI
+from tkinteros.applications.tictactoe.bot import TicTacToeBot
 #from theme import THEME_COLORS
 
 

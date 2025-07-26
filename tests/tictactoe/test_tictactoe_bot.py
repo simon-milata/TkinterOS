@@ -1,4 +1,4 @@
-from tkinteros.applications.tictactoe.tictactoe_bot import TicTacToeBot
+from tkinteros.applications.tictactoe.bot import TicTacToeBot
 
 def test_win_horizontal():
     board_list = [
