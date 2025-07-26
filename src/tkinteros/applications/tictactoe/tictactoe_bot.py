@@ -189,7 +189,6 @@ class TicTacToeBot:
                         best_score = score
                         move = (row, col)
 
-        logging.debug("")
         logging.debug(f"Finding the best move with a score {best_score} move took {(time.time() - start_time):.2f}s.")
         logging.debug(f"Minimax ran {self.times_ran} times.")
         

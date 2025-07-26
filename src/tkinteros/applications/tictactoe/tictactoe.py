@@ -1,3 +1,5 @@
+import logging
+
 import customtkinter as ctk
 
 from tkinteros.applications.tictactoe.tictactoe_gui import TicTacToeGUI
@@ -20,7 +22,6 @@ class TicTacToe:
         grid_size = int(grid_size.split("x")[0])
 
         self.gui.hide_main_menu()
-        print(self.get_points_to_win(grid_size))
         self.bot = TicTacToeBot(random_start=True, points_to_win=self.get_points_to_win(grid_size))
         self.create_board(rows=grid_size, columns=grid_size)
 
@@ -48,7 +49,7 @@ class TicTacToe:
         self.gui.check_cell(cell_button=button, player=self.current_player)
         self.board_list[row][column] = self.current_player
 
-        self.print_board(self.board_list)
+        # self.print_board(self.board_list)
 
         grid_size = len(self.board_list)
 
@@ -82,7 +83,7 @@ class TicTacToe:
         button = self.button_list[row][column]
         self.gui.check_cell(cell_button=button, player=self.current_player)
         self.switch_player()
-        self.print_board(self.board_list)
+        # self.print_board(self.board_list)
 
         winner = self.evaluate_game_state(self.board_list, self.empty_cell, points_to_win=(self.get_points_to_win(len(self.board_list))))
         if winner:
@@ -211,7 +212,7 @@ class TicTacToe:
 
 
     def create_board(self, rows: int = 5, columns: int = 5):
-        print("Creating board")
+        logging.debug("Creating tictactoe board")
         x_pos = 0 - self.cell_size
         y_pos = 0 - self.cell_size
 
@@ -242,7 +243,6 @@ class TicTacToe:
                     color=color, row=row, column=column, x=x_pos, y=y_pos, 
                     cell_size=self.cell_size, callback=self.on_click)
                 
-
                 self.button_list[row].append(button)
 
 
