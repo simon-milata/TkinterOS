@@ -135,8 +135,9 @@ class TicTacToeGUI:
 
     def create_grid_button(self, color: str, row: int, column: int, cell_size: int, click_callback: Callable):
         button = ctk.CTkButton(
-                    self.game_frame, width=cell_size, height=cell_size, 
-                    corner_radius=0, text="", text_color="red", fg_color=color
+                    master=self.game_frame, width=cell_size, height=cell_size, 
+                    text_color_disabled="black", fg_color=color, corner_radius=0,
+                    text="", font=(THEME_FONTS.family_bold, THEME_FONTS.medium)
                 )
         button.configure(command=lambda r=row, c=column: click_callback(row=r, column=c))
 

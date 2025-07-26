@@ -32,12 +32,12 @@ class TicTacToeBot:
 
         for window in windows:
             if window.count(self.ai_symbol) == points_to_win - 1 and window.count(empty_cell) == 1:
-                score += 1
+                score += 1.0
             if window.count(self.player_symbol) == points_to_win - 1 and window.count(empty_cell) == 1:
                 score -= 1.0
             if window.count(self.ai_symbol) == points_to_win // 2 and window.count(empty_cell) == points_to_win // 2:
                 score += 0.1
-            if window.count(self.player_symbol) == points_to_win / 2 and window.count(empty_cell) == points_to_win // 2:
+            if window.count(self.player_symbol) == points_to_win // 2 and window.count(empty_cell) == points_to_win // 2:
                 score -= 0.1
 
         # Normalize to [-1, 1]
@@ -93,9 +93,10 @@ class TicTacToeBot:
                     if beta <= alpha:
                         return min_score
             return min_score
-
+        
 
     def best_move(self, board: list[list[str]], empty_cell: str = " "):
+        logging.info("Finding the best move...")
         board_size = len(board)
         best_score = -float("inf")
         move = None
@@ -108,7 +109,7 @@ class TicTacToeBot:
                     board[row][col] = self.ai_symbol
                     score = self.minimax(board, False)
                     board[row][col] = empty_cell
-                    logging.debug(f"Move {(row, col)} has a score of {score}")
+                    logging.debug(f"Move {(row, col)} has a score of {score}.")
 
                     if score == 1:
                         return (row, col)
@@ -117,7 +118,7 @@ class TicTacToeBot:
                         best_score = score
                         move = (row, col)
 
-        logging.debug(f"Finding the best move with a score {best_score:.4f} move took {(time.time() - start_time):.2f}s.")
-        logging.debug(f"Minimax ran {self.times_ran} times.")
+        logging.info(f"Finding the best move with a score {best_score:.4f} move took {(time.time() - start_time):.2f}s.")
+        logging.info(f"Minimax ran {self.times_ran} times.")
         
         return move

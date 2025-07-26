@@ -32,9 +32,18 @@ class TicTacToeController:
 
 
     def on_click(self, row: int, column: int) -> None:
+        # Player's turn
+        self.take_turn(row=row, column=column)
+
+        # Bot's turn
+        row, column = self.bot.move(board=self.board_list)
+        self.take_turn(row=row, column=column)
+
+
+    def take_turn(self, row: int, column: int):
         self.board_list[row][column] = self.current_player
         self.gui.check_cell(row=row, column=column, player=self.current_player)
-
+        
         self.print_board(self.board_list)
 
         winner = game_logic.evaluate_game_state(self.board_list)
@@ -44,12 +53,12 @@ class TicTacToeController:
             self.gui.show_game_over_menu()
             self.gui.update_game_over_text(header)
             return
-
+        
         self.switch_player()
-        self.bot_take_turn()
 
 
     def reset_game(self):
+        logging.info("Resetting game...")
         self.gui.hide_game_over_menu()
         self.gui.hide_game_frame()
         self.gui.show_main_menu()
@@ -90,5 +99,6 @@ class TicTacToeController:
 
 
     def create_board(self, rows=5, columns=5, empty_cell=" "):
+        logging.info("Creating board...")
         self.board_list = [[empty_cell for _ in range(columns)] for _ in range(rows)]
         self.gui.create_board_grid(rows, columns, self.on_click)
