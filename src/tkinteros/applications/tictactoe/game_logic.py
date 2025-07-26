@@ -26,6 +26,7 @@ def get_points_to_win(board_size: int) -> int:
         return 3
     elif board_size == 5:
         return 4
+    return board_size - 1
 
 
 def get_board_windows(board: list[list[str]]) -> list[list[str]]:
