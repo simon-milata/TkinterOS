@@ -15,7 +15,7 @@ class ThemeColors:
     
     @staticmethod
     def create():
-        primary = ("#FFC436", "#061d3b")
+        primary = ("#f7c948", "#0f1b2b")
         bright = ("#ffe29e", "#1562c6")
         return ThemeColors(
             primary=primary,
@@ -33,7 +33,8 @@ class ThemeColors:
 class ThemeFonts:
     family: str = "Segoe UI"
     family_bold: str = "Segoe UI bold"
-    large: int = 60
+    extra_large: int = 65
+    large: int = 50
     big: int = 30
     medium: int = 24
     small: int = 18

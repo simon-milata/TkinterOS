@@ -33,24 +33,29 @@ class TicTacToeGUI:
                                             height=self.window_height, fg_color=THEME_COLORS.primary)
         self.main_menu_frame.pack()
         header = ctk.CTkLabel(self.main_menu_frame, text="Tic Tac Toe", text_color=THEME_COLORS.font_color, 
-                              font=(THEME_COLORS.font_color, THEME_FONTS.large))
+                              font=(THEME_FONTS.family_bold, THEME_FONTS.extra_large))
         header.place(anchor="n", relx=0.5, rely=0.05)
+
+        icon = ctk.CTkLabel(self.main_menu_frame, text_color=THEME_COLORS.font_color,
+                            font=(THEME_FONTS.family_bold, THEME_FONTS.small), text="❌⭕")
+        icon.place(anchor="n", relx=0.5, rely=0.25)
         
         rows_label = ctk.CTkLabel(self.main_menu_frame, text="Grid Size", text_color=THEME_COLORS.font_color,
-                                  font=(THEME_FONTS.family, THEME_FONTS.big))
+                                  font=(THEME_FONTS.family, THEME_FONTS.medium))
         rows_label.place(anchor="center", relx=0.5, rely=0.52)
         row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=THEME_COLORS.button_font_color, 
-                                            font=(THEME_FONTS.family, THEME_FONTS.big), 
-                                            selected_hover_color=THEME_COLORS.button_hover, 
+                                            font=(THEME_FONTS.family, THEME_FONTS.medium), width=80,
+                                            selected_hover_color=THEME_COLORS.button_hover, height=40,
                                             fg_color=THEME_COLORS.button, unselected_color=THEME_COLORS.button, 
                                             selected_color=THEME_COLORS.button_hover, values=["3x3", "5x5"], 
                                             unselected_hover_color=THEME_COLORS.button)
-        row_input.place(anchor="center", relx=0.5, rely=0.62)
+        row_input.place(anchor="center", relx=0.5, rely=0.65)
 
-        play_button = ctk.CTkButton(self.main_menu_frame, text="Play", text_color=THEME_COLORS.button_font_color, 
+        play_button = ctk.CTkButton(self.main_menu_frame, text="▶ Play", text_color=THEME_COLORS.button_font_color, 
                                     fg_color=THEME_COLORS.button, command=lambda: self.start_callback(row_input.get()),
-                                    font=(THEME_COLORS.font_color, THEME_FONTS.button_font_size), hover_color=THEME_COLORS.button_hover)
-        play_button.place(anchor="center", relx=0.5, rely=0.8)
+                                    font=(THEME_COLORS.font_color, THEME_FONTS.button_font_size), 
+                                    hover_color=THEME_COLORS.button_hover, width=150, height=50)
+        play_button.place(anchor="center", relx=0.5, rely=0.85)
 
 
     def create_game_over_menu(self):

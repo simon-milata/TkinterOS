@@ -122,3 +122,19 @@ class TicTacToeBot:
         logging.info(f"Minimax ran {self.times_ran} times.")
         
         return move
+    
+
+if __name__ == "__main__":
+    logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(filename)s | %(message)s",
+    datefmt="%H:%M:%S"
+    )
+    board = [
+        [" ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", "X", " ", " "],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " "]
+    ]
+    TicTacToeBot(ai_symbol="O", player_symbol="X").move(board)

@@ -21,7 +21,7 @@ class TicTacToeController:
 
         self.gui.hide_main_menu()
         self.gui.show_game_frame()
-        self.bot = TicTacToeBot(random_start=True)
+        self.bot = TicTacToeBot(random_start=False)
         self.create_board(rows=grid_size, columns=grid_size)
 
 
