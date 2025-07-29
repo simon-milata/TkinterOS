@@ -1,12 +1,20 @@
 import logging
 import threading
 
+from playsound import playsound
+
 from tkinteros.applications.tictactoe.gui import TicTacToeGUI
 from tkinteros.applications.tictactoe.bot import TicTacToeBot
 import tkinteros.applications.tictactoe.game_logic as game_logic
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.asset_management.assets import TictactoeAssets
 
 
 class TicTacToeController:
+    def __init__(self, asset_manager: AssetManager):
+        self.asset_manager = asset_manager
+
+
     def run(self):
         self.create_variables()
         self.gui = TicTacToeGUI(start_callback=self.start_game, replay_callback=self.reset_game)
@@ -38,6 +46,7 @@ class TicTacToeController:
             return
 
         self.take_turn(row, column)
+        playsound(self.asset_manager.get_sound(TictactoeAssets.PLAYER_MOVE_SOUND), block=False)
 
         self.bot_thinking = True
         self.gui.window.after(150, self.start_bot_move)
@@ -49,6 +58,7 @@ class TicTacToeController:
 
     def bot_turn(self):
         row, column = self.bot.move(board=self.board_list)
+        playsound(self.asset_manager.get_sound(TictactoeAssets.BOT_MOVE_SOUND), block=False)
         self.gui.window.after(0, lambda: self.finish_bot_turn(row, column))
 
 

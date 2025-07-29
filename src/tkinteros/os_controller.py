@@ -203,7 +203,7 @@ class OS_Controller:
                 self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
             case "tictactoe":
-                TicTacToe().setup()
+                TicTacToe(asset_manager=self.asset_manager).setup()
 
 
     def get_time(self) -> str:

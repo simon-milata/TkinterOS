@@ -29,3 +29,7 @@ class SnakeGameAssets(StrEnum):
     SNAKE_GAME_ICON_DARK = "python_game/snake_blue_icon.ico"
     SNAKE_GAME_ICON_LIGHT = "python_game/snake_yellow_icon.ico"
 
+
+class TictactoeAssets(StrEnum):
+    PLAYER_MOVE_SOUND = "tictactoe/player_move.mp3"
+    BOT_MOVE_SOUND = "tictactoe/bot_move.mp3"
