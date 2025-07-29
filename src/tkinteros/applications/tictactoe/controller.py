@@ -1,4 +1,5 @@
 import logging
+import threading
 
 from tkinteros.applications.tictactoe.gui import TicTacToeGUI
 from tkinteros.applications.tictactoe.bot import TicTacToeBot
@@ -26,18 +27,34 @@ class TicTacToeController:
 
 
     def create_variables(self) -> None:
+        self.bot_thinking = False
         self.player_1 = "X"
         self.player_2 = "O"
         self.current_player = self.player_1
 
 
-    def on_click(self, row: int, column: int) -> None:
-        # Player's turn
-        self.take_turn(row=row, column=column)
+    def on_click(self, row: int, column: int):
+        if self.bot_thinking:
+            return
 
-        # Bot's turn
+        self.take_turn(row, column)
+
+        self.bot_thinking = True
+        self.gui.window.after(150, self.start_bot_move)
+
+
+    def start_bot_move(self):
+        threading.Thread(target=self.bot_turn, daemon=True).start()
+
+
+    def bot_turn(self):
         row, column = self.bot.move(board=self.board_list)
+        self.gui.window.after(0, lambda: self.finish_bot_turn(row, column))
+
+
+    def finish_bot_turn(self, row, column):
         self.take_turn(row=row, column=column)
+        self.bot_thinking = False
 
 
     def take_turn(self, row: int, column: int):
@@ -62,6 +79,7 @@ class TicTacToeController:
         self.gui.hide_game_over_menu()
         self.gui.hide_game_frame()
         self.gui.show_main_menu()
+        self.gui.destroy_board_buttons()
 
         self.current_player = self.player_1
 

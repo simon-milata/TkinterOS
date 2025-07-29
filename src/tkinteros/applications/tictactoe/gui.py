@@ -24,8 +24,8 @@ class TicTacToeGUI:
 
 
     def create_game_frame(self):
-        self.game_frame = ctk.CTkFrame(self.window, width=self.window_width, 
-                                            height=self.window_height, fg_color=THEME_COLORS.primary)
+        self.game_frame = ctk.CTkFrame(self.window, width=self.window_width,
+                                    height=self.window_height, fg_color=THEME_COLORS.primary)
 
     
     def create_main_menu(self):
@@ -149,3 +149,9 @@ class TicTacToeGUI:
         button.grid(row=row, column=column)
 
         return button
+    
+
+    def destroy_board_buttons(self):
+        for row in self.buttons:
+            for button in row:
+                button.destroy()

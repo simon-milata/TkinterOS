@@ -6,7 +6,7 @@ import tkinteros.applications.tictactoe.game_logic as game_logic
 
 
 class TicTacToeBot:
-    def __init__(self, ai_symbol: str = "O", player_symbol: str = "X", random_start: bool = False, max_depth: int | None = 4):
+    def __init__(self, ai_symbol: str = "O", player_symbol: str = "X", random_start: bool = False, max_depth: int | None = 3):
         self.ai_symbol = ai_symbol
         self.player_symbol = player_symbol
         self.max_depth = max_depth
@@ -15,11 +15,11 @@ class TicTacToeBot:
 
     def move(self, board: list[list[str]]):
         self.times_ran = 0
-        if self.random_start and game_logic.get_move_count(board) < 3:
-            while True:
-                random_move = (random.randint(0, len(board) - 1), random.randint(0, len(board) - 1))
-                if board[random_move[0]][random_move[1]] == " ":
-                    return random_move
+        # if self.random_start and game_logic.get_move_count(board) < 3:
+        #     while True:
+        #         random_move = (random.randint(0, len(board) - 1), random.randint(0, len(board) - 1))
+        #         if board[random_move[0]][random_move[1]] == " ":
+        #             return random_move
 
         return self.best_move(board)
 
