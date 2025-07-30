@@ -11,13 +11,17 @@ from tkinteros.asset_management.assets import TictactoeAssets
 
 
 class TicTacToeController:
-    def __init__(self, asset_manager: AssetManager):
+    def __init__(self, asset_manager: AssetManager, appereance_mode):
         self.asset_manager = asset_manager
+        self.appereance_mode = appereance_mode
 
 
     def run(self):
         self.create_variables()
-        self.gui = TicTacToeGUI(start_callback=self.start_game, replay_callback=self.reset_game)
+        self.gui = TicTacToeGUI(start_callback=self.start_game, 
+                                replay_callback=self.reset_game, 
+                                asset_manager=self.asset_manager,
+                                appereance_mode=self.appereance_mode)
         self.gui.run()
 
 

@@ -4,14 +4,17 @@ import customtkinter as ctk
 
 from tkinteros.theme import THEME_COLORS
 from tkinteros.theme import THEME_FONTS
+from tkinteros.asset_management.assets import TictactoeAssets
 
 
 class TicTacToeGUI:
-    def __init__(self, start_callback, replay_callback):
-        self.create_variables()
-        self.create_window()
+    def __init__(self, asset_manager, start_callback, replay_callback, appereance_mode):
+        self.asset_manager = asset_manager
+        self.appereance_mode = appereance_mode
         self.start_callback = start_callback
         self.replay_callback = replay_callback
+        self.create_variables()
+        self.create_window()
         self.create_main_menu()
         self.create_game_frame()
         self.create_game_over_menu()
@@ -19,8 +22,14 @@ class TicTacToeGUI:
         
         
     def run(self):
-        print("running")
         self.window.mainloop()
+
+
+    def icon_setup(self):
+        if self.appereance_mode:
+            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON_LIGHT))
+        else:
+            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON_LIGHT))
 
 
     def create_game_frame(self):
@@ -116,7 +125,7 @@ class TicTacToeGUI:
         self.window.attributes("-topmost", True)
         self.window.focus_force()
         self.window.resizable(False, False)
-        # self.window.after(200, self.icon_setup)
+        self.window.after(200, self.icon_setup)
 
 
     def create_board_grid(self, rows: int, columns: int, click_callback: Callable):

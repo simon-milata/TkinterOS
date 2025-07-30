@@ -31,5 +31,7 @@ class SnakeGameAssets(StrEnum):
 
 
 class TictactoeAssets(StrEnum):
+    ICON_LIGHT = "tictactoe/icon_light.ico"
+    ICON_DARK = "tictactoe/icon_dark.ico"
     PLAYER_MOVE_SOUND = "tictactoe/player_move.mp3"
     BOT_MOVE_SOUND = "tictactoe/bot_move.mp3"
