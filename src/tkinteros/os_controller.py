@@ -8,7 +8,7 @@ from tkinteros.gui.desktop_gui import DesktopGUI
 from tkinteros.file_management.file_manager import FileManager
 from tkinteros.gui.taskbar_gui import TaskbarGUI
 from tkinteros.applications.snake_game import PythonGame
-from tkinteros.applications.tictactoe.tictactoe import TicTacToe
+from tkinteros.applications.tictactoe.game import TicTacToe
 from tkinteros.applications.pybrowse import PyBrowse
 from tkinteros.gui.text_editor import TextEditor
 from tkinteros.gui.file_widget import TextFileWidget
@@ -203,7 +203,7 @@ class OS_Controller:
                 self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
             case "tictactoe":
-                TicTacToe().setup()
+                TicTacToe(asset_manager=self.asset_manager).setup()
 
 
     def get_time(self) -> str:
