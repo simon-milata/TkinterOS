@@ -54,6 +54,9 @@ class TicTacToeController:
         self.take_turn(row, column)
         playsound(self.asset_manager.get_sound(TictactoeAssets.PLAYER_MOVE_SOUND), block=False)
 
+        if self.game_over:
+            return
+
         self.bot_thinking = True
         self.gui.window.after(150, self.start_bot_move)
 
@@ -105,31 +108,6 @@ class TicTacToeController:
         self.gui.destroy_board_buttons()
 
         self.current_player = self.player_1
-
-
-    def bot_take_turn(self):
-        row, column = self.bot.move(board=self.board_list)
-
-        self.board_list[row][column] = self.current_player
-        self.gui.check_cell(row=row, column=column, player=self.current_player)
-        
-        self.print_board(self.board_list)
-
-        game_state = game_logic.evaluate_game_state(self.board_list)
-        if game_state["status"] != "ongoing":
-            winner = game_state["status"]
-            self.game_over = True
-            
-            if game_state["winning_coords"]:
-                self.highlight_winning_sequence(game_state["winning_coords"])
-            self.gui.window.after(2000, self.gui.hide_game_frame)
-            self.gui.window.after(2000, self.gui.show_game_over_menu)
-
-            header = f"{winner.upper()} won!" if winner != "tie" else "Tie!"
-            self.gui.update_game_over_text(header)
-            return
-        
-        self.switch_player()
                 
 
     def switch_player(self):
