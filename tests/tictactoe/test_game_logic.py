@@ -10,7 +10,7 @@ def test_none():
         [" ", "X", "O", "O", "X"],
         ["O", " ", " ", "X", "X"],
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") is None
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "ongoing"
 
 
 def test_no_winner_with_reset_on_horizontal_windows():
@@ -22,7 +22,7 @@ def test_no_winner_with_reset_on_horizontal_windows():
         [" ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "],
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") is None
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "ongoing"
 
 
 def test_no_winner_with_reset_on_vertical_windows():
@@ -34,7 +34,7 @@ def test_no_winner_with_reset_on_vertical_windows():
         ["X", " ", " ", " ", " "],
         ["X", " ", " ", " ", " "],
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") is None
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "ongoing"
 
 
 def test_no_winner_with_reset_on_diagonal_windows():
@@ -46,7 +46,7 @@ def test_no_winner_with_reset_on_diagonal_windows():
         ["X", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "],
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") is None
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "ongoing"
 
 
 def test_draw():
@@ -57,7 +57,7 @@ def test_draw():
         ["O", "X", "O", "X", "O"],
         ["O", "X", "O", "X", "O"],
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "tie"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "tie"
 
 
 def test_x_win_horizontal():
@@ -68,7 +68,7 @@ def test_x_win_horizontal():
         [" ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "X"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "X"
 
 def test_o_win_vertical():
     board = [
@@ -78,7 +78,7 @@ def test_o_win_vertical():
         [" ", " ", "O", " ", " "],
         [" ", " ", " ", " ", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "O"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "O"
 
 
 def test_x_win_diagonal_top_right():
@@ -89,7 +89,7 @@ def test_x_win_diagonal_top_right():
         [" ", " ", " ", " ", "X"],
         [" ", " ", " ", " ", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "X"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "X"
 
 
 def test_x_win_diagonal_bottom_left():
@@ -100,7 +100,7 @@ def test_x_win_diagonal_bottom_left():
         [" ", " ", "X", " ", " "],
         [" ", " ", " ", "X", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "X"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "X"
 
 
 def test_o_win_anti_diagonal_top_left():
@@ -111,7 +111,7 @@ def test_o_win_anti_diagonal_top_left():
         ["O", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "O"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "O"
 
 
 def test_o_win_anti_diagonal_bottom_left():
@@ -122,4 +122,4 @@ def test_o_win_anti_diagonal_bottom_left():
         [" ", " ", "O", " ", " "],
         [" ", "O", " ", " ", " "]
     ]
-    assert game_logic.evaluate_game_state(board=board, empty_cell=" ") == "O"
+    assert game_logic.evaluate_game_state(board=board, empty_cell=" ")["status"] == "O"

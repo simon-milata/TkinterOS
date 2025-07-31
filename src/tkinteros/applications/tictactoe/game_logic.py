@@ -29,8 +29,8 @@ def get_points_to_win(board_size: int) -> int:
     return board_size - 1
 
 
-def get_board_windows(board: list[list[str]]) -> list[list[str]]:
-    """Return all rows, columns, and diagonals of board as windows."""
+def get_board_windows(board: list[list[str]]) -> list[tuple[list[str], list[tuple[int, int]]]]:
+    """Return tuples of (values, coordinates) for all rows, columns, and diagonals."""
     board_size = len(board)
     window_size = get_points_to_win(board_size)
     windows = []
@@ -38,47 +38,56 @@ def get_board_windows(board: list[list[str]]) -> list[list[str]]:
     # Horizontal
     for row in range(board_size):
         for col in range(board_size - window_size + 1):
-            windows.append(board[row][col:col+window_size])
+            values = []
+            coords = []
+            for k in range(window_size):
+                values.append(board[row][col + k])
+                coords.append((row, col + k))
+            windows.append((values, coords))
 
     # Vertical
     for col in range(board_size):
         for row in range(board_size - window_size + 1):
-            window = []
+            values = []
+            coords = []
             for k in range(window_size):
-                window.append(board[row + k][col])
-            windows.append(window)
+                values.append(board[row + k][col])
+                coords.append((row + k, col))
+            windows.append((values, coords))
 
     # Diagonal (\)
     for row in range(board_size - window_size + 1):
         for col in range(board_size - window_size + 1):
-            window = []
+            values = []
+            coords = []
             for k in range(window_size):
-                window.append(board[row + k][col + k])
-            windows.append(window)
+                values.append(board[row + k][col + k])
+                coords.append((row + k, col + k))
+            windows.append((values, coords))
 
     # Diagonal (/)
     for row in range(window_size - 1, board_size):
         for col in range(board_size - window_size + 1):
-            window = []
+            values = []
+            coords = []
             for k in range(window_size):
-                window.append(board[row - k][col + k])
-            windows.append(window)
+                values.append(board[row - k][col + k])
+                coords.append((row - k, col + k))
+            windows.append((values, coords))
 
     return windows
 
 
-def evaluate_game_state(board: list[list[str]], empty_cell: str = " ") -> str:
-    """Return winner symbol, "tie" if full board, or None if ongoing."""
-    windows = get_board_windows(board)
-
-    for window in windows:
-        winner = evaluate_winner(window)
+def evaluate_game_state(board: list[list[str]], empty_cell: str = " ") -> dict:
+    """Return dict with game status and winning coordinates if applicable."""
+    for values, coords in get_board_windows(board):
+        winner = evaluate_winner(values, empty_cell)
         if winner:
-            return winner
-        
+            return {"status": winner, "winning_coords": coords}
+
     # Check if the board is full
     is_full = all(cell != empty_cell for row in board for cell in row)
     if is_full:
-        return "tie"
+        return {"status": "tie", "winning_coords": None}
 
-    return None  # Game still in progress
+    return {"status": "ongoing", "winning_coords": None} # Game still in progress

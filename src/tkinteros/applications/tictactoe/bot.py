@@ -52,7 +52,7 @@ class TicTacToeBot:
     def minimax(self, board, is_maximizing: bool, depth: int = 0, empty_cell: str = " ",
                 alpha: float = -float("inf"), beta: float = float("inf")):
         self.times_ran += 1
-        result = game_logic.evaluate_game_state(board)
+        result = game_logic.evaluate_game_state(board)["status"]
         if result == self.ai_symbol:
             return 1 / (depth + 1)  # prefer quicker wins
         elif result == self.player_symbol:
@@ -131,10 +131,8 @@ if __name__ == "__main__":
     datefmt="%H:%M:%S"
     )
     board = [
-        [" ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " "],
-        [" ", " ", "X", " ", " "],
-        [" ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " "]
-    ]
-    TicTacToeBot(ai_symbol="O", player_symbol="X").move(board)
+            [" ", " ", " "],
+            [" ", " ", " "],
+            [" ", " ", "X"]
+        ]
+    TicTacToeBot(ai_symbol="O", player_symbol="X", max_depth=None).move(board)

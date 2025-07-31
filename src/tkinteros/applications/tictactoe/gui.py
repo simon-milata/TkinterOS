@@ -226,3 +226,8 @@ class TicTacToeGUI:
         for row in self.buttons:
             for button in row:
                 button.destroy()
+
+
+    def highlight_cell(self, coords: tuple[int, int]):
+        row, column = coords
+        self.buttons[row][column].configure(text_color="red", text_color_disabled="red")

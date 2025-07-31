@@ -40,6 +40,7 @@ class TicTacToeController:
 
 
     def create_variables(self) -> None:
+        self.game_over = False
         self.bot_thinking = False
         self.player_1 = "X"
         self.player_2 = "O"
@@ -47,7 +48,7 @@ class TicTacToeController:
 
 
     def on_click(self, row: int, column: int):
-        if self.bot_thinking:
+        if self.bot_thinking or self.game_over:
             return
 
         self.take_turn(row, column)
@@ -78,11 +79,17 @@ class TicTacToeController:
         
         self.print_board(self.board_list)
 
-        winner = game_logic.evaluate_game_state(self.board_list)
-        if winner:
+        game_state = game_logic.evaluate_game_state(self.board_list)
+        if game_state["status"] != "ongoing":
+            winner = game_state["status"]
+            self.game_over = True
+            
+            if game_state["winning_coords"]:
+                self.highlight_winning_sequence(game_state["winning_coords"])
+            self.gui.window.after(2000, self.gui.hide_game_frame)
+            self.gui.window.after(2000, self.gui.show_game_over_menu)
+
             header = f"{winner.upper()} won!" if winner != "tie" else "Tie!"
-            self.gui.hide_game_frame()
-            self.gui.show_game_over_menu()
             self.gui.update_game_over_text(header)
             return
         
@@ -91,6 +98,7 @@ class TicTacToeController:
 
     def reset_game(self):
         logging.info("Resetting game...")
+        self.game_over = False
         self.gui.hide_game_over_menu()
         self.gui.hide_game_frame()
         self.gui.show_main_menu()
@@ -107,11 +115,17 @@ class TicTacToeController:
         
         self.print_board(self.board_list)
 
-        winner = game_logic.evaluate_game_state(self.board_list)
-        if winner:
+        game_state = game_logic.evaluate_game_state(self.board_list)
+        if game_state["status"] != "ongoing":
+            winner = game_state["status"]
+            self.game_over = True
+            
+            if game_state["winning_coords"]:
+                self.highlight_winning_sequence(game_state["winning_coords"])
+            self.gui.window.after(2000, self.gui.hide_game_frame)
+            self.gui.window.after(2000, self.gui.show_game_over_menu)
+
             header = f"{winner.upper()} won!" if winner != "tie" else "Tie!"
-            self.gui.hide_game_frame()
-            self.gui.show_game_over_menu()
             self.gui.update_game_over_text(header)
             return
         
@@ -135,3 +149,8 @@ class TicTacToeController:
         logging.info("Creating board...")
         self.board_list = [[empty_cell for _ in range(columns)] for _ in range(rows)]
         self.gui.create_board_grid(rows, columns, self.on_click)
+
+
+    def highlight_winning_sequence(self, winning_coords: list[tuple[int, int]]):
+        for coords in winning_coords:
+            self.gui.highlight_cell(coords)
