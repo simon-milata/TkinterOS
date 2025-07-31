@@ -177,7 +177,8 @@ class TicTacToeGUI:
                     master=self.window, font=(THEME_FONTS.family, THEME_FONTS.small),
                     width=cell_size, height=cell_size, text_color=THEME_COLORS.off,
                     border_color=THEME_COLORS.primary, bg_color=THEME_COLORS.primary,
-                    fg_color=THEME_COLORS.primary, text=random.choice(["X", "O"])
+                    fg_color=THEME_COLORS.primary, text=random.choice(["X", "O"]),
+                    hover_color=THEME_COLORS.highlight
                 )
 
                 self.window.after(
@@ -195,25 +196,31 @@ class TicTacToeGUI:
         for row in range(rows):
             button_row = []
             for col in range(columns):
-                color = self.get_color_for_cell(row, col)
-                button = self.create_grid_button(color=color, row=row, column=col, 
-                                            cell_size=self.cell_size, click_callback=click_callback)
+                main_color, hover_color = self.get_colors_for_cell(row, col)
+                button = self.create_grid_button(
+                    main_color=main_color, hover_color= hover_color, row=row, column=col, 
+                    cell_size=self.cell_size, click_callback=click_callback
+                )
                 button_row.append(button)
             self.buttons.append(button_row)
         return self.buttons
 
 
-    def get_color_for_cell(self, row: int, col: int) -> str:
-        color1 = THEME_COLORS.highlight[0]
-        color2 = THEME_COLORS.highlight[1]
-        return color1 if (row + col) % 2 == 0 else color2
+    def get_colors_for_cell(self, row: int, col: int) -> str:
+        main_color1 = THEME_COLORS.highlight[0]
+        hover_color1 = THEME_COLORS.button_hover[1]
+        main_color2 = THEME_COLORS.highlight[1]
+        hover_color2 = THEME_COLORS.button_hover[0]
+
+        return (main_color1, hover_color1) if (row + col) % 2 == 0 else (main_color2, hover_color2)
 
 
-    def create_grid_button(self, color: str, row: int, column: int, cell_size: int, click_callback: Callable):
+    def create_grid_button(self, main_color: str, hover_color: str, row: int, column: int, cell_size: int, click_callback: Callable):
         button = ctk.CTkButton(
                     master=self.board_container, width=cell_size, height=cell_size, 
-                    text_color_disabled="black", fg_color=color, corner_radius=0,
-                    text="", font=(THEME_FONTS.family_bold, THEME_FONTS.medium)
+                    text_color_disabled="black", fg_color=main_color, corner_radius=0,
+                    text="", font=(THEME_FONTS.family_bold, THEME_FONTS.medium),
+                    hover_color=hover_color
                 )
         button.configure(command=lambda r=row, c=column: click_callback(row=r, column=c))
 

@@ -28,7 +28,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 class OS_Controller:
     def __init__(self) -> None:
-        self.appearance_mode = "dark"
+        self.appearance_mode = "light"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
