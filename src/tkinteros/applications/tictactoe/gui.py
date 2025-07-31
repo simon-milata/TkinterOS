@@ -35,8 +35,19 @@ class TicTacToeGUI:
 
 
     def create_game_frame(self):
+        self.border_frame = ctk.CTkFrame(
+            master=self.window, bg_color=THEME_COLORS.primary, fg_color="black",
+            border_color="white", border_width=1
+        )
         self.board_container = ctk.CTkFrame(
-            master=self.window, bg_color=THEME_COLORS.primary, fg_color=THEME_COLORS.primary
+            master=self.border_frame, bg_color=THEME_COLORS.primary, fg_color=THEME_COLORS.button
+        )
+
+
+    def resize_game_border(self, grid_size):
+        self.border_frame.configure(
+            width=self.cell_size * grid_size + 10, 
+            height=self.cell_size * grid_size + 10
         )
 
     
@@ -105,6 +116,7 @@ class TicTacToeGUI:
 
 
     def show_game_frame(self):
+        self.border_frame.place(relx=0.5, rely=0.5, anchor="center")
         self.board_container.place(relx=0.5, rely=0.5, anchor="center")
 
 
@@ -114,7 +126,7 @@ class TicTacToeGUI:
 
     
     def hide_game_frame(self):
-        self.board_container.place_forget()
+        self.border_frame.place_forget()
 
 
     def hide_main_menu(self):
@@ -143,6 +155,7 @@ class TicTacToeGUI:
     def create_window(self) -> None:
         self.window = ctk.CTkToplevel(fg_color=THEME_COLORS.primary)
         self.window.geometry(str(self.window_width) + "x" + str(self.window_height))
+        self.window.update()
         self.window.title("Tic Tac Toe")
         self.window.attributes("-topmost", True)
         self.window.focus_force()
