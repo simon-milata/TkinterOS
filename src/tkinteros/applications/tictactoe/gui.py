@@ -1,4 +1,5 @@
 from typing import Callable
+import random
 
 import customtkinter as ctk
 
@@ -15,10 +16,11 @@ class TicTacToeGUI:
         self.replay_callback = replay_callback
         self.create_variables()
         self.create_window()
+        self.create_background()
         self.create_main_menu()
         self.create_game_frame()
         self.create_game_over_menu()
-        self.hide_game_over_menu()
+        self.window.after(100, self.show_main_menu)
         
         
     def run(self):
@@ -33,78 +35,99 @@ class TicTacToeGUI:
 
 
     def create_game_frame(self):
-        self.game_frame = ctk.CTkFrame(self.window, width=self.window_width,
-                                    height=self.window_height, fg_color=THEME_COLORS.primary)
+        self.board_container = ctk.CTkFrame(
+            master=self.window, bg_color=THEME_COLORS.primary, fg_color=THEME_COLORS.primary
+        )
 
     
     def create_main_menu(self):
-        self.main_menu_frame = ctk.CTkFrame(self.window, width=self.window_width, 
-                                            height=self.window_height, fg_color=THEME_COLORS.primary)
-        self.main_menu_frame.pack()
-        header = ctk.CTkLabel(self.main_menu_frame, text="Tic Tac Toe", text_color=THEME_COLORS.font_color, 
-                              font=(THEME_FONTS.family_bold, THEME_FONTS.extra_large))
-        header.place(anchor="n", relx=0.5, rely=0.05)
+        self.main_menu_header = ctk.CTkLabel(
+            self.window, text="Tic Tac Toe", 
+            text_color=THEME_COLORS.font_color, 
+            font=(THEME_FONTS.family_bold, THEME_FONTS.extra_large), 
+            fg_color=THEME_COLORS.primary, bg_color=THEME_COLORS.primary
+        )
 
-        icon = ctk.CTkLabel(self.main_menu_frame, text_color=THEME_COLORS.font_color,
-                            font=(THEME_FONTS.family_bold, THEME_FONTS.small), text="❌⭕")
-        icon.place(anchor="n", relx=0.5, rely=0.25)
+        self.main_menu_subheader = ctk.CTkLabel(
+            self.window, text_color=THEME_COLORS.font_color,
+            font=(THEME_FONTS.family_bold, THEME_FONTS.small), text="❌⭕",
+            fg_color=THEME_COLORS.primary, bg_color=THEME_COLORS.primary
+        )
         
-        rows_label = ctk.CTkLabel(self.main_menu_frame, text="Grid Size", text_color=THEME_COLORS.font_color,
-                                  font=(THEME_FONTS.family, THEME_FONTS.medium))
-        rows_label.place(anchor="center", relx=0.5, rely=0.52)
-        row_input = ctk.CTkSegmentedButton(self.main_menu_frame, text_color=THEME_COLORS.button_font_color, 
-                                            font=(THEME_FONTS.family, THEME_FONTS.medium), width=80,
-                                            selected_hover_color=THEME_COLORS.button_hover, height=40,
-                                            fg_color=THEME_COLORS.button, unselected_color=THEME_COLORS.button, 
-                                            selected_color=THEME_COLORS.button_hover, values=["3x3", "5x5"], 
-                                            unselected_hover_color=THEME_COLORS.button)
-        row_input.place(anchor="center", relx=0.5, rely=0.65)
+        self.main_menu_rows_label = ctk.CTkLabel(
+            self.window, text="Grid Size", text_color=THEME_COLORS.font_color,
+            font=(THEME_FONTS.family, THEME_FONTS.medium), 
+            fg_color=THEME_COLORS.primary, bg_color=THEME_COLORS.primary
+        )
+        
+        self.main_menu_row_input = ctk.CTkSegmentedButton(
+            self.window, text_color=THEME_COLORS.button_font_color,  
+            font=(THEME_FONTS.family, THEME_FONTS.medium), width=80,
+            selected_hover_color=THEME_COLORS.button_hover, height=40,
+            fg_color=THEME_COLORS.button, unselected_color=THEME_COLORS.button, 
+            selected_color=THEME_COLORS.button_hover, values=["3x3", "5x5"], 
+            unselected_hover_color=THEME_COLORS.button, bg_color=THEME_COLORS.primary
+        )
 
-        play_button = ctk.CTkButton(self.main_menu_frame, text="▶ Play", text_color=THEME_COLORS.button_font_color, 
-                                    fg_color=THEME_COLORS.button, command=lambda: self.start_callback(row_input.get()),
-                                    font=(THEME_COLORS.font_color, THEME_FONTS.button_font_size), 
-                                    hover_color=THEME_COLORS.button_hover, width=150, height=50)
-        play_button.place(anchor="center", relx=0.5, rely=0.85)
+        self.main_menu_play_button = ctk.CTkButton(
+            self.window, text="▶ Play", text_color=THEME_COLORS.button_font_color, 
+            fg_color=THEME_COLORS.button, bg_color=THEME_COLORS.primary,
+            command=lambda: self.start_callback(self.main_menu_row_input.get()),
+            font=(THEME_COLORS.font_color, THEME_FONTS.button_font_size), 
+            hover_color=THEME_COLORS.button_hover, width=150, height=50
+        )
 
 
     def create_game_over_menu(self):
-        self.game_over_frame = ctk.CTkFrame(self.window, width=400, height=400, fg_color=THEME_COLORS.primary)
-        self.game_over_frame.pack()
-        self.game_over_text = ctk.CTkLabel(self.game_over_frame, text="", text_color=THEME_COLORS.font_color,
-                                      font=(THEME_FONTS.family_bold, THEME_FONTS.large))
-        self.game_over_text.place(anchor="n", relx=0.5, rely=0.05)
-        play_again_button = ctk.CTkButton(self.game_over_frame, text="Play Again", fg_color=THEME_COLORS.button, 
-                                          text_color=THEME_COLORS.button_font_color, hover_color=THEME_COLORS.button_hover,
-                                          font=(THEME_FONTS.family_bold, THEME_FONTS.button_font_size), command=self.replay_callback)
-        play_again_button.place(anchor="center", relx=0.5, rely=0.7)
-
+        self.game_over_text = ctk.CTkLabel(
+            self.window, text="", text_color=THEME_COLORS.font_color,
+            font=(THEME_FONTS.family_bold, THEME_FONTS.large), 
+            bg_color=THEME_COLORS.primary, fg_color=THEME_COLORS.primary
+        )
+        
+        self.play_again_button = ctk.CTkButton(
+            self.window, text="Play Again", fg_color=THEME_COLORS.button, bg_color=THEME_COLORS.primary,
+            text_color=THEME_COLORS.button_font_color, hover_color=THEME_COLORS.button_hover,
+            font=(THEME_FONTS.family_bold, THEME_FONTS.button_font_size), command=self.replay_callback
+        )
+        
 
     def update_game_over_text(self, text: str):
         self.game_over_text.configure(text=text)
 
 
     def show_main_menu(self):
-        self.main_menu_frame.pack()
+        self.main_menu_header.place(anchor="n", relx=0.5, rely=0.05)
+        self.main_menu_subheader.place(anchor="n", relx=0.5, rely=0.25)
+        self.main_menu_rows_label.place(anchor="center", relx=0.5, rely=0.52)
+        self.main_menu_row_input.place(anchor="center", relx=0.5, rely=0.65)
+        self.main_menu_play_button.place(anchor="center", relx=0.5, rely=0.85)
 
 
     def show_game_frame(self):
-        self.game_frame.pack()
+        self.board_container.place(relx=0.5, rely=0.5, anchor="center")
 
 
     def show_game_over_menu(self):
-        self.game_over_frame.pack()
+        self.game_over_text.place(anchor="n", relx=0.5, rely=0.05)
+        self.play_again_button.place(anchor="center", relx=0.5, rely=0.7)
 
     
     def hide_game_frame(self):
-        self.game_frame.pack_forget()
+        self.board_container.place_forget()
 
 
     def hide_main_menu(self):
-        self.main_menu_frame.pack_forget()
+        self.main_menu_header.place_forget()
+        self.main_menu_subheader.place_forget()
+        self.main_menu_rows_label.place_forget()
+        self.main_menu_row_input.place_forget()
+        self.main_menu_play_button.place_forget()
 
 
     def hide_game_over_menu(self):
-        self.game_over_frame.pack_forget()
+        self.game_over_text.place_forget()
+        self.play_again_button.place_forget()
 
 
     def check_cell(self, row: int, column: int, player: str):
@@ -112,20 +135,46 @@ class TicTacToeGUI:
 
 
     def create_variables(self):
-        self.cell_size = 80
+        self.cell_size = 60
         self.window_width = 400
         self.window_height = 400
         
 
     def create_window(self) -> None:
-        self.window = ctk.CTkToplevel()
+        self.window = ctk.CTkToplevel(fg_color=THEME_COLORS.primary)
         self.window.geometry(str(self.window_width) + "x" + str(self.window_height))
-        self.window.configure(fg_color="gray")
         self.window.title("Tic Tac Toe")
         self.window.attributes("-topmost", True)
         self.window.focus_force()
         self.window.resizable(False, False)
         self.window.after(200, self.icon_setup)
+
+
+    def create_background(self):
+        cell_size = self.window_width // 10
+        delay = 0
+
+        for row in range(10):
+            for col in range(10):
+                delay += row * 8
+                x = col * cell_size
+                y = row * cell_size
+
+                cell = ctk.CTkButton(
+                    master=self.window, font=(THEME_FONTS.family, THEME_FONTS.small),
+                    width=cell_size, height=cell_size, text_color=THEME_COLORS.off,
+                    border_color=THEME_COLORS.primary, bg_color=THEME_COLORS.primary,
+                    fg_color=THEME_COLORS.primary, text=random.choice(["X", "O"])
+                )
+
+                self.window.after(
+                    delay,
+                    lambda c=cell, x=x, y=y: self.place_background_button(cell=c, x=x, y=y)
+                )
+
+
+    def place_background_button(self, cell, x, y):
+        cell.place(x=x, y=y)
 
 
     def create_board_grid(self, rows: int, columns: int, click_callback: Callable):
@@ -149,7 +198,7 @@ class TicTacToeGUI:
 
     def create_grid_button(self, color: str, row: int, column: int, cell_size: int, click_callback: Callable):
         button = ctk.CTkButton(
-                    master=self.game_frame, width=cell_size, height=cell_size, 
+                    master=self.board_container, width=cell_size, height=cell_size, 
                     text_color_disabled="black", fg_color=color, corner_radius=0,
                     text="", font=(THEME_FONTS.family_bold, THEME_FONTS.medium)
                 )

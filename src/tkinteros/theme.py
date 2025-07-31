@@ -20,7 +20,7 @@ class ThemeColors:
         return ThemeColors(
             primary=primary,
             highlight=("#ffd36b", "#104b98"),
-            off=("#f5c44e", "#0c2340"),
+            off=("#f5c44e", "#0e2847"),
             bright=bright,
             button=(primary[1], primary[0]),
             button_hover=(bright[1], bright[0]),
