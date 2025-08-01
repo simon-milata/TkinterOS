@@ -15,11 +15,13 @@ class TicTacToeBot:
 
     def move(self, board: list[list[str]]):
         self.times_ran = 0
-        # if self.random_start and game_logic.get_move_count(board) < 3:
-        #     while True:
-        #         random_move = (random.randint(0, len(board) - 1), random.randint(0, len(board) - 1))
-        #         if board[random_move[0]][random_move[1]] == " ":
-        #             return random_move
+        self.max_depth = self.get_max_depth(board=board)
+
+        if self.random_start and game_logic.get_move_count(board) < 3:
+            while True:
+                random_move = (random.randint(0, len(board) - 1), random.randint(0, len(board) - 1))
+                if board[random_move[0]][random_move[1]] == " ":
+                    return random_move
 
         return self.best_move(board)
 
@@ -122,6 +124,14 @@ class TicTacToeBot:
         logging.info(f"Minimax ran {self.times_ran} times.")
         
         return move
+    
+
+    def get_max_depth(self, board: list[list[str]]) -> int:
+        if len(board) <= 3:
+            return None
+        
+        move_count = game_logic.get_move_count(board=board)
+        return 1 if move_count < 3 else 3
     
 
 if __name__ == "__main__":

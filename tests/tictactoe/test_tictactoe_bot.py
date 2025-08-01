@@ -77,3 +77,27 @@ def test_block_horizontal():
         ]
 
     assert TicTacToeBot().move(board) == (3, 1) or (3, 4)
+
+
+def test_block_beginning():
+    board = [
+            ["O", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " "],
+            [" ", " ", "X", " ", " "],
+            [" ", "X", " ", " ", " "],
+            [" ", " ", " ", " ", " "]
+        ]
+    move = TicTacToeBot().move(board)
+    assert move == (1, 3) or move == (4, 0) or move == (0, 4)
+
+
+def test_max_depth_not_zero():
+    board = [
+            [" ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " "],
+            [" ", " ", "X", " ", " "],
+            [" ", " ", " ", " ", " "],
+            [" ", " ", " ", " ", " "]
+        ]
+
+    assert TicTacToeBot().get_max_depth(board) != 0
