@@ -96,6 +96,10 @@ class DesktopGUI:
     
     def create_new_file(self, event):
         name = self.file_name_input.get()
+        
+        if not self.callbacks[Callback.VALIDATE_FILE_NAME](name):
+            return
+
         self.callbacks[Callback.CREATE_TXT_FILE](name)
         self.destroy_file_name_input_window()
         self.hide_desktop_actions_frame()

@@ -2,12 +2,14 @@ import os
 import json
 import logging
 from datetime import datetime
+from string import punctuation
+import re
 
 from tkinteros.file_management.file import File
 
 
 class FileManager():
-    def __init__(self):
+    def run(self):
         user_path = os.path.expanduser("~")
         self.project_folder_path = os.path.join(user_path, "AppData/Local/TkinterOS")
         self.file_folder = os.path.join(self.project_folder_path, "files")
@@ -124,3 +126,31 @@ class FileManager():
             file.writelines(updated_content)
 
         logging.debug(f"Saving file content:\n'{updated_content}' to {name}.")
+
+
+    def validate_file_name_on_creation(self, file_name: str, files: list[str]) -> bool:
+        """Returns True if the length of filename is in set range and filename is unique."""
+        base_file_name = self.get_file_basename(file_name)
+
+        if file_name.startswith(tuple(punctuation)):
+            logging.debug(f"Validation for '{file_name}' failed! File name mustn't start with a special character.")
+            return False
+        
+        if not re.match(r"^(?:[^a-zA-Z0-9]*[a-zA-Z0-9]){2,}.*$", file_name):
+            logging.debug(f"Validation for '{file_name}' failed! File name must contain at least 2 characters.")
+            return False
+
+        if not 1 < len(base_file_name) < 11:
+            logging.debug(f"Validation for '{file_name}' failed! File name not in length range [2, 10].")
+            return False
+        
+        if base_file_name in map(self.get_file_basename, files):
+            logging.debug(f"Validation for '{file_name}' failed! Base filename already exists.")
+            return False
+        
+        logging.debug(f"Validation for '{file_name}' succeded.")
+        return True
+    
+
+    def get_file_basename(self, file_name: str) -> str:
+        return os.path.splitext(os.path.basename(file_name))[0]

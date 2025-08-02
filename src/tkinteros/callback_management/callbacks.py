@@ -11,3 +11,4 @@ class Callback(Enum):
     PYTHON = auto()
     TICTACTOE = auto()
     CREATE_TXT_FILE = auto()
+    VALIDATE_FILE_NAME = auto()

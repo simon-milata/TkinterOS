@@ -43,6 +43,7 @@ class OS_Controller:
         self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
 
         self.create_binds()
+        self.file_manager.run()
         self.load_files()
         self.update_taskbar_time()
         self.run()
@@ -154,6 +155,10 @@ class OS_Controller:
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
         TextEditor(name, content, self.close_file)
+
+
+    def validate_file_name(self, file_name: str) -> bool:
+        return self.file_manager.validate_file_name_on_creation(file_name, self.file_manager.files)
 
 
     def create_txt_file(self, name: str):
