@@ -6,6 +6,8 @@ from tkinteros.callback_management.callbacks import Callback
 from tkinteros.theme import THEME_COLORS, THEME_FONTS
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
+from tkinteros.gui.file_widget import TextFileWidget
+
 
 class DesktopGUI:
     def __init__(self, appearance_mode, callbacks, asset_manager: AssetManager) -> None:
@@ -97,6 +99,14 @@ class DesktopGUI:
         self.callbacks[Callback.CREATE_TXT_FILE](name)
         self.destroy_file_name_input_window()
         self.hide_desktop_actions_frame()
+
+
+    def create_text_file_widget(self, file_object, open_file_callback):
+        TextFileWidget(
+            file=file_object, desktop_frame=self.WINDOW, on_click_callback=open_file_callback,
+            light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
+            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
+        )
 
 
     def create_selection_box_gui(self, start_x, start_y, end_x, end_y):

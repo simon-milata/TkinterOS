@@ -11,7 +11,6 @@ from tkinteros.applications.snake_game import PythonGame
 from tkinteros.applications.tictactoe.game import TicTacToe
 from tkinteros.applications.pybrowse import PyBrowse
 from tkinteros.gui.text_editor import TextEditor
-from tkinteros.gui.file_widget import TextFileWidget
 from tkinteros.callback_management.callback_manager import CallbackManager
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
@@ -149,7 +148,7 @@ class OS_Controller:
     def load_files(self):
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file, self.text_file_icon)
+            self.desktop_gui.create_text_file_widget(file_object=file, open_file_callback=self.open_file)
 
 
     def open_file(self, name):
@@ -161,7 +160,7 @@ class OS_Controller:
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, name, None, None)
-        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file, self.text_file_icon)
+        self.desktop_gui.create_text_file_widget(file_object=file_object, open_file_callback=self.open_file)
 
 
     def close_file(self, name, updated_content):
