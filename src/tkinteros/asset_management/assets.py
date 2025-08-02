@@ -12,7 +12,7 @@ class DesktopAssets(StrEnum):
     SNAKE_GAME_LIGHT = "desktop/snake_yellow_icon.png"
     WIFI_ICON_DARK = "desktop/wifi_icon_dark.png"
     WIFI_ICON_LIGHT = "desktop/wifi_icon_light.png"
-    TEXT_FILE_ICON = "desktop/python_logo.png"
+    TEXT_FILE_ICON = "desktop/text_file.png"
     TICTACTOE_DARK = "desktop/tictactoe_dark.png"
     TICTACTOE_LIGHT = "desktop/tictactoe_light.png"
 

@@ -15,6 +15,7 @@ from tkinteros.gui.file_widget import TextFileWidget
 from tkinteros.callback_management.callback_manager import CallbackManager
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
+from tkinteros.theme import THEME_COLORS
 
 
 logging.basicConfig(
@@ -28,7 +29,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 class OS_Controller:
     def __init__(self) -> None:
-        self.appearance_mode = "light"
+        self.appearance_mode = "dark"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
@@ -38,7 +39,6 @@ class OS_Controller:
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
 
-        self.text_file_icon = self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON)
         self.desktop_window_details = self.create_desktop_window_details()
 
         self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
@@ -149,7 +149,11 @@ class OS_Controller:
     def load_files(self):
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            TextFileWidget(file, self.desktop_gui.WINDOW, self.open_file, self.text_file_icon)
+            TextFileWidget(
+                file=file, desktop_frame=self.desktop_gui.WINDOW, on_click_callback=self.open_file,
+                light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
+                dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
+            )
 
 
     def open_file(self, name):
@@ -161,7 +165,11 @@ class OS_Controller:
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, name, None, None)
-        TextFileWidget(file_object, self.desktop_window_details["window"], self.open_file, self.text_file_icon)
+        TextFileWidget(
+            file=file_object, desktop_frame=self.desktop_window_details["window"], on_click_callback=self.open_file,
+            light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
+            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
+        )
 
 
     def close_file(self, name, updated_content):
