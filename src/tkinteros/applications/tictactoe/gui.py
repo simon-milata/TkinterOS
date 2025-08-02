@@ -29,9 +29,9 @@ class TicTacToeGUI:
 
     def icon_setup(self):
         if self.appereance_mode:
-            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON_LIGHT))
+            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON))
         else:
-            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON_LIGHT))
+            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON))
 
 
     def create_game_frame(self):

@@ -21,7 +21,10 @@ class PyBrowseGame:
 
 
     def create_icons(self) -> None:
-        self.python_icon = ctk.CTkImage(light_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE_DARK), dark_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE_LIGHT), size=(64, 64))
+        self.python_icon = ctk.CTkImage(
+            light_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE, THEME_COLORS.primary[1]), 
+            dark_image=self.asset_manager.get_image(PyBrowseAssets.PYBROWSE_GAME_SNAKE, THEME_COLORS.primary[0]), size=(64, 64)
+        )
 
 
     def create_python(self) -> None:
