@@ -32,7 +32,7 @@ class DesktopGUI:
 
 
     def icon_setup(self) -> None:
-        self.python_logo = ctk.CTkImage(self.asset_manager.get_image(DesktopAssets.BACKGROUND_LOGO), size=(self.height/5, self.height/5))
+        self.python_logo = ctk.CTkImage(self.asset_manager.get_image(DesktopAssets.BACKGROUND_LOGO, resize=False), size=(self.height/5, self.height/5))
 
     
     def create_gui(self) -> None:
@@ -60,8 +60,43 @@ class DesktopGUI:
 
         self.create_new_folder = ctk.CTkButton(self.new_action_frame, text="Folder")
         self.create_new_folder.pack()
-        self.create_new_text_document = ctk.CTkButton(self.new_action_frame, text="Text Document", command=self.callbacks[Callback.CREATE_TXT_FILE])
+
+        self.create_new_text_document = ctk.CTkButton(
+            self.new_action_frame, text="Text Document", 
+            command=self.create_file_name_input_window
+        )
         self.create_new_text_document.pack()
+
+
+    def create_file_name_input_window(self):
+        self.desktop_actions_frame.update()
+        x_pos = self.desktop_actions_frame.winfo_rootx()
+        y_pos = self.desktop_actions_frame.winfo_rooty() + self.desktop_actions_frame.winfo_height()
+
+        self.file_name_input = ctk.CTkEntry(self.WINDOW, placeholder_text="New Text File")
+        self.file_name_input.place(x=x_pos, y=y_pos)
+        self.file_name_input.focus()
+
+        self.file_name_input.bind("<Return>", self.create_new_file)
+
+
+    def destroy_file_name_input_window(self):
+        try:
+            self.file_name_input.destroy()
+        except AttributeError:
+            pass
+
+
+    def hide_desktop_actions_frame(self):
+        self.desktop_actions_frame.place_forget()
+        self.new_action_frame.place_forget()
+
+    
+    def create_new_file(self, event):
+        name = self.file_name_input.get()
+        self.callbacks[Callback.CREATE_TXT_FILE](name)
+        self.destroy_file_name_input_window()
+        self.hide_desktop_actions_frame()
 
 
     def create_selection_box_gui(self, start_x, start_y, end_x, end_y):

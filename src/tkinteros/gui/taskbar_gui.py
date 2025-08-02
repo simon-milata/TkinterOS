@@ -25,44 +25,44 @@ class TaskbarGUI:
 
     def icon_setup(self) -> None:
         self.python_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.START_LOGO_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.START_LOGO_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.START_LOGO, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.START_LOGO, THEME_COLORS.primary[0]),
             size=(40, 40)
         )
 
         self.snake_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.SNAKE_GAME, THEME_COLORS.primary[0]),
             size=(32, 32)
         )
 
         self.tictactoe_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.TICTACTOE, THEME_COLORS.primary[0]),
             size=(32, 32)
         )
 
         self.no_network_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.NO_INTERNET, THEME_COLORS.primary[0]),
             size=(20, 20)
         )
 
         self.network_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON, THEME_COLORS.primary[0]),
             size=(20, 20)
         )
 
         self.network_icon_off = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_LIGHT),
-            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON_DARK),
+            light_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON, THEME_COLORS.primary[0]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.WIFI_ICON, THEME_COLORS.primary[1]),
             size=(32, 32)
         )
 
         self.py_browse_icon = ctk.CTkImage(
-            light_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE_DARK),
-            dark_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE_LIGHT),
+            light_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE, THEME_COLORS.primary[1]),
+            dark_image=self.asset_manager.get_image(DesktopAssets.PYBROWSE, THEME_COLORS.primary[0]),
             size=(32, 32)
         )
 
