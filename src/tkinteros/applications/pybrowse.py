@@ -52,9 +52,9 @@ class PyBrowse:
     
     def icon_setup(self):
         if self.OS.appearance_mode:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON_LIGHT))
+            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON))
         else:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON_DARK))
+            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON))
 
 
     def create_window_bar(self) -> None:

@@ -14,6 +14,7 @@ from tkinteros.gui.text_editor import TextEditor
 from tkinteros.callback_management.callback_manager import CallbackManager
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
+from tkinteros.theme import THEME_COLORS
 
 
 logging.basicConfig(
@@ -27,7 +28,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 class OS_Controller:
     def __init__(self) -> None:
-        self.appearance_mode = "light"
+        self.appearance_mode = "dark"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
@@ -37,7 +38,6 @@ class OS_Controller:
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
 
-        self.text_file_icon = self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON)
         self.desktop_window_details = self.create_desktop_window_details()
 
         self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
