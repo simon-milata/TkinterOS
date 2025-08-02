@@ -102,6 +102,7 @@ class OS_Controller:
         self.close_start_menu()
         self.close_utils_menu()
         self.close_desktop_context_menu()
+        self.desktop_gui.destroy_file_name_input_window()
 
     
     def toggle_start_menu(self) -> None:
@@ -129,11 +130,15 @@ class OS_Controller:
             self.desktop_gui.desktop_actions_frame.place(x=event.x, y=event.y)
 
 
+
     def create_desktop_context_menu(self, event) -> None:
         """Opens context menu when you right click on the desktop"""
         self.desktop_actions_frame_x = self.desktop_gui.desktop_actions_frame.winfo_rootx()
         self.desktop_actions_frame_y = self.desktop_gui.desktop_actions_frame.winfo_rooty()
-        self.desktop_gui.new_action_frame.place(x=self.desktop_actions_frame_x + self.desktop_gui.desktop_actions_frame.winfo_width(), y=self.desktop_actions_frame_y - self.desktop_gui.desktop_actions_frame.winfo_height())
+        self.desktop_gui.new_action_frame.place(
+            x=self.desktop_actions_frame_x + self.desktop_gui.desktop_actions_frame.winfo_width(), 
+            y=self.desktop_actions_frame_y - self.desktop_gui.desktop_actions_frame.winfo_height()
+        )
 
     
     def close_desktop_context_menu(self) -> None:
@@ -156,7 +161,7 @@ class OS_Controller:
         TextEditor(name, content, self.close_file)
 
 
-    def create_txt_file(self):
+    def create_txt_file(self, name: str):
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, name, None, None)
