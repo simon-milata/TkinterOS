@@ -71,6 +71,7 @@ class FileManager():
             logging.debug(f"Physical file ({file}) created.")
 
             self.create_file_metadata(file)
+        self.load_files()
 
 
     def create_file_object(self, x_pos: int, y_pos: int, name: str, last_modified: datetime | None, creation_time: datetime | None) -> File:
