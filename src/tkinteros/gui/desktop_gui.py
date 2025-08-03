@@ -44,6 +44,7 @@ class DesktopGUI:
         self.create_desktop()
         self.create_desktop_actions()
         self.create_new_action()
+        self.file_name_input = ctk.CTkEntry(self.WINDOW, placeholder_text="New Text File")
 
 
     def create_desktop(self) -> None:
@@ -78,18 +79,16 @@ class DesktopGUI:
         x_pos = self.desktop_actions_frame.winfo_rootx()
         y_pos = self.desktop_actions_frame.winfo_rooty() + self.desktop_actions_frame.winfo_height()
 
-        self.file_name_input = ctk.CTkEntry(self.WINDOW, placeholder_text="New Text File")
         self.file_name_input.place(x=x_pos, y=y_pos)
+
         self.file_name_input.focus()
 
         self.file_name_input.bind("<Return>", self.create_new_file)
 
 
     def destroy_file_name_input_window(self):
-        try:
-            self.file_name_input.destroy()
-        except AttributeError:
-            pass
+        self.file_name_input.delete(0, "end")
+        self.file_name_input.place_forget()
 
 
     def hide_desktop_actions_frame(self):
@@ -99,15 +98,17 @@ class DesktopGUI:
     
     def create_new_file(self, event):
         name = self.file_name_input.get()
-        
-        if not self.callbacks[Callback.VALIDATE_FILE_NAME](name):
+        validation_succesful = self.callbacks[Callback.VALIDATE_FILE_NAME](name)
+
+        if not validation_succesful:
             if not self.shaking:
                 self.shake_placed_widget(self.file_name_input, 20)
-            return
+            return "break"
 
         self.callbacks[Callback.CREATE_TXT_FILE](name)
         self.destroy_file_name_input_window()
         self.hide_desktop_actions_frame()
+        return "break"
 
 
     def create_text_file_widget(self, file_object, open_file_callback):
