@@ -44,7 +44,7 @@ class DesktopGUI:
         self.create_desktop()
         self.create_desktop_actions()
         self.create_new_action()
-        self.file_name_input = ctk.CTkEntry(self.WINDOW, placeholder_text="New Text File")
+        self.create_file_name_input()
 
 
     def create_desktop(self) -> None:
@@ -86,7 +86,13 @@ class DesktopGUI:
         self.file_name_input.bind("<Return>", self.create_new_file)
 
 
-    def destroy_file_name_input_window(self):
+    def create_file_name_input(self):
+        self.file_name_input = ctk.CTkEntry(
+            self.WINDOW
+        )
+
+
+    def hide_file_name_input_window(self):
         self.file_name_input.delete(0, "end")
         self.file_name_input.place_forget()
 
@@ -106,7 +112,7 @@ class DesktopGUI:
             return "break"
 
         self.callbacks[Callback.CREATE_TXT_FILE](name)
-        self.destroy_file_name_input_window()
+        self.hide_file_name_input_window()
         self.hide_desktop_actions_frame()
         return "break"
 

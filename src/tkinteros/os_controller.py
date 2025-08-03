@@ -104,7 +104,7 @@ class OS_Controller:
         self.close_start_menu()
         self.close_utils_menu()
         self.close_desktop_context_menu()
-        self.desktop_gui.destroy_file_name_input_window()
+        self.desktop_gui.hide_file_name_input_window()
 
     
     def toggle_start_menu(self) -> None:
