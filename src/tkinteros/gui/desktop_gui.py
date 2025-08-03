@@ -1,5 +1,6 @@
-from PIL import Image
+import math
 
+from PIL import Image
 import customtkinter as ctk
 
 from tkinteros.callback_management.callbacks import Callback
@@ -18,6 +19,8 @@ class DesktopGUI:
         self.icon_setup()
         self.create_gui()
         ctk.set_appearance_mode(appearance_mode)
+
+        self.shaking = False
 
     
     def window_setup(self) -> None:
@@ -98,6 +101,8 @@ class DesktopGUI:
         name = self.file_name_input.get()
         
         if not self.callbacks[Callback.VALIDATE_FILE_NAME](name):
+            if not self.shaking:
+                self.shake_placed_widget(self.file_name_input, 20)
             return
 
         self.callbacks[Callback.CREATE_TXT_FILE](name)
@@ -111,6 +116,32 @@ class DesktopGUI:
             light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
             dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
         )
+
+
+    def shake_placed_widget(self, widget, pixel_amount: int, times_shaken: int = 3):
+        widget.update()
+        initial_x = widget.winfo_x()
+        initial_y = widget.winfo_y()
+
+        self.shaking = True
+
+        steps_per_shake = 8
+        total_steps = steps_per_shake * times_shaken
+        delay = 10
+
+        for step in range(total_steps):
+            # Calculate an offset using a sine wave pattern for smooth motion
+            angle = step / steps_per_shake * math.pi
+            offset = int(math.sin(angle) * pixel_amount)
+
+            widget.after(step * delay, lambda dx=offset: widget.place(x=initial_x + dx, y=initial_y))
+
+        widget.after(total_steps * delay, lambda: self.reset_shaken_widget(widget=widget, initial_x=initial_x, initial_y=initial_y))
+
+        
+    def reset_shaken_widget(self, widget, initial_x: int, initial_y: int):
+        widget.place(x=initial_x, y=initial_y)
+        self.shaking = False
 
 
     def create_selection_box_gui(self, start_x, start_y, end_x, end_y):

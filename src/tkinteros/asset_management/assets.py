@@ -9,6 +9,7 @@ class DesktopAssets(StrEnum):
     WIFI_ICON = "desktop/wifi_icon.png"
     TEXT_FILE_ICON = "desktop/text_file_icon.png"
     TICTACTOE = "desktop/tictactoe_icon.png"
+    ERROR_SOUND = "desktop/error_sound.mp3"
 
 
 class PyBrowseAssets(StrEnum):

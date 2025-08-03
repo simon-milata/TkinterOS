@@ -4,6 +4,8 @@ import datetime
 import logging
 import subprocess
 
+from playsound import playsound
+
 from tkinteros.gui.desktop_gui import DesktopGUI
 from tkinteros.file_management.file_manager import FileManager
 from tkinteros.gui.taskbar_gui import TaskbarGUI
@@ -158,7 +160,12 @@ class OS_Controller:
 
 
     def validate_file_name(self, file_name: str) -> bool:
-        return self.file_manager.validate_file_name_on_creation(file_name, self.file_manager.files)
+        validation_succesful = self.file_manager.validate_file_name_on_creation(file_name, self.file_manager.files)
+        if not validation_succesful:
+            if not self.desktop_gui.shaking:
+                playsound(self.asset_manager.get_sound(DesktopAssets.ERROR_SOUND), block=False)
+
+        return validation_succesful
 
 
     def create_txt_file(self, name: str):
