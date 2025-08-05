@@ -156,7 +156,7 @@ class OS_Controller:
 
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
-        TextEditor(name, content, self.close_file)
+        TextEditor(name, content, self.close_file, self.asset_manager.get_icon(DesktopAssets.TEXT_FILE_ICON))
 
 
     def validate_file_name(self, file_name: str) -> bool:
