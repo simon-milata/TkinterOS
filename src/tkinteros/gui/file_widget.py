@@ -23,42 +23,45 @@ class TextFileWidget:
 
     def create_file_widget(self, desktop_frame):
         """Creates the body/icon of the file"""
-        self.file_body_frame = ctk.CTkFrame(desktop_frame, width=75, height=100, fg_color="transparent")
-        self.file_body_frame.place(x=self.file.x_pos, y=self.file.y_pos)
+        self.frame = ctk.CTkFrame(desktop_frame, width=80, height=100, fg_color="transparent")
+        self.frame.place(x=self.file.x_pos, y=self.file.y_pos)
+        self.frame.propagate(False)
 
         image = ctk.CTkImage(light_image=self.light_icon, dark_image=self.dark_icon, size=(50, 50))
 
         self.image_label = ctk.CTkLabel(
-            master=self.file_body_frame, image=image, text="",
+            master=self.frame, image=image, text="",
             fg_color="transparent", bg_color="transparent"
         )
-        self.image_label.place(anchor="center", relx=0.5, rely=0.5)
+        self.image_label.place(anchor="center", relx=0.5, rely=0.4)
 
-        self.file_body_name_label = ctk.CTkLabel(self.file_body_frame, width=75, height=20, text=self.file.name)
-        self.file_body_name_label.place(anchor="center", relx=0.5, rely=0.9)
+        self.name_label = ctk.CTkLabel(
+            self.frame, text=self.file.name, height=20, fg_color="transparent"
+        )
+        self.name_label.place(anchor="center", relx=0.5, rely=0.85)
 
 
     def create_hover_binds(self):
-        self.file_body_frame.bind("<Enter>", self.hover_enter)
-        self.file_body_frame.bind("<Leave>", self.hover_exit)
+        self.frame.bind("<Enter>", self.hover_enter)
+        self.frame.bind("<Leave>", self.hover_exit)
         self.image_label.bind("<Enter>", self.hover_enter)
         self.image_label.bind("<Leave>", self.hover_exit)
-        self.file_body_name_label.bind("<Enter>", self.hover_enter)
-        self.file_body_name_label.bind("<Leave>", self.hover_exit)
+        self.name_label.bind("<Enter>", self.hover_enter)
+        self.name_label.bind("<Leave>", self.hover_exit)
 
 
     def create_callback_binds(self):
-        self.file_body_frame.bind("<Double-1>", self.on_click)
+        self.frame.bind("<Double-1>", self.on_click)
         self.image_label.bind("<Double-1>", self.on_click)
-        self.file_body_name_label.bind("<Double-1>", self.on_click)
+        self.name_label.bind("<Double-1>", self.on_click)
 
 
     def hover_enter(self, event=None):
-        self.file_body_frame.configure(fg_color=THEME_COLORS.highlight)
+        self.frame.configure(fg_color=THEME_COLORS.highlight)
 
 
     def hover_exit(self, event=None):
-        self.file_body_frame.configure(fg_color="transparent")
+        self.frame.configure(fg_color="transparent")
 
 
     def on_click(self, event=None):
