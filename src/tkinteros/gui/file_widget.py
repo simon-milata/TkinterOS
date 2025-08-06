@@ -38,9 +38,15 @@ class TextFileWidget:
         self.image_label.place(anchor="center", relx=0.5, rely=0.4)
 
         self.name_label = ctk.CTkLabel(
-            self.frame, text=self.file.name, height=20, fg_color="transparent"
+            self.frame, text=self.truncate_file_name(self.file.name), height=20, fg_color="transparent"
         )
         self.name_label.place(anchor="center", relx=0.5, rely=0.85)
+
+
+    def truncate_file_name(self, file_name: str, char_limit=12) -> str:
+        if len(file_name) > char_limit:
+            return file_name[:char_limit - 3] + "..."
+        return file_name
 
 
     def create_hover_binds(self):
