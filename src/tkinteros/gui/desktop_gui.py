@@ -45,6 +45,7 @@ class DesktopGUI:
         self.create_desktop_actions()
         self.create_new_action()
         self.create_file_name_input()
+        self.create_filename_popup()
 
 
     def create_desktop(self) -> None:
@@ -121,8 +122,31 @@ class DesktopGUI:
         TextFileWidget(
             file=file_object, desktop_frame=self.WINDOW, on_click_callback=open_file_callback,
             light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[1]),
-            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[0])
+            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[0]),
+            hover_callback=self.show_filename_popup, hover_exit_callback=self.hide_filename_popup
         )
+
+    
+    def create_filename_popup(self):
+        self.filename_popup_frame = ctk.CTkFrame(
+            master=self.WINDOW, fg_color="transparent", border_color=THEME_COLORS.button, height=30, 
+            corner_radius=10, border_width=1
+        )
+        self.filename_popup_label = ctk.CTkLabel(
+            master=self.filename_popup_frame, text="", fg_color="transparent",
+            font=(THEME_FONTS.family, THEME_FONTS.extra_small)
+        )
+        self.filename_popup_label.pack(fill="both", anchor="center", padx=10, pady=1)
+
+
+    def show_filename_popup(self, event, filename: str):
+        self.filename_popup_label.configure(text=filename)
+        self.filename_popup_frame.place(x=event.x_root + 10, y=event.y_root + 20)
+        self.filename_popup_frame.lift()
+
+
+    def hide_filename_popup(self):
+        self.filename_popup_frame.place_forget()
 
 
     def shake_placed_widget(self, widget, pixel_amount: int, times_shaken: int = 3):

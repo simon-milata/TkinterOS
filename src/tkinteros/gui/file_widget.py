@@ -10,9 +10,11 @@ from tkinteros.theme import THEME_COLORS
 class TextFileWidget:
     def __init__(
             self, file: File, desktop_frame: ctk.CTkFrame, on_click_callback: Callable, 
-            light_icon: Image, dark_icon: Image):
+            hover_callback: Callable, hover_exit_callback: Callable, light_icon: Image, dark_icon: Image):
         self.file = file
         self.on_click_callback = on_click_callback
+        self.hover_callback = hover_callback
+        self.hover_exit_callback = hover_exit_callback
         self.light_icon = light_icon
         self.dark_icon = dark_icon
 
@@ -56,12 +58,14 @@ class TextFileWidget:
         self.name_label.bind("<Double-1>", self.on_click)
 
 
-    def hover_enter(self, event=None):
+    def hover_enter(self, event):
         self.frame.configure(fg_color=THEME_COLORS.highlight)
+        self.hover_callback(event, self.file.name)
 
 
     def hover_exit(self, event=None):
         self.frame.configure(fg_color="transparent")
+        self.hover_exit_callback()
 
 
     def on_click(self, event=None):
