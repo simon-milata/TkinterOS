@@ -10,7 +10,8 @@ from tkinteros.theme import THEME_COLORS
 class TextFileWidget:
     def __init__(
             self, file: File, desktop_frame: ctk.CTkFrame, on_click_callback: Callable, 
-            hover_callback: Callable, hover_exit_callback: Callable, light_icon: Image, dark_icon: Image):
+            hover_callback: Callable, hover_exit_callback: Callable, 
+            light_icon: Image, dark_icon: Image):
         self.file = file
         self.on_click_callback = on_click_callback
         self.hover_callback = hover_callback
@@ -54,7 +55,8 @@ class TextFileWidget:
         self.frame.bind("<Leave>", self.hover_exit)
         self.image_label.bind("<Enter>", self.hover_enter)
         self.image_label.bind("<Leave>", self.hover_exit)
-        self.name_label.bind("<Enter>", self.hover_enter)
+        self.name_label.bind("<Enter>", self.name_hover)
+        self.name_label.bind("<Motion>", self.name_hover)
         self.name_label.bind("<Leave>", self.hover_exit)
 
 
@@ -66,6 +68,10 @@ class TextFileWidget:
 
     def hover_enter(self, event):
         self.frame.configure(fg_color=THEME_COLORS.highlight)
+
+
+    def name_hover(self, event):
+        self.hover_enter(event=None)
         self.hover_callback(event, self.file.name)
 
 
