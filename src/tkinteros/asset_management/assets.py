@@ -7,8 +7,10 @@ class DesktopAssets(StrEnum):
     BACKGROUND_LOGO = "desktop/python_logo.png"
     SNAKE_GAME = "desktop/snake_icon.png"
     WIFI_ICON = "desktop/wifi_icon.png"
-    TEXT_FILE_ICON = "desktop/text_file_icon.png"
+    TEXT_FILE = "desktop/text_file_icon.png"
     TICTACTOE = "desktop/tictactoe_icon.png"
+    ERROR_SOUND = "desktop/error_sound.mp3"
+    TEXT_FILE_ICON = "desktop/text_file_icon.ico"
 
 
 class PyBrowseAssets(StrEnum):

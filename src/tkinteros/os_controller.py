@@ -4,6 +4,8 @@ import datetime
 import logging
 import subprocess
 
+from playsound import playsound
+
 from tkinteros.gui.desktop_gui import DesktopGUI
 from tkinteros.file_management.file_manager import FileManager
 from tkinteros.gui.taskbar_gui import TaskbarGUI
@@ -11,7 +13,6 @@ from tkinteros.applications.snake_game import PythonGame
 from tkinteros.applications.tictactoe.game import TicTacToe
 from tkinteros.applications.pybrowse import PyBrowse
 from tkinteros.gui.text_editor import TextEditor
-from tkinteros.gui.file_widget import TextFileWidget
 from tkinteros.callback_management.callback_manager import CallbackManager
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
@@ -29,7 +30,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 class OS_Controller:
     def __init__(self) -> None:
-        self.appearance_mode = "dark"
+        self.appearance_mode = "light"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
@@ -44,6 +45,7 @@ class OS_Controller:
         self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
 
         self.create_binds()
+        self.file_manager.run()
         self.load_files()
         self.update_taskbar_time()
         self.run()
@@ -102,7 +104,7 @@ class OS_Controller:
         self.close_start_menu()
         self.close_utils_menu()
         self.close_desktop_context_menu()
-        self.desktop_gui.destroy_file_name_input_window()
+        self.desktop_gui.hide_file_name_input_window()
 
     
     def toggle_start_menu(self) -> None:
@@ -149,27 +151,32 @@ class OS_Controller:
     def load_files(self):
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
-            TextFileWidget(
-                file=file, desktop_frame=self.desktop_gui.WINDOW, on_click_callback=self.open_file,
-                light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
-                dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
+            self.desktop_gui.create_text_file_widget(
+                file_object=file, open_file_callback=self.open_file
             )
 
 
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
-        TextEditor(name, content, self.close_file)
+        TextEditor(name, content, self.close_file, self.asset_manager.get_icon(DesktopAssets.TEXT_FILE_ICON))
+
+
+    def validate_file_name(self, file_name: str) -> bool:
+        validation_succesful = self.file_manager.validate_file_name_on_creation(file_name, self.file_manager.files)
+        if not validation_succesful:
+            if not self.desktop_gui.shaking:
+                playsound(self.asset_manager.get_sound(DesktopAssets.ERROR_SOUND), block=False)
+
+        return validation_succesful
 
 
     def create_txt_file(self, name: str):
         x=self.desktop_actions_frame_x
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, name, None, None)
-        TextFileWidget(
-            file=file_object, desktop_frame=self.desktop_window_details["window"], on_click_callback=self.open_file,
-            light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[1]),
-            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE_ICON, THEME_COLORS.primary[0])
-        )
+        self.desktop_gui.create_text_file_widget(
+                file_object=file_object, open_file_callback=self.open_file
+            )
 
 
     def close_file(self, name, updated_content):

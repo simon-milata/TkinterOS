@@ -1,11 +1,14 @@
-from PIL import Image
+import math
 
+from PIL import Image
 import customtkinter as ctk
 
 from tkinteros.callback_management.callbacks import Callback
 from tkinteros.theme import THEME_COLORS, THEME_FONTS
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
+from tkinteros.gui.file_widget import TextFileWidget
+
 
 class DesktopGUI:
     def __init__(self, appearance_mode, callbacks, asset_manager: AssetManager) -> None:
@@ -16,6 +19,8 @@ class DesktopGUI:
         self.icon_setup()
         self.create_gui()
         ctk.set_appearance_mode(appearance_mode)
+
+        self.shaking = False
 
     
     def window_setup(self) -> None:
@@ -39,6 +44,8 @@ class DesktopGUI:
         self.create_desktop()
         self.create_desktop_actions()
         self.create_new_action()
+        self.create_file_name_input()
+        self.create_filename_popup()
 
 
     def create_desktop(self) -> None:
@@ -73,18 +80,22 @@ class DesktopGUI:
         x_pos = self.desktop_actions_frame.winfo_rootx()
         y_pos = self.desktop_actions_frame.winfo_rooty() + self.desktop_actions_frame.winfo_height()
 
-        self.file_name_input = ctk.CTkEntry(self.WINDOW, placeholder_text="New Text File")
         self.file_name_input.place(x=x_pos, y=y_pos)
+
         self.file_name_input.focus()
 
         self.file_name_input.bind("<Return>", self.create_new_file)
 
 
-    def destroy_file_name_input_window(self):
-        try:
-            self.file_name_input.destroy()
-        except AttributeError:
-            pass
+    def create_file_name_input(self):
+        self.file_name_input = ctk.CTkEntry(
+            self.WINDOW
+        )
+
+
+    def hide_file_name_input_window(self):
+        self.file_name_input.delete(0, "end")
+        self.file_name_input.place_forget()
 
 
     def hide_desktop_actions_frame(self):
@@ -94,9 +105,74 @@ class DesktopGUI:
     
     def create_new_file(self, event):
         name = self.file_name_input.get()
+        validation_succesful = self.callbacks[Callback.VALIDATE_FILE_NAME](name)
+
+        if not validation_succesful:
+            if not self.shaking:
+                self.shake_placed_widget(self.file_name_input, 20)
+            return "break"
+
         self.callbacks[Callback.CREATE_TXT_FILE](name)
-        self.destroy_file_name_input_window()
+        self.hide_file_name_input_window()
         self.hide_desktop_actions_frame()
+        return "break"
+
+
+    def create_text_file_widget(self, file_object, open_file_callback):
+        TextFileWidget(
+            file=file_object, desktop_frame=self.WINDOW, on_click_callback=open_file_callback,
+            light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[1]),
+            dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[0]),
+            hover_callback=self.show_filename_popup, hover_exit_callback=self.hide_filename_popup
+        )
+
+    
+    def create_filename_popup(self):
+        self.filename_popup_frame = ctk.CTkFrame(
+            master=self.WINDOW, fg_color="transparent", border_color=THEME_COLORS.button, height=30, 
+            corner_radius=10, border_width=1
+        )
+        self.filename_popup_label = ctk.CTkLabel(
+            master=self.filename_popup_frame, text="", fg_color="transparent",
+            font=(THEME_FONTS.family, THEME_FONTS.extra_small)
+        )
+        self.filename_popup_label.pack(fill="both", anchor="center", padx=10, pady=1)
+
+
+    def show_filename_popup(self, event, filename: str):
+        self.filename_popup_label.configure(text=filename)
+        self.filename_popup_frame.place(x=event.x_root + 10, y=event.y_root + 20)
+        self.filename_popup_frame.lift()
+
+
+    def hide_filename_popup(self):
+        self.filename_popup_frame.place_forget()
+
+
+    def shake_placed_widget(self, widget, pixel_amount: int, times_shaken: int = 3):
+        widget.update()
+        initial_x = widget.winfo_x()
+        initial_y = widget.winfo_y()
+
+        self.shaking = True
+
+        steps_per_shake = 8
+        total_steps = steps_per_shake * times_shaken
+        delay = 10
+
+        for step in range(total_steps):
+            # Calculate an offset using a sine wave pattern for smooth motion
+            angle = step / steps_per_shake * math.pi
+            offset = int(math.sin(angle) * pixel_amount)
+
+            widget.after(step * delay, lambda dx=offset: widget.place(x=initial_x + dx, y=initial_y))
+
+        widget.after(total_steps * delay, lambda: self.reset_shaken_widget(widget=widget, initial_x=initial_x, initial_y=initial_y))
+
+        
+    def reset_shaken_widget(self, widget, initial_x: int, initial_y: int):
+        widget.place(x=initial_x, y=initial_y)
+        self.shaking = False
 
 
     def create_selection_box_gui(self, start_x, start_y, end_x, end_y):
