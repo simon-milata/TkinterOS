@@ -10,12 +10,13 @@ from tkinteros.theme import THEME_COLORS
 class TextFileWidget:
     def __init__(
             self, file: File, desktop_frame: ctk.CTkFrame, on_click_callback: Callable, 
-            hover_callback: Callable, hover_exit_callback: Callable, 
+            hover_callback: Callable, hover_exit_callback: Callable, on_move_callback: Callable,
             light_icon: Image, dark_icon: Image):
         self.file = file
         self.on_click_callback = on_click_callback
         self.hover_callback = hover_callback
         self.hover_exit_callback = hover_exit_callback
+        self.on_move_callback = on_move_callback
         self.light_icon = light_icon
         self.dark_icon = dark_icon
 
@@ -53,11 +54,19 @@ class TextFileWidget:
     def create_hover_binds(self):
         self.frame.bind("<Enter>", self.hover_enter)
         self.frame.bind("<Leave>", self.hover_exit)
+        self.frame.bind("<B1-Motion>", self.on_drag)
+        self.frame.bind("<ButtonRelease-1>", self.on_b1_release)
+
         self.image_label.bind("<Enter>", self.hover_enter)
         self.image_label.bind("<Leave>", self.hover_exit)
+        self.image_label.bind("<B1-Motion>", self.on_drag)
+        self.image_label.bind("<ButtonRelease-1>", self.on_b1_release)
+
         self.name_label.bind("<Enter>", self.name_hover)
         self.name_label.bind("<Motion>", self.name_hover)
         self.name_label.bind("<Leave>", self.hover_exit)
+        self.name_label.bind("<B1-Motion>", self.on_drag)
+        self.name_label.bind("<ButtonRelease-1>", self.on_b1_release)
 
 
     def create_callback_binds(self):
@@ -78,6 +87,21 @@ class TextFileWidget:
     def hover_exit(self, event=None):
         self.frame.configure(fg_color="transparent")
         self.hover_exit_callback()
+
+
+    def on_drag(self, event):
+        x_pos = event.x_root - self.frame.winfo_width() // 2
+        y_pos = event.y_root - self.frame.winfo_height() // 2
+        
+        self.frame.place(x=x_pos, y=y_pos)
+        self.frame.lift()
+
+
+    def on_b1_release(self, event):
+        x_pos = event.x_root - self.frame.winfo_width() // 2
+        y_pos = event.y_root - self.frame.winfo_height() // 2
+        
+        self.on_move_callback(file_name=self.file.name, x_pos=x_pos, y_pos=y_pos)
 
 
     def on_click(self, event=None):
