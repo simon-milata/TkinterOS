@@ -152,7 +152,8 @@ class OS_Controller:
         """Creates icons for files"""
         for file in self.file_manager.file_objects:
             self.desktop_gui.create_text_file_widget(
-                file_object=file, open_file_callback=self.open_file
+                file_object=file, open_file_callback=self.open_file, 
+                on_move_callback=self.on_file_move
             )
 
 
@@ -175,8 +176,13 @@ class OS_Controller:
         y=self.desktop_actions_frame_y
         file_object = self.file_manager.create_file_object(x, y, name, None, None)
         self.desktop_gui.create_text_file_widget(
-                file_object=file_object, open_file_callback=self.open_file
+                file_object=file_object, open_file_callback=self.open_file, 
+                on_move_callback=self.on_file_move
             )
+        
+
+    def on_file_move(self, file_name: str, x_pos: int, y_pos: int):
+        self.file_manager.update_metadata(file_name=file_name, x_pos=x_pos, y_pos=y_pos)
 
 
     def close_file(self, name, updated_content):

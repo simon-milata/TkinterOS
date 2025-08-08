@@ -46,8 +46,7 @@ class FileManager():
 
 
     def create_file_metadata(self, file: File) -> None:
-        with open(self.metadata_path, "r") as metadata_file: 
-            self.metadata = json.load(metadata_file)
+        self.get_metadata()
 
         self.metadata["files"][file.name] = {
             "x_pos": file.x_pos,
@@ -55,11 +54,14 @@ class FileManager():
             "creation_time": file.creation_time.isoformat(),
             "last_modified": file.last_modified.isoformat()
         }
-
-        with open(self.metadata_path, "w") as metadata_file:
-            json.dump(self.metadata, metadata_file)
-        
         logging.debug(f"Metadata for {file.name} created.")
+
+        self.save_metadata()
+
+
+    def get_metadata(self) -> None:
+        with open(self.metadata_path, "r") as metadata_file: 
+            self.metadata = json.load(metadata_file)
 
 
     def create_actual_file(self, file: File):
@@ -127,6 +129,27 @@ class FileManager():
             file.writelines(updated_content)
 
         logging.debug(f"Saving file content:\n'{updated_content}' to {name}.")
+
+
+    def save_metadata(self) -> None:
+        with open(self.metadata_path, "w") as metadata_file:
+            logging.debug("Saving metadata.")
+            json.dump(self.metadata, metadata_file)
+
+
+    def update_metadata(self, file_name, **kwargs) -> None:
+        for attribute_name, attribute_value in kwargs.items():
+            if not file_name in self.metadata["files"]:
+                continue
+            if not attribute_name in self.metadata["files"][file_name]:
+                continue
+            
+            self.metadata["files"][file_name][attribute_name] = attribute_value
+        self.metadata["files"][file_name]["last_modified"] = datetime.now().isoformat()
+
+        logging.debug(f"Updating metadata {kwargs.items()} for file {file_name}")
+
+        self.save_metadata()
 
 
     def validate_file_name_on_creation(self, file_name: str, files: list[str]) -> bool:

@@ -118,12 +118,13 @@ class DesktopGUI:
         return "break"
 
 
-    def create_text_file_widget(self, file_object, open_file_callback):
+    def create_text_file_widget(self, file_object, open_file_callback, on_move_callback):
         TextFileWidget(
             file=file_object, desktop_frame=self.WINDOW, on_click_callback=open_file_callback,
             light_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[1]),
             dark_icon=self.asset_manager.get_image(DesktopAssets.TEXT_FILE, THEME_COLORS.primary[0]),
-            hover_callback=self.show_filename_popup, hover_exit_callback=self.hide_filename_popup
+            hover_callback=self.show_filename_popup, hover_exit_callback=self.hide_filename_popup,
+            on_move_callback=on_move_callback
         )
 
     
