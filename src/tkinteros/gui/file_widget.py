@@ -90,14 +90,18 @@ class TextFileWidget:
 
 
     def on_drag(self, event):
-        x_pos = event.x_root - 40
-        y_pos = event.y_root - 50
+        x_pos = event.x_root - self.frame.winfo_width() // 2
+        y_pos = event.y_root - self.frame.winfo_height() // 2
+        
         self.frame.place(x=x_pos, y=y_pos)
+        self.frame.lift()
 
 
     def on_b1_release(self, event):
-        print("AAAA")
-        self.on_move_callback(file_name=self.file.name, x_pos=event.x_root, y_pos=event.y_root)
+        x_pos = event.x_root - self.frame.winfo_width() // 2
+        y_pos = event.y_root - self.frame.winfo_height() // 2
+        
+        self.on_move_callback(file_name=self.file.name, x_pos=x_pos, y_pos=y_pos)
 
 
     def on_click(self, event=None):
