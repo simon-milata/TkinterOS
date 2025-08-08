@@ -147,7 +147,7 @@ class FileManager():
             self.metadata["files"][file_name][attribute_name] = attribute_value
         self.metadata["files"][file_name]["last_modified"] = datetime.now().isoformat()
 
-        logging.debug(f"Updating metadata {kwargs.items()} for file {file_name}")
+        logging.debug(f"Updating metadata {dict(kwargs.items())} for file {file_name}")
 
         self.save_metadata()
 
