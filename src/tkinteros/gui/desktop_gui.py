@@ -16,7 +16,7 @@ class DesktopGUI:
         self.callbacks = callbacks
         self.window_setup()
         self.get_screen_size()
-        self.icon_setup()
+        self.background_image_setup()
         self.create_gui()
         ctk.set_appearance_mode(appearance_mode)
 
@@ -36,7 +36,7 @@ class DesktopGUI:
         self.height = int(self.WINDOW.winfo_geometry().split("x")[1].split("+")[0])
 
 
-    def icon_setup(self) -> None:
+    def background_image_setup(self) -> None:
         self.python_logo = ctk.CTkImage(self.asset_manager.get_image(DesktopAssets.BACKGROUND_LOGO, resize=False), size=(self.height/5, self.height/5))
 
     

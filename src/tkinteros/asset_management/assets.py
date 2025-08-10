@@ -10,17 +10,17 @@ class DesktopAssets(StrEnum):
     TEXT_FILE = "desktop/text_file_icon.png"
     TICTACTOE = "desktop/tictactoe_icon.png"
     ERROR_SOUND = "desktop/error_sound.mp3"
-    TEXT_FILE_ICON = "desktop/text_file_icon.ico"
+    TEXT_FILE_ICON = "desktop/text_file_icon.png"
 
 
 class PyBrowseAssets(StrEnum):
     PYBROWSE_GAME_SNAKE = "pybrowse/snake.png"
-    PYBROWSE_ICON = "pybrowse/pybrowse.ico"
+    PYBROWSE_ICON = "pybrowse/pybrowse.png"
 
 
 class SnakeGameAssets(StrEnum):
     MUNCH_SOUND = "python_game/munch_sound.mp3"
-    SNAKE_GAME_ICON = "python_game/snake_icon.ico"
+    SNAKE_GAME_ICON = "python_game/snake_icon.png"
 
 
 class TictactoeAssets(StrEnum):

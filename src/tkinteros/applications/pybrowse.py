@@ -35,7 +35,7 @@ class PyBrowse:
         self.WINDOW.attributes("-topmost", True)
         self.WINDOW.resizable(False, False)
 
-        self.WINDOW.after(200, self.icon_setup)
+        self.WINDOW.after(300, self.icon_setup)
 
 
     def maximize_window(self):
@@ -49,13 +49,12 @@ class PyBrowse:
                 self.WINDOW.geometry(f"{int(self.WINDOW_WIDTH//1.01)}x{int(self.WINDOW_HEIGHT//1.01)}+0+0")
                 self.WINDOW.update_idletasks()
 
-    
-    def icon_setup(self):
-        if self.OS.appearance_mode:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON))
-        else:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON))
 
+    def icon_setup(self):
+        color = THEME_COLORS.primary[1] if self.OS.appearance_mode == "light" else THEME_COLORS.primary[0]
+        icon = self.asset_manager.get_icon(PyBrowseAssets.PYBROWSE_ICON, hex_color=color)
+        self.WINDOW.iconbitmap(icon)
+        
 
     def create_window_bar(self) -> None:
         self.window_bar_frame = ctk.CTkFrame(self.WINDOW, fg_color=THEME_COLORS.font_color, corner_radius=0, width=self.WINDOW_WIDTH, height=50)

@@ -1,11 +1,15 @@
 import os
 from typing import Tuple
+import tempfile
 
-from PIL import Image, ImageColor
+from PIL import Image, ImageColor, ImageTk
+
 
 class AssetManager:
-    def __init__(self, asset_folder: str):
+    def __init__(self, asset_folder: str, appearance_mode: str):
         self.asset_folder = asset_folder
+        
+        self.window_background_color = (240, 240, 240) if appearance_mode == "light" else (32, 32, 32)
 
 
     def get_image(self, relative_path: str, hex_color: str | None = None, resize: bool = True):
@@ -13,21 +17,28 @@ class AssetManager:
 
         if resize:
             image = self.resize_image(image=image)
+        if hex_color:
+            image = self.color_image(image=image, rgb_new_color=ImageColor.getrgb(hex_color))
 
-        if not hex_color:
-            return image
-
-        colored_image = self.color_image(image, rgb_new_color=ImageColor.getrgb(hex_color))
-
-        return colored_image
+        return image
     
 
     def get_sound(self, relative_path: str):
         return os.path.join(self.asset_folder, relative_path)
     
 
-    def get_icon(self, relative_path: str):
-        return os.path.join(self.asset_folder, relative_path)
+    def get_icon(self, relative_path: str, hex_color: str | None = None):
+        image = self.get_image(relative_path=relative_path, hex_color=hex_color)
+
+        # Flatten transparency onto a background
+        background = Image.new("RGB", image.size, self.window_background_color)  # light gray, change to match fg_color
+        background.paste(image, mask=image.split()[3] if image.mode == "RGBA" else None)
+
+        with tempfile.NamedTemporaryFile(suffix=".ico", delete=False) as tmp:
+            background.save(tmp, format="ICO", sizes=[(32, 32)])
+            ico_path = tmp.name
+
+        return ico_path
     
 
     def resize_image(self, image: Image.Image, size: Tuple[int, int] = (64, 64)):
@@ -35,6 +46,7 @@ class AssetManager:
     
 
     def color_image(self, image: Image.Image, rgb_new_color: tuple[int, int, int]):
+        image = image.convert("RGBA")
         pixel_list = list(image.getdata())
 
         modified_pixels = [
@@ -44,5 +56,5 @@ class AssetManager:
 
         colored_image = Image.new(mode="RGBA", size=image.size)
         colored_image.putdata(modified_pixels)
-
         return colored_image
+

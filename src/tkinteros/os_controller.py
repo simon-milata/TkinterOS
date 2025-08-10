@@ -30,12 +30,12 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 class OS_Controller:
     def __init__(self) -> None:
-        self.appearance_mode = "light"
+        self.appearance_mode = "dark"
         self.start_menu_open = False
         self.system_tray_menu_open = False
         self.network_on = False
 
-        self.asset_manager = AssetManager("src/tkinteros/asset_management/assets")
+        self.asset_manager = AssetManager("src/tkinteros/asset_management/assets", appearance_mode=self.appearance_mode)
         self.file_manager = FileManager()
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
@@ -159,7 +159,11 @@ class OS_Controller:
 
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
-        TextEditor(name, content, self.close_file, self.asset_manager.get_icon(DesktopAssets.TEXT_FILE_ICON))
+        color = THEME_COLORS.primary[1] if self.appearance_mode == "light" else THEME_COLORS.primary[0]
+        TextEditor(
+            name=name, file_content=content, on_close_callback=self.close_file, 
+            icon=self.asset_manager.get_icon(DesktopAssets.TEXT_FILE_ICON, hex_color=color)
+        )
 
 
     def validate_file_name(self, file_name: str) -> bool:
@@ -229,7 +233,7 @@ class OS_Controller:
                 self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
             case "tictactoe":
-                TicTacToe(asset_manager=self.asset_manager).setup()
+                TicTacToe(asset_manager=self.asset_manager, appereance_mode=self.appearance_mode).setup()
 
 
     def get_time(self) -> str:

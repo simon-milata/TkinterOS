@@ -42,10 +42,9 @@ class PythonGame:
 
     
     def icon_setup(self):
-        if self.OS.appearance_mode:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(SnakeGameAssets.SNAKE_GAME_ICON))
-        else:
-            self.WINDOW.iconbitmap(self.asset_manager.get_icon(SnakeGameAssets.SNAKE_GAME_ICON))
+        color = THEME_COLORS.primary[1] if self.OS.appearance_mode == "light" else THEME_COLORS.primary[0]
+        icon = self.asset_manager.get_icon(SnakeGameAssets.SNAKE_GAME_ICON, hex_color=color)
+        self.WINDOW.iconbitmap(icon)
 
 
     def create_main_menu(self):

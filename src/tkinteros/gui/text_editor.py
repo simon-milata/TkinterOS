@@ -4,7 +4,8 @@ import customtkinter as ctk
 
 
 class TextEditor:
-    def __init__(self, name: str, file_content: str, on_close_callback: Callable[[str, str], None], icon):
+    def __init__(self, name: str, file_content: str, icon,
+                 on_close_callback: Callable[[str, str], None]):
         self.name = name
         self.file_content = file_content
         self.on_close_callback = on_close_callback
