@@ -18,11 +18,10 @@ TkinterOS is inspired by GodotOS and offers a fun desktop environment where you 
 - **Theme Support:** Light and dark mode support with consistent styling across apps (currently only changeable in code).
 
 ## Screenshots
-<img width="260" alt="image" src="https://github.com/user-attachments/assets/17c8d901-e8d8-475e-bc92-2cb2546995da" />
-<img width="200" alt="image" src="https://github.com/user-attachments/assets/7cc4c6da-6b1d-43a3-9bdf-582530817705" />
+<img width="280" alt="image" src="https://github.com/user-attachments/assets/17c8d901-e8d8-475e-bc92-2cb2546995da" />
+<img width="280" alt="image" src="https://github.com/user-attachments/assets/7cc4c6da-6b1d-43a3-9bdf-582530817705" />
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/bd519109-52c5-41fa-9d60-d7ef00354cac" />
 <img width="400" alt="image" src="https://github.com/user-attachments/assets/4e6d8e06-8b61-4123-bcae-a25b58605a07" />
-<img width="720" alt="image" src="https://github.com/user-attachments/assets/bd519109-52c5-41fa-9d60-d7ef00354cac" />
-
 
 ## Installation
 
