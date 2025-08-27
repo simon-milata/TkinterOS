@@ -41,6 +41,7 @@ class OS_Controller:
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
 
         self.desktop_window_details = self.create_desktop_window_details()
+        self.desktop_window_details["window"].protocol("WM_DELETE_WINDOW", self.quit)
 
         self.task_bar = TaskbarGUI(self.desktop_window_details, self.callback_manager.callbacks, self.asset_manager)
 
@@ -65,15 +66,21 @@ class OS_Controller:
     def run(self) -> None:
         self.desktop_gui.run()
 
+
+    def delete_temp_files(self):
+        self.asset_manager.delete_temp_files()
+
     
     def quit(self) -> None:
         logging.debug("Shutting down.")
+        self.delete_temp_files()
         self.desktop_window_details["window"].destroy()
         sys.exit(0)
 
     
     def restart(self) -> None:
         logging.debug("Restarting.")
+        self.delete_temp_files()
         self.desktop_window_details["window"].destroy()
         subprocess.call([sys.executable] + sys.argv)
         sys.exit(0)

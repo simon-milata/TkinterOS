@@ -1,6 +1,7 @@
 import os
 from typing import Tuple
 import tempfile
+import logging
 
 from PIL import Image, ImageColor, ImageTk
 
@@ -8,6 +9,7 @@ from PIL import Image, ImageColor, ImageTk
 class AssetManager:
     def __init__(self, asset_folder: str, appearance_mode: str):
         self.asset_folder = asset_folder
+        self.temp_files = []
         
         self.window_background_color = (240, 240, 240) if appearance_mode == "light" else (32, 32, 32)
 
@@ -31,12 +33,14 @@ class AssetManager:
         image = self.get_image(relative_path=relative_path, hex_color=hex_color)
 
         # Flatten transparency onto a background
-        background = Image.new("RGB", image.size, self.window_background_color)  # light gray, change to match fg_color
+        background = Image.new("RGB", image.size, self.window_background_color)
         background.paste(image, mask=image.split()[3] if image.mode == "RGBA" else None)
 
         with tempfile.NamedTemporaryFile(suffix=".ico", delete=False) as tmp:
             background.save(tmp, format="ICO", sizes=[(32, 32)])
             ico_path = tmp.name
+
+        self.temp_files.append(ico_path)
 
         return ico_path
     
@@ -58,3 +62,8 @@ class AssetManager:
         colored_image.putdata(modified_pixels)
         return colored_image
 
+
+    def delete_temp_files(self):
+        for file_path in self.temp_files:
+            logging.debug(f"Deleting temp file {file_path}...")
+            os.remove(file_path)
