@@ -1,52 +1,67 @@
-## TkinterOS
-**Please Note:** TkinterOS is a new project, and it's still in its early stages of development. Expect frequent updates, improvements, and potential bugs. Contributions and feedback are highly encouraged to help shape the future of this project!
-<br>
-<br>
-TkinterOS is a fun and lightweight fake operating system built using CustomTkinter library. 
-<br>
-Inspired by GodotOS, TkinterOS offers a playful environment for users to explore and interact with.
+# TkinterOS
 
-### Screenshots
+**Disclaimer:** TkinterOS is a playful, lightweight fake operating system built in Python using CustomTkinter. It is still in early development, so expect frequent updates, improvements, and potential bugs. Contributions and feedback are highly encouraged!
 
-<img src="https://github.com/Tamzuu/TkinterOS/assets/10380019/b97056fe-8ff8-47ca-9f87-b81227f95ff1" width="700">
-<p float="left">
-    <img src="https://github.com/Tamzuu/TkinterOS/assets/10380019/7d624d7f-da08-481b-8c5b-de8bc888265d" width="250">
-    <img src="https://github.com/Tamzuu/TkinterOS/assets/10380019/df493b0c-55b4-4a74-9966-430997d429b6" width="250">
-</p>
+## Overview
 
-### Features
-- **User-Friendly Interface:** Navigate through the system with ease thanks to the intuitive graphical interface.
-- **Desktop Environment:** Immerse yourself in a modern graphical desktop environment featuring a sleek Python color theme.
-- **Python (Snake Game):** Enjoy a classic Snake game right within TkinterOS, perfect for some quick entertainment.
+TkinterOS is inspired by GodotOS and offers a fun desktop environment where you can explore, play, and experiment with Python-based applications.
+
+## Features
+
+- **User-Friendly Interface:** Navigate through the OS with an intuitive graphical desktop environment.
+- **File Management:** Create, edit, and organize text files. Drag-and-drop functionality is supported.
+- **Applications:**
+  - **🐍 Snake Game:** Play the classic Snake game inside TkinterOS.
+  - **❌ Tic Tac Toe:** Challenge the Minimax AI with a fully functional Tic Tac Toe game.
+  - **🦖 Dino Game:** Play a browser-style Dino game that mimics the offline dinosaur game in web browsers.
+- **Taskbar & System Tray:** Access apps, system utilities, and network toggles.
+- **Theme Support:** Light and dark mode support with consistent styling across apps (currently only changeable in code).
+
+## Screenshots
+<img width="260" alt="image" src="https://github.com/user-attachments/assets/17c8d901-e8d8-475e-bc92-2cb2546995da" />
+<img width="200" alt="image" src="https://github.com/user-attachments/assets/7cc4c6da-6b1d-43a3-9bdf-582530817705" />
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/4e6d8e06-8b61-4123-bcae-a25b58605a07" />
+<img width="720" alt="image" src="https://github.com/user-attachments/assets/bd519109-52c5-41fa-9d60-d7ef00354cac" />
 
 
-### Upcoming Features
-- **File Management:** Create, edit, and organize files seamlessly within the operating system.
-- **More Applications:** Add more interactive applications to enrich the user experience.
-- **Customization Options:** Provide users with additional customization features to personalize their TkinterOS experience.
+## Installation
 
-## 🧱 Installation
-
-1. **Clone the repository**:
+Clone the repository:
 
 ```bash
 git clone https://github.com/simon-milata/TkinterOS.git
-cd tkinteros
+cd TkinterOS
 ```
-2. **Create a virtual environment** (Optional)
+(Optional) Create a virtual environment:
 ```bash
 python -m venv .venv
-.venv/scripts/activate
+.venv/Scripts/activate   # Windows
+source .venv/bin/activate  # Linux/macOS
 ```
-3. **Install the project**
+
+Install the project and dependencies:
 ```bash
 pip install -e .
 ```
-4. **Run the project**
+
+Run the project:
 ```bash
 py src/tkinteros/main.py
 ```
+## Upcoming Features
 
-Feel free to explore TkinterOS and contribute to its development!
+Custom windows manager and a file manager
 
-Disclaimer: I haven't worked on this project in a while and the code is very messy. Next few updates will be focused on refactoring.
+More interactive applications to enrich the user experience.
+
+Additional customization options for themes and desktop layout.
+
+Refactored game logic and UI improvements.
+
+## Contributing
+
+Fork the repository and submit pull requests.
+
+Report bugs and suggest new features via GitHub issues.
+
+Code quality and readability improvements are welcome!
