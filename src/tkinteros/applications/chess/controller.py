@@ -20,7 +20,7 @@ class ChessController:
             ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
             ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
             ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
-            ["WR", "WN", "WW", "WQ", "WK", "WW", "WN", "WR"],
+            ["WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"],
         ]
     
 
