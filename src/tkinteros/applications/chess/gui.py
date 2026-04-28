@@ -7,6 +7,7 @@ class ChessGUI:
     def __init__(self):
         self.create_window()
         self.create_game_frame()
+        self.highlighted_cells = []
 
 
     def create_window(self) -> None:
@@ -61,13 +62,31 @@ class ChessGUI:
                 self.board_buttons[i].append(cell_button)
                 
     
-    def draw_pieces(self, board: list[str]):
+    def draw_pieces(self, board: list[str], click_callback: callable):
         for i, row in enumerate(board):
             for j, cell_piece in enumerate(row):
                 color = "black" if cell_piece.startswith("B") else "white"
                 self.board_buttons[i][j].configure(
-                    text_color=color, text=cell_piece
+                    text_color=color, text=cell_piece,
+                    command=lambda row=i, col=j: click_callback(board, (row, col))
                 )
+    
+
+    def highlight_possible_moves(self, possible_moves: list[tuple[int, int]], click_callback):
+        for move_row, move_col in possible_moves:
+            cell_button = self.board_buttons[move_row][move_col]
+            init_color = cell_button.cget("fg_color")
+            cell_button.configure(
+                fg_color="red", command=lambda dest_pos=(move_row, move_col): click_callback(dest_pos)
+            )
+            self.highlighted_cells.append((cell_button, init_color))
+            print(self.highlighted_cells)
+
+
+    def clear_highlights(self):
+        for button, init_color in self.highlighted_cells:
+            button.configure(fg_color=init_color)
+        self.highlighted_cells = []
 
 
     def run(self):
