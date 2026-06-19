@@ -30,7 +30,10 @@ def move_piece(board: list[list[str]], init_pos: tuple[int, int], dest_pos: tupl
     return board
 
 
-def get_move_range(piece_coords: tuple[int, int], opp_piece_col: str, board: list[list[str]]):
+def get_move_range(
+        piece_coords: tuple[int, int], opp_piece_col: str, board: list[list[str]], 
+        square_limit: int | None = None
+    ):
     piece_row, piece_col = piece_coords
     possible_moves = []
 
@@ -42,6 +45,8 @@ def get_move_range(piece_coords: tuple[int, int], opp_piece_col: str, board: lis
     ]
 
     board_size = len(board)
+    if not square_limit:
+        square_limit = board_size
 
     for y, x in directions:
         row, col = piece_row + y, piece_col + x
@@ -49,6 +54,9 @@ def get_move_range(piece_coords: tuple[int, int], opp_piece_col: str, board: lis
         while 0 <= row < board_size and 0 <= col < board_size:
             square = board[row][col]
 
+            if row > piece_row + square_limit or col > piece_col + square_limit or \
+                row < piece_row - square_limit or col < piece_col - square_limit:
+                break
             if square == "  ":
                 possible_moves.append((row, col))
             else:
