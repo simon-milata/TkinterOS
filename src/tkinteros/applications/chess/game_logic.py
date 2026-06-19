@@ -1,3 +1,5 @@
+from tkinteros.applications.chess.config import PieceDirections
+
 def get_possible_moves(board: list[list[str]], piece_coords: tuple[int, int]) -> list[tuple[int, int]]:
     piece_row, piece_col = piece_coords
     piece = board[piece_row][piece_col]
@@ -14,8 +16,15 @@ def get_possible_moves(board: list[list[str]], piece_coords: tuple[int, int]) ->
         possible_moves = [(piece_row + 1, piece_col) if piece_color == "B" else (piece_row - 1, piece_col)]
 
     if piece_type == "R":
-        possible_moves = get_move_range(piece_coords, opp_piece_col, board)
-    
+        possible_moves = get_move_range(piece_coords, opp_piece_col, board, PieceDirections.ROOK)
+    if piece_type == "B":
+        possible_moves = get_move_range(piece_coords, opp_piece_col, board, PieceDirections.BISHOP)
+    if piece_type == "K":
+        possible_moves = get_move_range(piece_coords, opp_piece_col, board, PieceDirections.ALL, 1)
+    if piece_type == "Q":
+        possible_moves = get_move_range(piece_coords, opp_piece_col, board, PieceDirections.ALL)
+    if piece_type == "N":
+        possible_moves = get_move_range(piece_coords, opp_piece_col, board, PieceDirections.KNIGHT, 2)
         
     while piece_coords in possible_moves:
         possible_moves.remove(piece_coords)
@@ -32,17 +41,10 @@ def move_piece(board: list[list[str]], init_pos: tuple[int, int], dest_pos: tupl
 
 def get_move_range(
         piece_coords: tuple[int, int], opp_piece_col: str, board: list[list[str]], 
-        square_limit: int | None = None
+        directions: list[tuple[int, int]], square_limit: int | None = None
     ):
     piece_row, piece_col = piece_coords
     possible_moves = []
-
-    directions = [
-        (-1, 0), # down
-        (1, 0), # up
-        (0, 1), # right
-        (0, -1), # left
-    ]
 
     board_size = len(board)
     if not square_limit:
