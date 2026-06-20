@@ -1,6 +1,6 @@
 import logging
 
-from src.tkinteros.window_management.window import Window
+from tkinteros.window_management.window import Window
 
 class WindowManager:
     def __init__(self):

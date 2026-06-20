@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from src.tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.theme import THEME_COLORS, THEME_FONTS
 
 
 class Window:
