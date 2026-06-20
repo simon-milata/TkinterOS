@@ -12,16 +12,17 @@ class Window:
 
 
     def create(self):
-        self.main_frame = ctk.CTkFrame(self.master, fg_color="red", width=300, height=320)
-        self.main_frame.place(relx=0, rely=0)
+        self.main_frame = ctk.CTkFrame(self.master, fg_color="red", width=500, height=520)
+        self.main_frame.place(x=100, y=100)
         self.create_top_bar()
     
 
     def create_top_bar(self):
         top_bar = ctk.CTkFrame(self.main_frame, height=40, corner_radius=0, width=300)
-        top_bar.place(relx=0, rely=0)
+        top_bar.pack(fill="x")
+        top_bar.pack_propagate(False)
         button_zone = ctk.CTkFrame(top_bar, width=120, height=40, corner_radius=0, fg_color="green")
-        button_zone.place(x=180, rely=0)
+        button_zone.pack(side="right")
         button_zone.grid_propagate(False)
         close_button = ctk.CTkButton(
             button_zone, width=40, height=40, text="X", hover_color="red", fg_color="orange", 
@@ -31,6 +32,9 @@ class Window:
 
         top_bar.bind("<Button-1>", self.start_move)
         top_bar.bind("<B1-Motion>", self.move_window)
+
+        self.content_frame = ctk.CTkFrame(self.main_frame, fg_color="blue")
+        self.content_frame.pack(fill="both", expand=True)
 
 
     def start_move(self, event):

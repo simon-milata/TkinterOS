@@ -8,8 +8,10 @@ class WindowManager:
 
 
     def create_window(self, master, name):
-        self.windows.append(Window(master, name, self.close_window))
+        app_window = Window(master, name, self.close_window)
+        self.windows.append(app_window)
         self.log_windows()
+        return app_window
 
 
     def close_window(self, name: str):

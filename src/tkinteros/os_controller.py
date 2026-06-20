@@ -226,8 +226,8 @@ class OS_Controller:
     def start_app(self, game:str) -> None:
         match game:
             case "python":
-                self.window_manager.create_window(self.desktop_gui.WINDOW, "python")
-                PythonGame(self, self.desktop_gui.WINDOW, self.asset_manager)
+                app_window = self.window_manager.create_window(self.desktop_gui.WINDOW, "python")
+                PythonGame(self, app_window.content_frame, self.asset_manager)
             case "pybrowse":
                 self.window_manager.create_window(self.desktop_gui.WINDOW, "pybrowse")
                 self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)

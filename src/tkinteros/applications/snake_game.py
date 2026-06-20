@@ -11,10 +11,10 @@ python_blue = "#326c9b"
 python_yellow = "#ffe66d"
 
 class PythonGame:
-    def __init__(self, os, os_window: ctk.CTk, asset_manager: AssetManager) -> None:
+    def __init__(self, os, master_frame: ctk.CTkFrame, asset_manager: AssetManager) -> None:
         self.OS = os
         self.asset_manager = asset_manager
-        self.OS_WINDOW = os_window
+        self.app_frame = master_frame
         self.create_game_variables()
         self.create_window()
         self.create_main_menu()
@@ -31,14 +31,16 @@ class PythonGame:
 
     
     def create_window(self) -> None:
-        self.WINDOW = ctk.CTkToplevel()
-        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
-        self.WINDOW.configure(fg_color=THEME_COLORS.primary)
-        self.WINDOW.title("Python Game")
-        self.WINDOW.attributes("-topmost", True)
+        self.WINDOW = ctk.CTkFrame(
+            self.app_frame, width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT, 
+            fg_color=THEME_COLORS.primary
+        )
+        self.WINDOW.pack()
+        # self.WINDOW.title("Python Game")
+        # self.WINDOW.attributes("-topmost", True)
         self.WINDOW.focus_force()
-        self.WINDOW.resizable(False, False)
-        self.WINDOW.after(200, self.icon_setup)
+        # self.WINDOW.resizable(False, False)
+        # self.WINDOW.after(200, self.icon_setup)
 
     
     def icon_setup(self):
@@ -112,14 +114,17 @@ class PythonGame:
 
 
     def create_binds(self) -> None:
-        self.WINDOW.bind("w", lambda event: self.change_direction(event, "up"))
-        self.WINDOW.bind("<Up>", lambda event: self.change_direction(event, "up"))
-        self.WINDOW.bind("a", lambda event: self.change_direction(event, "left"))
-        self.WINDOW.bind("<Left>", lambda event: self.change_direction(event, "left"))
-        self.WINDOW.bind("s", lambda event: self.change_direction(event, "down"))
-        self.WINDOW.bind("<Down>", lambda event: self.change_direction(event, "down"))
-        self.WINDOW.bind("d", lambda event: self.change_direction(event, "right"))
-        self.WINDOW.bind("<Right>", lambda event: self.change_direction(event, "right"))
+        self.OS.desktop_gui.WINDOW.bind("w", lambda event: self.change_direction(event, "up"))
+        self.OS.desktop_gui.WINDOW.bind("<Up>", lambda event: self.change_direction(event, "up"))
+        self.OS.desktop_gui.WINDOW.bind("a", lambda event: self.change_direction(event, "left"))
+        self.OS.desktop_gui.WINDOW.bind("<Left>", lambda event: self.change_direction(event, "left"))
+        self.OS.desktop_gui.WINDOW.bind("s", lambda event: self.change_direction(event, "down"))
+        self.OS.desktop_gui.WINDOW.bind("<Down>", lambda event: self.change_direction(event, "down"))
+        self.OS.desktop_gui.WINDOW.bind("d", lambda event: self.change_direction(event, "right"))
+        self.OS.desktop_gui.WINDOW.bind("<Right>", lambda event: self.change_direction(event, "right"))
+
+        self.WINDOW.focus_force()
+        self.WINDOW.focus_set()
 
 
     def change_direction(self, event, direction:str) -> None:
@@ -348,7 +353,7 @@ class PythonGame:
 
 
     def create_game_over_gui(self):
-        self.WINDOW.geometry("400x400")
+        self.WINDOW.configure(width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
         self.game_over_frame = ctk.CTkFrame(self.WINDOW, width=400, height=400, fg_color=THEME_COLORS.primary)
         self.game_over_frame.pack()
         game_over_text = ctk.CTkLabel(self.game_over_frame, text="Game Over!", font=(THEME_FONTS.family_bold, THEME_FONTS.large), text_color=THEME_COLORS.font_color)
@@ -388,7 +393,7 @@ class PythonGame:
         except AttributeError:
             pass
 
-        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
+        self.WINDOW.configure(width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
 
         self.create_python_variables()
         self.create_binds()
@@ -419,13 +424,13 @@ class PythonGame:
         if self.row_input.get() == "":
             self.row_input.set("10")
 
-        self.OS_WINDOW.update()
+        self.app_frame.update()
 
-        if int(self.column_input.get()) > self.OS_WINDOW.winfo_width() or int(self.row_input.get()) > self.OS_WINDOW.winfo_height():
+        if int(self.column_input.get()) > self.app_frame.winfo_width() or int(self.row_input.get()) > self.app_frame.winfo_height():
             return
         
         self.WINDOW_WIDTH = self.GRID_SIZE * int(self.column_input.get())
         self.WINDOW_HEIGHT = self.GRID_SIZE * int(self.row_input.get())
-        self.WINDOW.geometry(str(self.WINDOW_WIDTH) + "x" + str(self.WINDOW_HEIGHT))
+        self.WINDOW.configure(width=self.WINDOW_WIDTH, height=self.WINDOW_HEIGHT)
 
         self.grid_setup = True
