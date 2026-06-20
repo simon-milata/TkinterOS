@@ -4,8 +4,10 @@ from src.tkinteros.theme import ThemeColors, ThemeFonts
 
 
 class Window:
-    def __init__(self, master):
+    def __init__(self, master, name: str, close_callback):
         self.master = master
+        self.name = name
+        self.close_callback = close_callback
         self.create()
 
 
@@ -20,7 +22,12 @@ class Window:
         top_bar.place(relx=0, rely=0)
         button_zone = ctk.CTkFrame(top_bar, width=120, height=40, corner_radius=0, fg_color="green")
         button_zone.place(x=180, rely=0)
-
+        button_zone.grid_propagate(False)
+        close_button = ctk.CTkButton(
+            button_zone, width=40, height=40, text="X", hover_color="red", fg_color="orange", 
+            command=self.close_window
+        )
+        close_button.grid()
 
         top_bar.bind("<Button-1>", self.start_move)
         top_bar.bind("<B1-Motion>", self.move_window)
@@ -36,3 +43,8 @@ class Window:
 
         self.main_frame.place(x=x_pos, y=y_pos)
         self.main_frame.lift()
+
+
+    def close_window(self):
+        self.close_callback(self.name)
+        self.main_frame.destroy()

@@ -224,14 +224,16 @@ class OS_Controller:
 
 
     def start_app(self, game:str) -> None:
-        self.window_manager.create_window(self.desktop_gui.WINDOW)
         match game:
             case "python":
+                self.window_manager.create_window(self.desktop_gui.WINDOW, "python")
                 PythonGame(self, self.desktop_gui.WINDOW, self.asset_manager)
             case "pybrowse":
+                self.window_manager.create_window(self.desktop_gui.WINDOW, "pybrowse")
                 self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
                 self.show_pybrowse_gui()
             case "tictactoe":
+                self.window_manager.create_window(self.desktop_gui.WINDOW, "tictactoe")
                 TicTacToe(asset_manager=self.asset_manager).setup()
 
 
