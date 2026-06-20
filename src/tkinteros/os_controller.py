@@ -17,6 +17,7 @@ from tkinteros.callback_management.callback_manager import CallbackManager
 from tkinteros.asset_management.asset_manager import AssetManager
 from tkinteros.asset_management.assets import DesktopAssets
 from tkinteros.theme import THEME_COLORS
+from tkinteros.window_management.window_manager import WindowManager
 
 
 logging.basicConfig(
@@ -36,6 +37,7 @@ class OS_Controller:
         self.network_on = False
 
         self.asset_manager = AssetManager("src/tkinteros/asset_management/assets")
+        self.window_manager = WindowManager()
         self.file_manager = FileManager()
         self.callback_manager = CallbackManager(self)
         self.desktop_gui = DesktopGUI(self.appearance_mode, self.callback_manager.callbacks, self.asset_manager)
@@ -222,6 +224,7 @@ class OS_Controller:
 
 
     def start_app(self, game:str) -> None:
+        self.window_manager.create_window(self.desktop_gui.WINDOW)
         match game:
             case "python":
                 PythonGame(self, self.desktop_gui.WINDOW, self.asset_manager)
