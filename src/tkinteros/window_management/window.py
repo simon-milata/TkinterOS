@@ -1,13 +1,19 @@
 import customtkinter as ctk
 
 from tkinteros.theme import THEME_COLORS, THEME_FONTS
+from tkinteros.asset_management.asset_manager import AssetManager
+from tkinteros.window_management.app_config import App
 
+
+am = AssetManager("src/tkinteros/asset_management/assets")
 
 class Window:
-    def __init__(self, master, name: str, close_callback):
+    def __init__(self, master, app: App, close_callback):
         self.master = master
-        self.name = name
+        self.name = app.name
+        self.title = app.title
         self.close_callback = close_callback
+        self.icon = app.icon
         self.create()
 
 
@@ -28,6 +34,15 @@ class Window:
         )
         top_bar.pack(fill="x")
         top_bar.pack_propagate(False)
+        app_icon = ctk.CTkImage(
+            light_image=am.get_image(self.icon, THEME_COLORS.primary[1]), 
+            dark_image=am.get_image(self.icon, THEME_COLORS.primary[0]), size=(20, 20)
+        )
+        app_icon_label = ctk.CTkLabel(top_bar, width=40, height=40, text="", image=app_icon)
+        app_icon_label.pack(side="left")
+        title = ctk.CTkLabel(top_bar, text=self.title, font=(THEME_FONTS.family, THEME_FONTS.small))
+        title.pack(side="left", padx=10)
+        
         button_zone = ctk.CTkFrame(top_bar, width=120, height=40, corner_radius=0, fg_color=THEME_COLORS.bright)
         button_zone.pack(side="right")
         button_zone.grid_propagate(False)
@@ -42,6 +57,10 @@ class Window:
         top_bar.bind("<B1-Motion>", self.move_window)
         button_zone.bind("<Button-1>", self.start_move)
         button_zone.bind("<B1-Motion>", self.move_window)
+        title.bind("<Button-1>", self.start_move)
+        title.bind("<B1-Motion>", self.move_window)
+        app_icon_label.bind("<Button-1>", self.start_move)
+        app_icon_label.bind("<B1-Motion>", self.move_window)
 
 
     def start_move(self, event):
