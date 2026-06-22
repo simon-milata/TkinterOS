@@ -183,3 +183,8 @@ class DesktopGUI:
 
     def run(self) -> None:
         self.WINDOW.mainloop()
+
+
+    def get_screen_resolution(self) -> tuple[int, int]:
+        self.WINDOW.update()
+        return (self.WINDOW.winfo_screenwidth(), self.WINDOW.winfo_screenheight())

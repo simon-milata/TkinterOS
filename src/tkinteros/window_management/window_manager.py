@@ -5,12 +5,14 @@ from tkinteros.window_management.app_config import app_config
 
 class WindowManager:
     def __init__(self):
+        self.screen_dims = (1920, 1080)
+        self.os_window = None
         self.windows = []
 
 
-    def create_window(self, master, name):
+    def create_window(self, name):
         app = app_config[name]
-        app_window = Window(master, app, self.close_window)
+        app_window = Window(self.os_window, app, self.close_window, self.screen_dims)
         self.windows.append(app_window)
         self.log_windows()
         return app_window

@@ -8,18 +8,34 @@ from tkinteros.window_management.app_config import App
 am = AssetManager("src/tkinteros/asset_management/assets")
 
 class Window:
-    def __init__(self, master, app: App, close_callback):
+    def __init__(self, master, app: App, close_callback, screen_dims: tuple[int, int]):
         self.master = master
         self.name = app.name
         self.title = app.title
+        self.maximized = app.maximized
+        self.propagate = app.propagate
+        self.screen_dims = screen_dims
         self.close_callback = close_callback
         self.icon = app.icon
+        self.create_variables()
         self.create()
 
 
+    def create_variables(self):
+        self.window_width = 500
+        self.window_height = 520
+        if self.maximized:
+            self.window_width = self.screen_dims[0]
+            self.window_height = self.screen_dims[1]
+
+
     def create(self):
-        self.main_frame = ctk.CTkFrame(self.master, fg_color=THEME_COLORS.bright, width=500, height=520)
-        self.main_frame.place(x=100, y=100)
+        self.main_frame = ctk.CTkFrame(
+            self.master, fg_color=THEME_COLORS.bright, width=self.window_width, 
+            height=self.window_height
+        )
+        self.main_frame.place(x=0, y=0)
+        self.main_frame.pack_propagate(self.propagate)
         self.inside_frame = ctk.CTkFrame(self.main_frame)
         self.inside_frame.pack(padx=2, pady=2, fill="both", expand=True)
         self.create_top_bar()

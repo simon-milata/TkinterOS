@@ -10,12 +10,17 @@ class App:
     title: str
     app_type: Literal["Application", "Game", "File"]
     icon: str
+    maximized: bool = False
+    propagate: bool = True
 
 
 @dataclass
 class Apps:
     snake_game = App(name="python", title="Python", app_type="Game", icon=SnakeGameAssets.SNAKE_GAME_ICON)
-    pybrowse = App(name="pybrowse", title="PyBrowse", app_type="Application", icon=PyBrowseAssets.PYBROWSE_ICON)
+    pybrowse = App(
+        name="pybrowse", title="PyBrowse", app_type="Application", icon=PyBrowseAssets.PYBROWSE_ICON, 
+        maximized=True, propagate=False
+    )
     tictactoe = App(name="tictactoe", title="Tic Tac Toe", app_type="Game", icon=TictactoeAssets.ICON)
 
     app_list = [snake_game, pybrowse, tictactoe]

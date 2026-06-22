@@ -224,16 +224,19 @@ class OS_Controller:
 
 
     def start_app(self, game:str) -> None:
+        self.window_manager.screen_dims = self.desktop_gui.get_screen_resolution()
+        self.window_manager.os_window = self.desktop_gui.WINDOW
+        
         match game:
             case "python":
-                app_window = self.window_manager.create_window(self.desktop_gui.WINDOW, "python")
+                app_window = self.window_manager.create_window("python")
                 PythonGame(self, app_window.content_frame, self.asset_manager)
             case "pybrowse":
-                self.window_manager.create_window(self.desktop_gui.WINDOW, "pybrowse")
-                self.py_browse = PyBrowse(self, self.desktop_gui.WINDOW, self.asset_manager)
+                app_window = self.window_manager.create_window("pybrowse")
+                self.py_browse = PyBrowse(self, app_window.content_frame, self.asset_manager)
                 self.show_pybrowse_gui()
             case "tictactoe":
-                self.window_manager.create_window(self.desktop_gui.WINDOW, "tictactoe")
+                self.window_manager.create_window("tictactoe")
                 TicTacToe(asset_manager=self.asset_manager).setup()
 
 
