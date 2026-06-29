@@ -3,8 +3,8 @@ from tkinteros.asset_management.asset_manager import AssetManager
 
 
 class TicTacToe:
-    def __init__(self, asset_manager, appereance_mode: str = "dark"):
-        TicTacToeController(asset_manager=asset_manager, appereance_mode=appereance_mode).run()
+    def __init__(self, master_frame, asset_manager, appereance_mode: str = "dark"):
+        TicTacToeController(master_frame, asset_manager=asset_manager, appereance_mode=appereance_mode).run()
 
 
 if __name__ == "__main__":

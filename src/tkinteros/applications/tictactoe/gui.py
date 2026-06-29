@@ -9,7 +9,8 @@ from tkinteros.asset_management.assets import TictactoeAssets
 
 
 class TicTacToeGUI:
-    def __init__(self, asset_manager, start_callback, replay_callback, appereance_mode):
+    def __init__(self, master_frame, asset_manager, start_callback, replay_callback, appereance_mode):
+        self.master_frame = master_frame
         self.asset_manager = asset_manager
         self.appereance_mode = appereance_mode
         self.start_callback = start_callback
@@ -22,17 +23,6 @@ class TicTacToeGUI:
         self.create_game_over_menu()
         self.window.after(100, self.show_main_menu)
         
-        
-    def run(self):
-        self.window.mainloop()
-
-
-    def icon_setup(self):
-        if self.appereance_mode:
-            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON))
-        else:
-            self.window.iconbitmap(self.asset_manager.get_icon(TictactoeAssets.ICON))
-
 
     def create_game_frame(self):
         self.border_frame = ctk.CTkFrame(
@@ -153,14 +143,11 @@ class TicTacToeGUI:
         
 
     def create_window(self) -> None:
-        self.window = ctk.CTkToplevel(fg_color=THEME_COLORS.primary)
-        self.window.geometry(str(self.window_width) + "x" + str(self.window_height))
-        self.window.update()
-        self.window.title("Tic Tac Toe")
-        self.window.attributes("-topmost", True)
-        self.window.focus_force()
-        self.window.resizable(False, False)
-        self.window.after(200, self.icon_setup)
+        self.window = ctk.CTkFrame(
+            self.master_frame, fg_color=THEME_COLORS.primary, width=self.window_width, 
+            height=self.window_height, corner_radius=0, bg_color=THEME_COLORS.primary
+        )
+        self.window.pack()
 
 
     def create_background(self):
