@@ -1,7 +1,9 @@
 from typing import Literal
 from dataclasses import dataclass
 
-from tkinteros.asset_management.assets import PyBrowseAssets, SnakeGameAssets, TictactoeAssets
+from tkinteros.asset_management.assets import (
+    PyBrowseAssets, SnakeGameAssets, TictactoeAssets, DesktopAssets
+)
 
 
 @dataclass
@@ -22,8 +24,9 @@ class Apps:
         maximized=True, propagate=False
     )
     tictactoe = App(name="tictactoe", title="Tic Tac Toe", app_type="Game", icon=TictactoeAssets.ICON)
+    textfile = App(name="textfile", title="Text file", app_type="File", icon=DesktopAssets.TEXT_FILE)
 
-    app_list = [snake_game, pybrowse, tictactoe]
+    app_list = [snake_game, pybrowse, tictactoe, textfile]
 
 
 class AppConfig:

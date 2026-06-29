@@ -161,7 +161,8 @@ class OS_Controller:
 
     def open_file(self, name):
         content = self.file_manager.get_file_content(name)
-        TextEditor(name, content, self.close_file, self.asset_manager.get_icon(DesktopAssets.TEXT_FILE_ICON))
+        window = self.window_manager.create_window("textfile", custom_title=name)
+        TextEditor(name, content, self.close_file, window.content_frame)
 
 
     def validate_file_name(self, file_name: str) -> bool:

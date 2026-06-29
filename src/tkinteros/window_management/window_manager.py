@@ -10,8 +10,9 @@ class WindowManager:
         self.windows = []
 
 
-    def create_window(self, name):
+    def create_window(self, name, custom_title: str | None = None):
         app = app_config[name]
+        if custom_title: app.title = custom_title
         app_window = Window(self.os_window, app, self.close_window, self.screen_dims)
         self.windows.append(app_window)
         self.log_windows()
